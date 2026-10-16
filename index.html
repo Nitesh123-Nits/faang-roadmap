@@ -1,0 +1,1052 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>FAANG Run 2027</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: mission-control app. Dark hero band with a 26-segment phase track, sticky tab bar, one panel per tab; dashboard puts "this week" first. */
+:root{
+  --bg:#eef1f7; --surface:#ffffff; --surface-2:#e8ecf4; --fg:#131827; --muted:#5b6478; --line:#d6dce8;
+  --ink:#2546c9; --accent:#ff5a36; --accent-soft:#ffe6df;
+  --hero:#0f1426; --hero-2:#1a2140; --hero-fg:#f1f4ff; --hero-muted:#a4add0;
+  --p1:#3b5bdb; --p2:#0b8a7d; --p3:#c77700; --p4:#c2255c; --p5:#2f9e44;
+  --p1-soft:#e2e8ff; --p2-soft:#d6f2ee; --p3-soft:#fff0d4; --p4-soft:#ffdfe9; --p5-soft:#dcf4e1;
+  --adbe:#d6201a; --atl:#0c66e4; --gs:#6a7d93; --fk:#2874f0; --wmt:#0071ce; --amz:#c25e00; --goo:#1a5fd0; --meta:#0b63e6; --msft:#2b8a3e; --apl:#4a4f5c; --uber:#111827; --bbg:#9c36b5;
+  --shadow:0 1px 2px rgba(19,24,39,.06),0 6px 18px -8px rgba(19,24,39,.18);
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"Instrument Sans","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0b0f1a; --surface:#141a28; --surface-2:#1c2434; --fg:#e8ecf5; --muted:#99a3b9; --line:#283146;
+  --ink:#93abff; --accent:#ff7651; --accent-soft:#3a1c14;
+  --hero:#070a14; --hero-2:#121a33;
+  --p1:#7c95ff; --p2:#3cc7b6; --p3:#f2a93b; --p4:#f06595; --p5:#5fcf72;
+  --p1-soft:#1c2546; --p2-soft:#0e2d2a; --p3-soft:#32230b; --p4-soft:#381323; --p5-soft:#122d19;
+  --adbe:#ff7b73; --atl:#6ea6ff; --gs:#a9b9cc; --fk:#7aa9ff; --wmt:#5eb2ff; --amz:#ffae57; --goo:#8ab4ff; --meta:#7fb0ff; --msft:#7fd492; --apl:#c9cede; --uber:#e8ecf5; --bbg:#e09cf0;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 22px -10px rgba(0,0,0,.6);
+  color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0b0f1a; --surface:#141a28; --surface-2:#1c2434; --fg:#e8ecf5; --muted:#99a3b9; --line:#283146;
+  --ink:#93abff; --accent:#ff7651; --accent-soft:#3a1c14;
+  --hero:#070a14; --hero-2:#121a33;
+  --p1:#7c95ff; --p2:#3cc7b6; --p3:#f2a93b; --p4:#f06595; --p5:#5fcf72;
+  --p1-soft:#1c2546; --p2-soft:#0e2d2a; --p3-soft:#32230b; --p4-soft:#381323; --p5-soft:#122d19;
+  --adbe:#ff7b73; --atl:#6ea6ff; --gs:#a9b9cc; --fk:#7aa9ff; --wmt:#5eb2ff; --amz:#ffae57; --goo:#8ab4ff; --meta:#7fb0ff; --msft:#7fd492; --apl:#c9cede; --uber:#e8ecf5; --bbg:#e09cf0;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 22px -10px rgba(0,0,0,.6);
+  color-scheme:dark }
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+.pt a{text-decoration-thickness:1px;text-decoration-color:color-mix(in srgb,var(--ink) 35%,transparent)}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.55}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--hero)}
+a{color:var(--ink);text-underline-offset:3px}
+a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1200px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3,h4{font-family:var(--display);text-wrap:balance;margin:0}
+h2{font-size:clamp(1.4rem,2.6vw,1.9rem);font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.08rem;font-weight:700}
+.eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.mono{font-family:var(--mono)}
+.num{font-variant-numeric:tabular-nums}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+
+/* ---------- hero ---------- */
+.hero{background:radial-gradient(1200px 400px at 85% -10%,var(--hero-2),transparent 70%),var(--hero);color:var(--hero-fg);position:relative;overflow:hidden}
+.hero .wrap{padding-block:30px 22px;display:grid;gap:22px}
+.hero-top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:center}
+@media (max-width:760px){.hero-top{grid-template-columns:1fr}}
+.hero .eyebrow{color:var(--hero-muted)}
+.hero h1{font-size:clamp(2.4rem,7vw,4.6rem);font-weight:800;line-height:.95;letter-spacing:-.035em;margin-top:8px}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,#ff5a36,#f2a93b 45%,#5fcf72);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.sub{color:var(--hero-muted);max-width:58ch;margin:10px 0 0}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.badge{font:500 .78rem var(--mono);padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:var(--hero-fg)}
+.badge b{color:#ffb199;font-weight:600}
+.ringbox{display:flex;align-items:center;gap:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:16px 20px}
+.ringbox svg{width:110px;height:110px;flex:none}
+.ringbox .big{font-family:var(--display);font-size:2.4rem;font-weight:800;line-height:1}
+.ringbox .lbl{font-size:.8rem;color:var(--hero-muted)}
+.ringbox .mini{display:grid;gap:4px;margin-top:8px;font:500 .76rem var(--mono);color:var(--hero-fg)}
+.ringbox .mini i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px;vertical-align:middle}
+#saveState{font:400 .7rem var(--mono);color:var(--hero-muted);margin-top:6px}
+
+.track{display:grid;grid-template-columns:repeat(26,minmax(0,1fr));gap:3px;position:relative}
+.seg{height:30px;border-radius:5px;background:color-mix(in srgb,var(--pc) 28%,transparent);position:relative;overflow:hidden;text-decoration:none}
+.seg i{position:absolute;inset:auto 0 0 0;height:0;background:var(--pc);transition:height .5s}
+.seg.now{outline:2px solid #fff;outline-offset:1px}
+.seg.ms::after{content:"";position:absolute;top:3px;left:50%;width:6px;height:6px;margin-left:-3px;background:#fff;transform:rotate(45deg)}
+.trackmeta{display:grid;grid-template-columns:repeat(26,minmax(0,1fr));gap:3px;font:500 .62rem var(--mono);color:var(--hero-muted);margin-top:6px}
+.trackmeta span{grid-column:span var(--n);border-top:2px solid var(--pc);padding-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:640px){.trackmeta span{font-size:0;border-top-width:3px}}
+
+/* ---------- tabs ---------- */
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav.tabs .wrap{display:flex;gap:4px;overflow-x:auto;padding-block:10px;scrollbar-width:none}
+nav.tabs button{white-space:nowrap;border:0;background:transparent;color:var(--muted);font:600 .9rem var(--body);padding:8px 14px;border-radius:10px;cursor:pointer;display:flex;gap:8px;align-items:center}
+nav.tabs button:hover{background:var(--surface-2);color:var(--fg)}
+nav.tabs button[aria-selected="true"]{background:var(--fg);color:var(--bg)}
+nav.tabs .cnt{font:600 .68rem var(--mono);padding:1px 6px;border-radius:999px;background:var(--accent);color:#fff}
+main{padding-block:28px 60px}
+.panel{display:grid;gap:22px;grid-template-columns:minmax(0,1fr)}
+.panel>*,.side-col,.side-col>*,.daily>*,.dash>*{min-width:0}
+.phead{display:grid;gap:4px}
+.phead p{color:var(--muted);margin:0;max-width:72ch}
+
+/* ---------- dashboard ---------- */
+.dash{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:920px){.dash{grid-template-columns:1fr}}
+.thisweek{overflow:hidden}
+.tw-head{padding:20px 22px;background:linear-gradient(135deg,var(--pcs),transparent 70%);border-bottom:1px solid var(--line);display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:16px;align-items:center}
+.tw-no{font-family:var(--display);font-weight:800;font-size:3rem;line-height:.9;color:var(--pc)}
+.tw-head h3{font-size:1.45rem;font-weight:800}
+.tw-head .d{font:500 .74rem var(--mono);color:var(--muted)}
+.tw-body{padding:18px 22px 22px;display:grid;gap:18px}
+.tw-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:560px){.tw-grid{grid-template-columns:1fr}.tw-head{grid-template-columns:auto minmax(0,1fr)}.tw-head .ring-s{display:none}}
+.mini-card{background:var(--surface-2);border-radius:12px;padding:12px 14px;font-size:.9rem}
+.lbl-s{font:600 .68rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between;gap:8px}
+.lbl-s span{letter-spacing:0;text-transform:none;font-weight:500}
+.side-col{display:grid;gap:18px}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.tile{padding:16px;display:grid;gap:2px}
+.tile b{font-family:var(--display);font-size:2rem;font-weight:800;line-height:1.05}
+.tile span{font-size:.8rem;color:var(--muted)}
+.tile .bar{margin-top:8px}
+.bar{height:7px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:99px;background:var(--pc,var(--accent));transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.box{padding:18px}
+.box h3{margin-bottom:12px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.box h3 small{font:500 .72rem var(--mono);color:var(--muted)}
+.cobars{display:grid;gap:10px}
+.cobar{display:grid;grid-template-columns:86px minmax(0,1fr) 54px;gap:10px;align-items:center;font-size:.85rem;background:none;border:0;padding:0;color:var(--fg);cursor:pointer;text-align:left;font-family:var(--body)}
+.cobar:hover .bar{outline:1px solid var(--line)}
+.cobar b{font-weight:600}
+.cobar .n{font:500 .74rem var(--mono);color:var(--muted);text-align:right}
+.next{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center}
+.next .dia{width:40px;height:40px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;border-radius:12px;font-size:1.1rem}
+.next b{display:block}
+.next span{font-size:.84rem;color:var(--muted)}
+.routine-c{display:grid;gap:10px}
+.slot{display:grid;grid-template-columns:92px 1fr;gap:10px;font-size:.86rem}
+.slot .t{font:500 .74rem var(--mono);color:var(--ink);padding-top:2px}
+
+/* ---------- rows ---------- */
+.rows{display:grid;gap:2px}
+.row{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:10px;align-items:center;padding:7px 8px;border-radius:9px;cursor:pointer}
+.row:hover{background:var(--surface-2)}
+.row input{width:18px;height:18px;margin:0;accent-color:var(--pc,var(--p5));cursor:pointer}
+.row.task{grid-template-columns:22px minmax(0,1fr)}
+.row.task.done .tx{color:var(--muted);text-decoration:line-through}
+.row.prob.done .pt a{color:var(--muted);text-decoration:line-through}
+.tag{font:600 .62rem var(--mono);letter-spacing:.06em;padding:2px 6px;border-radius:4px;background:var(--accent-soft);color:var(--accent);margin-right:6px;text-transform:uppercase}
+.pt{min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.pt a{font-weight:600}
+.diff{font:600 .64rem var(--mono);padding:2px 6px;border-radius:4px}
+.diff.E{background:var(--p5-soft);color:var(--p5)}.diff.M{background:var(--p3-soft);color:var(--p3)}.diff.H{background:var(--p4-soft);color:var(--p4)}
+.wk-l{font:500 .68rem var(--mono);color:var(--muted)}
+.cos{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end}
+.co{font:600 .62rem var(--mono);padding:2px 6px;border-radius:5px;color:var(--c);background:color-mix(in srgb,var(--c) 12%,transparent);white-space:nowrap}
+@media (max-width:600px){.row.prob{grid-template-columns:22px minmax(0,1fr)}.row.prob .cos{grid-column:2;justify-content:flex-start}}
+.reads{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.reads li{display:grid;grid-template-columns:16px 1fr;gap:6px;font-size:.88rem}
+.reads li::before{content:"↗";color:var(--muted);font-family:var(--mono);font-size:.8rem}
+.pnote{margin:0;color:var(--muted);font-size:.88rem}
+
+/* ---------- plan ---------- */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--fg);font:600 .82rem var(--body);padding:6px 12px;border-radius:999px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.chip i{width:9px;height:9px;border-radius:3px;background:var(--pc)}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.phases{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+@media (max-width:1000px){.phases{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.phases{grid-template-columns:1fr}}
+.phase{padding:16px;display:grid;gap:8px;align-content:start;position:relative;overflow:hidden}
+.phase::before{content:"";position:absolute;inset:0 0 auto;height:5px;background:var(--pc)}
+.phase .pn{font-family:var(--display);font-size:2.2rem;font-weight:800;color:var(--pc);line-height:1;opacity:.9}
+.phase .dates{font:500 .7rem var(--mono);color:var(--muted)}
+.phase ul{margin:0;padding-left:18px;font-size:.84rem}
+.phase .pct{font:500 .7rem var(--mono);color:var(--muted)}
+.weeks{display:grid;gap:10px}
+details.week{overflow:hidden;border-left:6px solid var(--pc)}
+details.week summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 18px}
+details.week summary::-webkit-details-marker{display:none}
+details.week[open] summary{border-bottom:1px solid var(--line);background:linear-gradient(90deg,var(--pcs),transparent 60%)}
+.wno{font-family:var(--display);font-weight:800;font-size:1.6rem;color:var(--pc);min-width:2.2ch}
+.wmeta .d{font:500 .7rem var(--mono);color:var(--muted)}
+.wmeta .t{font-weight:700;font-family:var(--display);font-size:1.05rem}
+.wcount{display:grid;justify-items:end;gap:4px;font:500 .74rem var(--mono);color:var(--muted)}
+.wcount .bar{width:70px;height:5px}
+.wcount.full{color:var(--p5)}
+.wbody{padding:16px 18px 18px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:18px}
+@media (max-width:780px){.wbody{grid-template-columns:1fr}}
+.wbody .full{grid-column:1/-1}
+.wside{display:grid;gap:10px;align-content:start}
+.nowpill{font:600 .62rem var(--mono);letter-spacing:.1em;background:var(--accent);color:#fff;padding:2px 7px;border-radius:999px;margin-left:8px;vertical-align:middle}
+
+/* ---------- calendar ---------- */
+.calwrap{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
+@media (max-width:980px){.calwrap{grid-template-columns:1fr}}
+.months{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.month{padding:14px}
+.month h3{font-size:1rem;margin-bottom:10px;display:flex;justify-content:space-between}
+.month h3 small{font:500 .7rem var(--mono);color:var(--muted)}
+.mgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+.mgrid .dow{font:600 .6rem var(--mono);color:var(--muted);text-align:center;padding-bottom:2px}
+.day{aspect-ratio:1;max-width:100%;border-radius:6px;display:grid;place-items:center;font:500 .72rem var(--mono);color:var(--muted);position:relative;border:0;background:transparent;padding:0}
+.day.in{background:var(--pcs);color:var(--fg);cursor:pointer}
+.day.in:hover{outline:1.5px solid var(--pc)}
+.day.mon::before{content:attr(data-w2);position:absolute;top:1px;left:3px;font-size:.5rem;color:var(--pc);font-weight:700}
+.day.ms{background:var(--pc);color:#fff}
+.day.today{outline:2px solid var(--accent);outline-offset:1px;color:var(--accent);font-weight:700}
+.day.ev::after{content:"";position:absolute;bottom:3px;width:4px;height:4px;border-radius:50%;background:var(--accent)}
+.milestones{padding:18px;display:grid;gap:12px}
+.mst{display:grid;grid-template-columns:54px 1fr;gap:12px;align-items:start}
+.mst .dt{font:600 .7rem var(--mono);color:var(--pc);background:var(--pcs);border-radius:8px;padding:6px;text-align:center;line-height:1.2}
+.mst b{display:block;font-size:.92rem}
+.mst span{font-size:.8rem;color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;border-radius:3px;background:var(--pcs);border:1.5px solid var(--pc)}
+
+/* ---------- problems ---------- */
+.probwrap{display:grid;grid-template-columns:280px minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:900px){.probwrap{grid-template-columns:1fr}}
+.cofilter{display:grid;gap:4px;padding:10px}
+.cofilter button{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;background:transparent;border:0;border-radius:10px;padding:9px 10px;text-align:left;cursor:pointer;color:var(--fg);font:600 .88rem var(--body)}
+.cofilter button:hover{background:var(--surface-2)}
+.cofilter button[aria-pressed="true"]{background:var(--surface-2);box-shadow:inset 3px 0 0 var(--c,var(--accent))}
+.cofilter .n{font:500 .72rem var(--mono);color:var(--muted)}
+.cofilter .bar{grid-column:1/-1;height:4px}
+.cofilter .bar i{background:var(--c,var(--accent))}
+.bank{padding:8px}
+.bankbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-bottom:12px}
+.count{font:500 .78rem var(--mono);color:var(--muted)}
+.grouph{font:600 .68rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--pc);padding:12px 8px 4px;display:flex;gap:8px;align-items:center}
+.grouph::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--pc)}
+
+/* ---------- prep ---------- */
+.subnav{display:flex;flex-wrap:wrap;gap:8px}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:.88rem}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 .66rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+tr:last-child td{border-bottom:0}
+td .cname{font-family:var(--display);font-weight:800;font-size:1.05rem;color:var(--c)}
+.lvl{font:600 .72rem var(--mono);padding:2px 8px;border-radius:999px;background:var(--surface-2);white-space:nowrap}
+.fit{display:inline-block;font:600 .64rem var(--mono);padding:2px 7px;border-radius:999px;margin-bottom:4px}
+.fit.hi{background:var(--p5-soft);color:var(--p5)}.fit.md{background:var(--p3-soft);color:var(--p3)}.fit.lo{background:var(--surface-2);color:var(--muted)}
+.note{font-size:.82rem;color:var(--muted);margin:0}
+.edge{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:780px){.edge{grid-template-columns:1fr}}
+.ecard{padding:18px}
+.ecard h3{display:flex;gap:10px;align-items:center}
+.ecard h3 i{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-style:normal;font-size:.9rem}
+.ecard.good h3 i{background:var(--p5-soft);color:var(--p5)}
+.ecard.warn h3 i{background:var(--accent-soft);color:var(--accent)}
+.ecard ul{margin:12px 0 0;padding-left:18px;display:grid;gap:8px;font-size:.9rem}
+.stories{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:780px){.stories{grid-template-columns:1fr}}
+.story{padding:16px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px}
+.story .sn{grid-row:span 3;font-family:var(--display);font-weight:800;font-size:1.7rem;color:var(--accent);line-height:1}
+.story b{font-size:.95rem}
+.story .lp{display:flex;flex-wrap:wrap;gap:4px}
+.story .lp span{font:600 .64rem var(--mono);padding:2px 7px;border-radius:999px;background:var(--p4-soft);color:var(--p4)}
+.story .mi{font-size:.82rem;color:var(--muted)}
+.tgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:900px){.tgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.tgrid{grid-template-columns:1fr}}
+.tcard{padding:16px;display:grid;gap:10px;align-content:start}
+.tcard h3{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.tcard h3 small{font:500 .7rem var(--mono);color:var(--muted)}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{font-size:.78rem;padding:3px 9px;border-radius:999px;background:var(--surface-2)}
+.pill.hi{background:var(--fg);color:var(--bg)}
+
+/* ---------- resources ---------- */
+.rgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:980px){.rgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.rgrid{grid-template-columns:1fr}}
+.rcat{padding:18px;display:grid;gap:12px;align-content:start;position:relative;overflow:hidden}
+.rcat::before{content:"";position:absolute;inset:0 0 auto;height:4px;background:var(--pc)}
+.rcat ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.rcat li a{display:grid;gap:1px;padding:8px 10px;border-radius:10px;text-decoration:none;color:var(--fg)}
+.rcat li a:hover{background:var(--surface-2)}
+.rcat li a b{color:var(--ink);font-weight:600}
+.rcat li a span{font-size:.8rem;color:var(--muted)}
+
+/* daily */
+.daily{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:940px){.daily{grid-template-columns:1fr}}
+.dhead{padding:18px 20px;display:grid;gap:14px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,var(--accent-soft),transparent 65%)}
+.dtop{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.dtop h3{font-size:1.5rem;font-weight:800}
+.dtop .sub{font:500 .74rem var(--mono);color:var(--muted)}
+.dnav{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.ib{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer;font-size:1rem}
+.dnav input[type=date]{height:34px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);padding:0 8px;font:500 .8rem var(--mono)}
+.strip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.dstrip{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:6px 2px 8px;display:grid;justify-items:center;gap:1px;cursor:pointer;color:var(--fg);position:relative;overflow:hidden}
+.dstrip span{font:500 .62rem var(--mono);color:var(--muted);text-transform:uppercase}
+.dstrip b{font-family:var(--display);font-size:1.15rem}
+.dstrip i{position:absolute;left:0;bottom:0;height:3px;width:calc(var(--f)*100%);background:var(--p5)}
+.dstrip.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}.dstrip.on span{color:inherit;opacity:.7}
+.dstrip.td:not(.on){border-color:var(--accent)}
+.dprog{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center}
+.dprog b{font-family:var(--display);font-size:1.4rem;font-weight:800}
+.dbody{padding:18px 20px 20px;display:grid;gap:18px}
+.dform{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px}
+@media (max-width:520px){.dform{grid-template-columns:minmax(0,1fr) auto}.dform button{grid-column:1/-1}}
+.dform input,.dform select{height:42px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2);color:var(--fg);padding:0 12px;font:500 .92rem var(--body);min-width:0}
+.dform button{height:42px;border:0;border-radius:12px;background:var(--accent);color:#fff;font:700 .9rem var(--body);padding:0 18px;cursor:pointer}
+.dlist{display:grid;gap:6px}
+.ditem{display:grid;grid-template-columns:22px minmax(0,1fr) auto 22px 26px;gap:10px;align-items:center;padding:9px 10px;border-radius:12px;background:var(--surface-2);border-left:4px solid var(--pc)}
+.ditem input{width:18px;height:18px;margin:0;accent-color:var(--pc);cursor:pointer}
+.dtext{cursor:pointer;min-width:0;overflow-wrap:anywhere}
+.ditem.done .dtext{color:var(--muted);text-decoration:line-through}
+.dcat{font:600 .62rem var(--mono);padding:2px 7px;border-radius:999px;background:var(--pcs);color:var(--pc);text-transform:uppercase;letter-spacing:.05em}
+.dlink{text-decoration:none;font-weight:700}
+.ddel{border:0;background:transparent;color:var(--muted);font-size:1.2rem;cursor:pointer;border-radius:8px;width:26px;height:26px}
+.ddel:hover{background:var(--accent-soft);color:var(--accent)}
+.dempty{margin:0;color:var(--muted);font-size:.88rem;padding:6px 2px}
+.dnote{width:100%;min-height:90px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2);color:var(--fg);padding:10px 12px;font:400 .9rem var(--body);resize:vertical}
+.dsug{max-width:100%;text-align:left}
+.dsug i{width:8px;height:8px;border-radius:50%;background:var(--pc);flex:none}
+#dCarry{justify-self:start;background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.heat{display:flex;gap:3px;overflow-x:auto;padding:2px 2px 4px}
+.hcol{display:grid;grid-template-rows:repeat(7,1fr);gap:3px}
+.hc{width:13px;height:13px;border-radius:3px;border:0;padding:0;cursor:pointer;background:var(--surface-2)}
+.hc.l1{background:color-mix(in srgb,var(--p5) 35%,var(--surface-2))}.hc.l2{background:color-mix(in srgb,var(--p5) 60%,var(--surface-2))}.hc.l3{background:color-mix(in srgb,var(--p5) 82%,var(--surface-2))}.hc.l4{background:var(--p5)}
+.hc.on{outline:2px solid var(--fg);outline-offset:1px}.hc.td{box-shadow:inset 0 0 0 2px var(--accent)}
+.dstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.dstats div{background:var(--surface-2);border-radius:12px;padding:10px 12px}
+.dstats b{display:block;font-family:var(--display);font-size:1.5rem;font-weight:800}
+.dstats span{font-size:.74rem;color:var(--muted)}
+.undo{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:8px 10px 8px 16px;border-radius:999px;display:flex;gap:10px;align-items:center;font-size:.86rem;z-index:20;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
+.undo .chip{background:var(--bg);color:var(--fg)}
+.todayc{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:14px 18px;background:linear-gradient(90deg,var(--accent-soft),var(--surface) 70%)}
+.todayc b{display:block;font-family:var(--display);font-size:1.05rem}
+.todayc span{font-size:.84rem;color:var(--muted)}
+/* company brief */
+.brief{padding:16px 18px;margin:0 0 12px;border-radius:14px;background:color-mix(in srgb,var(--c) 9%,var(--surface));border:1px solid color-mix(in srgb,var(--c) 30%,var(--line));display:grid;gap:12px}
+.brief h3{color:var(--c);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:baseline}
+.brief h3 a{font:600 .74rem var(--mono)}
+.brief .loop{font-size:.88rem}
+.bgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:760px){.bgrid{grid-template-columns:1fr}}
+.bgrid ul{margin:0;padding-left:18px;font-size:.86rem;display:grid;gap:4px}
+footer{padding-block:20px 50px;color:var(--muted);font-size:.8rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <div>
+        <div class="eyebrow">Nitesh Kumar Sah · Backend Engineer · 3 YOE → SDE-2 / L4–L5</div>
+        <h1>FAANG Run <em>2027</em></h1>
+        <p class="sub">26 weeks · Mon 19 Oct 2026 → Sun 18 Apr 2027 · ~20 h a week around a full-time job. DSA every day, design on weekends, loops in March and April.</p>
+        <div class="badges" id="badges"></div>
+      </div>
+      <div class="ringbox" aria-live="polite">
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff5a36"></stop><stop offset=".5" stop-color="#f2a93b"></stop><stop offset="1" stop-color="#5fcf72"></stop></linearGradient></defs>
+          <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="12"></circle>
+          <circle id="ringArc" cx="60" cy="60" r="50" fill="none" stroke="url(#rg)" stroke-width="12" stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="314.16" transform="rotate(-90 60 60)" style="transition:stroke-dashoffset .8s"></circle>
+          <circle id="ringArc2" cx="60" cy="60" r="35" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="7"></circle>
+          <circle id="ringProb" cx="60" cy="60" r="35" fill="none" stroke="#7c95ff" stroke-width="7" stroke-linecap="round" stroke-dasharray="219.9" stroke-dashoffset="219.9" transform="rotate(-90 60 60)" style="transition:stroke-dashoffset .8s"></circle>
+        </svg>
+        <div>
+          <div class="big num" id="pctAll">0%</div>
+          <div class="lbl">of the plan complete</div>
+          <div class="mini num"><span><i style="background:#ff7651"></i><span id="countAll">0 / 0 tasks</span></span><span><i style="background:#7c95ff"></i><span id="countProb">0 / 0 problems</span></span></div>
+          <div id="saveState">Loading progress…</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="track" id="track"></div>
+      <div class="trackmeta" id="trackmeta"></div>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Sections"><div class="wrap" role="tablist" id="tabs"></div></nav>
+
+<main class="wrap">
+  <!-- DASHBOARD -->
+  <section class="panel" id="tab-dashboard" role="tabpanel">
+    <div class="card todayc" id="todayCard"></div>
+    <div class="dash">
+      <div class="card thisweek" id="thisWeek"></div>
+      <div class="side-col">
+        <div class="tiles">
+          <div class="card tile"><span>Problems solved</span><b class="num" id="tProb">0</b><span id="tProbSub">goal ~380 by week 26</span><div class="bar"><i id="tProbBar" style="--pc:var(--p1)"></i></div></div>
+          <div class="card tile"><span>Days to FAANG applications</span><b class="num" id="tApply">0</b><span>Week 22 · Mon 15 Mar 2027</span></div>
+          <div class="card tile"><span>Current phase</span><b id="tPhase" style="font-size:1.25rem;padding-top:6px">—</b><span id="tPhaseSub"></span><div class="bar"><i id="tPhaseBar"></i></div></div>
+          <div class="card tile"><span>Contest rating goal</span><b class="num">1700+</b><span>Sun 08:00 IST weekly</span></div>
+        </div>
+        <div class="card box"><h3>Company readiness <small>problems solved per tag</small></h3><div class="cobars" id="cobars"></div></div>
+        <div class="card box"><h3>Next checkpoint</h3><div class="next" id="nextCk"></div></div>
+        <div class="card box"><h3>Daily routine</h3>
+          <div class="routine-c">
+            <div class="slot"><span class="t">Weekday AM</span><span><b>DSA, 90 min.</b> 2 problems of the week's pattern, timed. Write the approach before code.</span></div>
+            <div class="slot"><span class="t">Commute</span><span>One article from this week's reading list.</span></div>
+            <div class="slot"><span class="t">Weekday PM</span><span><b>Theory, 30 min.</b> Make 3 flashcards.</span></div>
+            <div class="slot"><span class="t">Saturday</span><span>Re-solve 4 old problems · one LLD/HLD design out loud · Biweekly contest 20:00 IST.</span></div>
+            <div class="slot"><span class="t">Sunday</span><span>Weekly contest 08:00 IST · mock · 30-min review and tick this page.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DAILY -->
+  <section class="panel" id="tab-daily" role="tabpanel" hidden>
+    <div class="phead"><div class="eyebrow">Your daily log</div><h2>Daily to-do</h2><p>Plan each day, tick what you finish, and carry over what's left. Pull tasks straight from this week's plan. Every day is saved, so you can look back at any date.</p></div>
+    <div class="daily">
+      <div class="card" style="overflow:hidden">
+        <div class="dhead">
+          <div class="dtop"><div><h3 id="dDate"></h3><div class="sub" id="dSub"></div></div>
+            <div class="dnav"><button class="ib" id="dPrev" aria-label="Previous day">‹</button><input type="date" id="dPick" aria-label="Pick a date"><button class="ib" id="dNext" aria-label="Next day">›</button><button class="chip" id="dToday">Today</button></div></div>
+          <div class="strip" id="dStrip"></div>
+          <div class="dprog"><b class="num" id="dPct">0%</b><div class="bar"><i id="dBar" style="--pc:var(--p5)"></i></div></div>
+        </div>
+        <div class="dbody">
+          <form class="dform" id="dForm" autocomplete="off"><input id="dInput" placeholder="Add a task, e.g. Solve Coin Change, or paste a link" aria-label="New task"><select id="dCatSel" aria-label="Category"></select><button type="submit">Add</button></form>
+          <button class="chip" id="dCarry" hidden></button>
+          <div><div class="lbl-s">To do <span class="num" id="dTodoN">0</span></div><div class="dlist" id="dTodo"></div></div>
+          <div><div class="lbl-s">Done <span class="num" id="dDoneN">0</span></div><div class="dlist" id="dDone"></div></div>
+          <div><div class="lbl-s">Notes for the day <span>what you learned, blockers, mistakes</span></div><textarea class="dnote" id="dNote" placeholder="e.g. Coin Change: forgot the base case dp[0]=0. Review tomorrow."></textarea></div>
+        </div>
+      </div>
+      <div class="side-col">
+        <div class="card box"><h3>Streak</h3><div class="dstats"><div><b class="num" id="dStreak">0</b><span>day streak</span></div><div><b class="num" id="dTotal">0</b><span>tasks done</span></div><div><b class="num" id="dActive">0</b><span>active days</span></div></div></div>
+        <div class="card box"><h3>Add from the plan <small id="dSugW"></small></h3><div class="chips" id="dSug"></div></div>
+        <div class="card box"><h3>26-week activity <small>tap a day</small></h3><div class="heat" id="dHeat"></div><p class="note" style="margin-top:8px">Darker means more tasks done that day. Columns are weeks; rows run Mon to Sun.</p></div>
+      </div>
+    </div>
+    <div class="undo" id="dUndo" hidden></div>
+  </section>
+
+  <!-- PLAN -->
+  <section class="panel" id="tab-plan" role="tabpanel" hidden>
+    <div class="phead"><div class="eyebrow">The arc</div><h2>Five phases, 26 weeks</h2><p>Each phase ends in a checkpoint week. If you miss a checkpoint target, slip a week rather than skip topics.</p></div>
+    <div class="phases" id="phaseGrid"></div>
+    <div class="chips" id="filters"></div>
+    <div class="weeks" id="weekList"></div>
+  </section>
+
+  <!-- CALENDAR -->
+  <section class="panel" id="tab-calendar" role="tabpanel" hidden>
+    <div class="phead"><div class="eyebrow">Oct 2026 – Apr 2027</div><h2>Calendar</h2><p>Every day of the plan, coloured by phase. Small numbers mark the start of each week; solid days are checkpoint Sundays. Tap any day to open that week.</p></div>
+    <div class="legend" id="legend"></div>
+    <div class="calwrap">
+      <div class="months" id="months"></div>
+      <div class="card milestones" id="milestones"></div>
+    </div>
+  </section>
+
+  <!-- PROBLEMS -->
+  <section class="panel" id="tab-problems" role="tabpanel" hidden>
+    <div class="phead"><div class="eyebrow">LeetCode · company-tagged</div><h2>Problem bank</h2><p>Every practice problem in the plan, plus company-specific sets for 12 companies. Pick a company to see only its problems before a loop. Tags show where a problem is commonly reported in interviews; LeetCode Premium's company tab has live frequencies.</p></div>
+    <div class="probwrap">
+      <div class="card cofilter" id="cofilter"></div>
+      <div class="card bank">
+        <div class="bankbar"><div class="chips" id="dFilters"></div><span class="count" id="bankCount"></span></div>
+        <div id="bankList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PREP -->
+  <section class="panel" id="tab-prep" role="tabpanel" hidden>
+    <div class="phead"><div class="eyebrow">Interview prep</div><h2>Where to aim and what to say</h2><p>Target companies at your level, what your resume gives you, the story bank, and the full syllabus.</p></div>
+    <div class="subnav chips"><a class="chip" href="#companies">Companies</a><a class="chip" href="#edge">Your edge</a><a class="chip" href="#stories">Story bank</a><a class="chip" href="#syllabus">Syllabus</a></div>
+
+    <div class="phead" id="companies"><h3>Target companies</h3><p>Loops change often; confirm the structure with your recruiter before each one.</p></div>
+    <div class="card tbl"><table>
+      <thead><tr><th>Company</th><th>Level</th><th>India hubs</th><th>Loop shape</th><th>Fit for you</th></tr></thead>
+      <tbody>
+        <tr><td><span class="cname" style="--c:var(--amz)">Amazon</span></td><td><span class="lvl">SDE II · L5</span></td><td>Bengaluru, Hyderabad, Chennai</td><td>Online assessment → 4–5 round loop incl. a Bar Raiser. Leadership Principles questions in every round.</td><td><span class="fit hi">Best first target</span><br>Kafka and scheduler work map onto their HLD round. Invest heavily in LP stories.</td></tr>
+        <tr><td><span class="cname" style="--c:var(--goo)">Google</span></td><td><span class="lvl">L4 · SWE III</span></td><td>Bengaluru, Hyderabad</td><td>Recruiter screen → technical screen → 4–5 interviews (mostly coding, one Googleyness & Leadership). Hiring committee, then team match.</td><td><span class="fit md">Hardest DSA bar</span><br>Needs clean code on medium-hard graph and DP problems with no IDE.</td></tr>
+        <tr><td><span class="cname" style="--c:var(--msft)">Microsoft</span></td><td><span class="lvl">SDE II · 61–62</span></td><td>Hyderabad, Bengaluru, Noida</td><td>4–5 rounds: coding, LLD / HLD, final "as appropriate" round with a senior leader.</td><td><span class="fit hi">Strong fit</span><br>Expect LLD with working code and deep questions on past projects.</td></tr>
+        <tr><td><span class="cname" style="--c:var(--meta)">Meta</span></td><td><span class="lvl">E4</span></td><td>Little SWE hiring in India; mostly London, Singapore, US</td><td>2 coding (two problems in 45 min each), 1 system/product design, 1 behavioral.</td><td><span class="fit lo">Only if relocating</span><br>Speed matters more than anywhere else.</td></tr>
+        <tr><td><span class="cname" style="--c:var(--apl)">Apple</span></td><td><span class="lvl">ICT3 – ICT4</span></td><td>Hyderabad, Bengaluru</td><td>Team-specific; several rounds with the hiring team plus a manager.</td><td><span class="fit md">Team by team</span><br>Apply to specific backend / services teams. Domain depth beats breadth.</td></tr>
+        <tr><td><span class="cname" style="--c:var(--p4)">Netflix</span></td><td><span class="lvl">Senior only</span></td><td>Very limited in India</td><td>Culture-memo heavy, senior-level loops.</td><td><span class="fit lo">Later in career</span><br>Not this cycle.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">The same prep clears FAANG-tier pay in India at Uber, Atlassian, Databricks, LinkedIn, Salesforce, Stripe, Walmart Global Tech, Flipkart, Rubrik and Goldman Sachs. Use 3–4 of them as warm-up loops in weeks 21–23. Check each careers page for current openings.</p>
+
+    <div class="phead" id="edge"><h3>Your edge and your gaps</h3><p>Read from your resume: what interviewers will dig into, and the claims to defend line by line.</p></div>
+    <div class="edge">
+      <div class="card ecard good"><h3><i>✓</i>Lead with these</h3><ul>
+        <li><b>Distributed job scheduler</b> (Kafka consumer groups, distributed lock, retries, per-device status). Rehearse it as a 45-min design with numbers: devices, jobs/day, partitions, lag, failure modes.</li>
+        <li><b>Event-driven provisioning at Jio</b> across thousands of devices. Use it for "a system you designed" and Ownership questions.</li>
+        <li><b>Latency work at Aditya Birla Capital</b>: sequential → parallel async plus Redis. Know p50/p99 before and after, and how partial failures were handled.</li>
+        <li><b>Fintech context</b> (FD, gold/silver, SIP) gives you a natural payment or ledger design to own.</li>
+      </ul></div>
+      <div class="card ecard warn"><h3><i>!</i>Fix before you apply</h3><ul>
+        <li><b>"Exactly-once processing semantics"</b> with a distributed lock will be challenged. A lock stops duplicate publishing; exactly-once end to end needs idempotent consumers or Kafka transactions.</li>
+        <li><b>"JWT … improving CRUD performance by 75%"</b> reads as cause and effect. Split what made CRUD faster from what JWT secured.</li>
+        <li><b>"Significantly cutting latency"</b> needs a number. Write bullets as: did X, measured by Y, by doing Z.</li>
+        <li><b>LeetCode link</b> is on your resume, so raise your contest rating before applying.</li>
+        <li><b>Skills list</b> is long. Keep what you can whiteboard; drop AngularJS for backend roles.</li>
+      </ul></div>
+    </div>
+
+    <div class="phead" id="stories"><h3>Story bank</h3><p>Ten STAR stories from your own work, mapped to the Amazon Leadership Principles they prove best. The same stories serve Google's Googleyness round and Microsoft's final round.</p></div>
+    <div class="stories" id="storyGrid"></div>
+
+    <div class="phead" id="syllabus"><h3>Syllabus</h3><p>Dark pills come up most often in SDE-2 backend loops.</p></div>
+    <div class="tgrid" id="topicGrid"></div>
+  </section>
+
+  <!-- RESOURCES -->
+  <section class="panel" id="tab-resources" role="tabpanel" hidden>
+    <div class="phead"><div class="eyebrow">Links</div><h2>Resources</h2><p>Few and good. Finish one sheet before starting another. Each week in the Plan also has its own reading list.</p></div>
+    <div class="rgrid" id="resGrid"></div>
+  </section>
+</main>
+<footer><div class="wrap">Progress saves to your Claude account when you're signed in, and also in this browser. Plan built 17 Oct 2026.</div></footer>
+
+<script>
+const PHASES = [
+  {id:1,name:"Foundations",weeks:[1,6],c:"p1",goal:"Core DSA patterns + Java depth",items:["Arrays, hashing, two pointers, sliding window","Stacks, binary search, linked lists, trees","Java collections, JVM, concurrency","~90 problems solved"]},
+  {id:2,name:"Patterns + LLD",weeks:[7,12],c:"p2",goal:"Hard patterns and object design",items:["Tries, heaps, backtracking, graphs, DP intro","SOLID + 10 design patterns","8 classic LLD problems in Java","~180 problems solved"]},
+  {id:3,name:"System Design",weeks:[13,18],c:"p3",goal:"HLD fluency at scale",items:["DP depth, greedy, mixed sets","Storage, sharding, caching, queues","12 HLD case studies","~260 problems solved"]},
+  {id:4,name:"Company Mode",weeks:[19,22],c:"p4",goal:"Tailor, brand, apply",items:["Company-tagged problems","Story bank + resume rewrite","Referrals and first applications","~320 problems solved"]},
+  {id:5,name:"Mocks & Loops",weeks:[23,26],c:"p5",goal:"Interview-ready and interviewing",items:["12+ mocks, weak spots fixed","Real loops, fast feedback","Offer comparison and negotiation","~380 problems solved"]}
+];
+const START = new Date(2026,9,19); // Mon 19 Oct 2026
+
+// [focus, dsa pattern, theory track, tasks[], problems, milestone?]
+// Company codes → full names. Tags reflect how often each problem is commonly reported in those companies' interviews; not an official list.
+const CO = {AMZ:"Amazon",GOO:"Google",META:"Meta",MSFT:"Microsoft",APL:"Apple",UBER:"Uber",BBG:"Bloomberg"};
+const P = (t,s,d,c)=>({t,s,d,c:c?c.split(" "):[]});
+const BB = s=>"https://bytebytego.com/courses/system-design-interview/"+s;
+const HI = s=>"https://www.hellointerview.com/learn/system-design/problem-breakdowns/"+s;
+const BD = s=>"https://www.baeldung.com/"+s;
+const TIH = s=>"https://www.techinterviewhandbook.org/"+s;
+const RG = s=>"https://refactoring.guru/design-patterns/"+s;
+
+// focus, dsa, theory, tasks, problems, milestone, reads
+const W = [
+ {f:"Arrays & Hashing",dsa:"Arrays, HashMap/HashSet, prefix sums",th:"Java Collections internals: HashMap resize & treeify, ArrayList growth",
+  tasks:["Set up a tracking sheet: problem, pattern, time, mistake","Solve 12 problems: arrays & hashing","Write notes: HashMap internals, equals/hashCode contract","Baseline mock: 1 timed medium, record time","Join LeetCode Weekly Contest (Sun 08:00 IST)"],
+  probs:[P("Contains Duplicate","contains-duplicate","E","AMZ APL"),P("Valid Anagram","valid-anagram","E","AMZ BBG"),P("Two Sum","two-sum","E","AMZ GOO META MSFT APL BBG"),P("Group Anagrams","group-anagrams","M","AMZ META MSFT BBG"),P("Top K Frequent Elements","top-k-frequent-elements","M","AMZ META GOO"),P("Product of Array Except Self","product-of-array-except-self","M","AMZ META MSFT APL"),P("Longest Consecutive Sequence","longest-consecutive-sequence","M","GOO AMZ"),P("Subarray Sum Equals K","subarray-sum-equals-k","M","META GOO AMZ")],
+  reads:[["A Guide to HashMap in Java (Baeldung)",BD("java-hashmap")],["equals() and hashCode() contracts (Baeldung)",BD("java-equals-hashcode-contracts")],["NeetCode roadmap: pattern order",'https://neetcode.io/roadmap']]},
+ {f:"Two Pointers & Sliding Window",dsa:"Two pointers, fixed and variable windows",th:"Strings, immutability, StringBuilder; Comparable vs Comparator",
+  tasks:["Solve 14 problems: two pointers + windows","Write a window template in Java you can reuse","Re-solve 4 week-1 problems from memory","Contest + upsolve 1"],
+  probs:[P("3Sum","3sum","M","AMZ META MSFT APL BBG"),P("Container With Most Water","container-with-most-water","M","AMZ GOO META"),P("Longest Substring Without Repeating Characters","longest-substring-without-repeating-characters","M","AMZ MSFT BBG"),P("Longest Repeating Character Replacement","longest-repeating-character-replacement","M","GOO"),P("Permutation in String","permutation-in-string","M","MSFT AMZ"),P("Trapping Rain Water","trapping-rain-water","H","AMZ GOO META BBG"),P("Minimum Window Substring","minimum-window-substring","H","META AMZ GOO UBER"),P("Sliding Window Maximum","sliding-window-maximum","H","AMZ GOO")],
+  reads:[["Why String is immutable (Baeldung)",BD("java-string-immutable")],["Comparator and Comparable (Baeldung)",BD("java-comparator-comparable")],["Array & window cheatsheet (Tech Interview Handbook)",TIH("algorithms/array/")]]},
+ {f:"Stacks & Queues",dsa:"Stack, monotonic stack, deque",th:"JVM memory model: heap, stack, metaspace; GC (G1, ZGC) basics",
+  tasks:["Solve 14 problems: stacks & monotonic stack","Notes: GC algorithms + when you'd tune them","Explain one production memory issue you saw (story prep)","Contest + upsolve 1"],
+  probs:[P("Valid Parentheses","valid-parentheses","E","AMZ META GOO BBG"),P("Min Stack","min-stack","M","AMZ BBG MSFT"),P("Evaluate Reverse Polish Notation","evaluate-reverse-polish-notation","M","AMZ"),P("Daily Temperatures","daily-temperatures","M","AMZ GOO META"),P("Asteroid Collision","asteroid-collision","M","AMZ GOO"),P("Basic Calculator II","basic-calculator-ii","M","META AMZ"),P("Car Fleet","car-fleet","M","GOO"),P("Largest Rectangle in Histogram","largest-rectangle-in-histogram","H","GOO AMZ")],
+  reads:[["Stack vs heap memory in Java (Baeldung)",BD("java-stack-heap")],["JVM garbage collectors (Baeldung)",BD("jvm-garbage-collectors")],["Stack cheatsheet (Tech Interview Handbook)",TIH("algorithms/stack/")]]},
+ {f:"Binary Search",dsa:"Classic, rotated arrays, binary search on answer",th:"Concurrency 1: threads, ExecutorService, CompletableFuture",
+  tasks:["Solve 14 problems: binary search","Implement a parallel fetch with CompletableFuture + timeouts (mirrors your ABC work)","Notes: thread pool sizing, rejection policies","Contest + upsolve 1"],
+  probs:[P("Binary Search","binary-search","E",""),P("Find Peak Element","find-peak-element","M","META GOO"),P("Search in Rotated Sorted Array","search-in-rotated-sorted-array","M","META AMZ MSFT"),P("Find Minimum in Rotated Sorted Array","find-minimum-in-rotated-sorted-array","M","AMZ MSFT"),P("Koko Eating Bananas","koko-eating-bananas","M","GOO META"),P("Time Based Key-Value Store","time-based-key-value-store","M","GOO AMZ"),P("Split Array Largest Sum","split-array-largest-sum","H","GOO AMZ"),P("Median of Two Sorted Arrays","median-of-two-sorted-arrays","H","GOO AMZ MSFT APL")],
+  reads:[["ExecutorService guide (Baeldung)",BD("java-executor-service-tutorial")],["CompletableFuture guide (Baeldung)",BD("java-completablefuture")],["Binary search cheatsheet (Tech Interview Handbook)",TIH("algorithms/binary-search/")]]},
+ {f:"Linked Lists",dsa:"Fast/slow pointers, reversal, merge, LRU",th:"Concurrency 2: synchronized, ReentrantLock, CAS, volatile, ConcurrentHashMap",
+  tasks:["Solve 12 problems: linked lists","Code LRU Cache from scratch twice","Notes: happens-before, deadlock conditions","Write producer-consumer with BlockingQueue","Contest + upsolve 1"],
+  probs:[P("Reverse Linked List","reverse-linked-list","E","AMZ MSFT APL"),P("Remove Nth Node From End of List","remove-nth-node-from-end-of-list","M","META AMZ"),P("Add Two Numbers","add-two-numbers","M","AMZ MSFT BBG"),P("Reorder List","reorder-list","M","AMZ META"),P("Linked List Cycle II","linked-list-cycle-ii","M","MSFT AMZ"),P("Copy List with Random Pointer","copy-list-with-random-pointer","M","AMZ META MSFT"),P("LRU Cache","lru-cache","M","AMZ MSFT GOO META BBG"),P("Merge k Sorted Lists","merge-k-sorted-lists","H","AMZ META GOO MSFT")],
+  reads:[["volatile in Java (Baeldung)",BD("java-volatile")],["Locks in Java (Baeldung)",BD("java-concurrent-locks")],["ConcurrentMap guide (Baeldung)",BD("java-concurrent-map")]]},
+ {f:"Trees · Checkpoint 1",dsa:"DFS/BFS traversals, BST properties, path problems",th:"Revision: Java + concurrency flashcards",ms:true,
+  tasks:["Solve 14 problems: binary trees & BST","CHECKPOINT: 2 mediums in 45 min, timed","Count solved — target ~90","Re-do every problem marked 'struggled' in weeks 1–5","Update resume metrics (latency numbers, throughput)"],
+  probs:[P("Maximum Depth of Binary Tree","maximum-depth-of-binary-tree","E","AMZ"),P("Diameter of Binary Tree","diameter-of-binary-tree","E","META GOO"),P("Binary Tree Level Order Traversal","binary-tree-level-order-traversal","M","AMZ META MSFT"),P("Binary Tree Right Side View","binary-tree-right-side-view","M","META AMZ"),P("Validate Binary Search Tree","validate-binary-search-tree","M","AMZ META MSFT BBG"),P("Kth Smallest Element in a BST","kth-smallest-element-in-a-bst","M","AMZ UBER"),P("Vertical Order Traversal of a Binary Tree","vertical-order-traversal-of-a-binary-tree","H","META AMZ"),P("Binary Tree Maximum Path Sum","binary-tree-maximum-path-sum","H","META AMZ GOO")],
+  reads:[["Tree cheatsheet (Tech Interview Handbook)",TIH("algorithms/tree/")],["Big-O cheat sheet","https://www.bigocheatsheet.com"]]},
+ {f:"Advanced Trees & Tries",dsa:"LCA, construct, serialize; Trie",th:"LLD 1: OOP pillars, SOLID with Java examples",
+  tasks:["Solve 12 problems: trees + tries","Implement a Trie with insert/search/startsWith","Write SOLID examples from your own codebase (God class refactor)","Contest + upsolve 1"],
+  probs:[P("Lowest Common Ancestor of a Binary Tree","lowest-common-ancestor-of-a-binary-tree","M","META AMZ MSFT"),P("Construct Binary Tree from Preorder and Inorder","construct-binary-tree-from-preorder-and-inorder-traversal","M","AMZ MSFT"),P("Implement Trie (Prefix Tree)","implement-trie-prefix-tree","M","AMZ GOO MSFT"),P("Design Add and Search Words Data Structure","design-add-and-search-words-data-structure","M","META AMZ"),P("Search Suggestions System","search-suggestions-system","M","AMZ"),P("Serialize and Deserialize Binary Tree","serialize-and-deserialize-binary-tree","H","AMZ GOO META MSFT UBER"),P("Word Search II","word-search-ii","H","AMZ MSFT UBER")],
+  reads:[["SOLID principles in Java (Baeldung)",BD("solid-principles")],["Trie cheatsheet (Tech Interview Handbook)",TIH("algorithms/trie/")]]},
+ {f:"Heaps & Intervals",dsa:"Top-K, two heaps, merge intervals, sweep line",th:"LLD 2: Strategy, Observer, Factory, Builder, Singleton, State, Decorator",
+  tasks:["Solve 14 problems: heaps + intervals","Write a 1-page cheat sheet of 10 patterns with when-to-use","LLD: Parking Lot in Java (classes + core methods)","Contest + upsolve 1"],
+  probs:[P("Kth Largest Element in an Array","kth-largest-element-in-an-array","M","META AMZ GOO"),P("K Closest Points to Origin","k-closest-points-to-origin","M","META AMZ"),P("Task Scheduler","task-scheduler","M","META AMZ"),P("Merge Intervals","merge-intervals","M","GOO META AMZ MSFT BBG"),P("Insert Interval","insert-interval","M","GOO"),P("Non-overlapping Intervals","non-overlapping-intervals","M","META"),P("Car Pooling","car-pooling","M","AMZ"),P("Find Median from Data Stream","find-median-from-data-stream","H","AMZ GOO MSFT")],
+  reads:[["Strategy pattern (Refactoring Guru)",RG("strategy")],["Observer pattern (Refactoring Guru)",RG("observer")],["Builder pattern (Refactoring Guru)",RG("builder")],["Parking lot and other LLD problems (awesome-low-level-design)","https://github.com/ashishps1/awesome-low-level-design"]]},
+ {f:"Backtracking",dsa:"Subsets, permutations, combinations, pruning",th:"LLD 3: Rate limiter, LRU/LFU cache, Logger",
+  tasks:["Solve 12 problems: backtracking","LLD: Rate Limiter (token bucket + sliding window) with tests","LLD: thread-safe LRU cache","Contest + upsolve 1"],
+  probs:[P("Subsets","subsets","M","META AMZ"),P("Permutations","permutations","M","MSFT META"),P("Combination Sum","combination-sum","M","AMZ UBER"),P("Letter Combinations of a Phone Number","letter-combinations-of-a-phone-number","M","AMZ META UBER"),P("Generate Parentheses","generate-parentheses","M","GOO AMZ META"),P("Word Search","word-search","M","AMZ MSFT META"),P("Palindrome Partitioning","palindrome-partitioning","M","AMZ GOO"),P("N-Queens","n-queens","H","AMZ APL")],
+  reads:[["Design a rate limiter (ByteByteGo)",BB("design-a-rate-limiter")],["Decorator pattern (Refactoring Guru)",RG("decorator")],["Backtracking cheatsheet (Tech Interview Handbook)",TIH("algorithms/recursion/")]]},
+ {f:"Graphs 1",dsa:"BFS, DFS, grids, topological sort",th:"LLD 4: Elevator system, Vending machine",
+  tasks:["Solve 14 problems: graphs","LLD: Elevator with State pattern","Notes: BFS vs DFS choice, cycle detection directed vs undirected","Light week buffer (year-end): catch up if behind"],
+  probs:[P("Number of Islands","number-of-islands","M","AMZ GOO META MSFT BBG"),P("Clone Graph","clone-graph","M","META GOO"),P("Rotting Oranges","rotting-oranges","M","AMZ MSFT"),P("Pacific Atlantic Water Flow","pacific-atlantic-water-flow","M","GOO"),P("Surrounded Regions","surrounded-regions","M","GOO"),P("Shortest Path in Binary Matrix","shortest-path-in-binary-matrix","M","META AMZ"),P("Course Schedule II","course-schedule-ii","M","AMZ META GOO"),P("Word Ladder","word-ladder","H","AMZ META GOO")],
+  reads:[["State pattern (Refactoring Guru)",RG("state")],["Graph cheatsheet (Tech Interview Handbook)",TIH("algorithms/graph/")]]},
+ {f:"Graphs 2",dsa:"Dijkstra, Union-Find, MST",th:"LLD 5: Splitwise, BookMyShow, Snake & Ladder",
+  tasks:["Solve 12 problems: advanced graphs","Implement Union-Find with path compression + rank","LLD: Splitwise with expense-split strategies","LLD: BookMyShow seat locking (concurrency!)","Contest + upsolve 1"],
+  probs:[P("Number of Provinces","number-of-provinces","M","AMZ"),P("Redundant Connection","redundant-connection","M","GOO"),P("Accounts Merge","accounts-merge","M","META GOO"),P("Network Delay Time","network-delay-time","M","GOO AMZ"),P("Cheapest Flights Within K Stops","cheapest-flights-within-k-stops","M","AMZ GOO META"),P("Path With Minimum Effort","path-with-minimum-effort","M","GOO"),P("Min Cost to Connect All Points","min-cost-to-connect-all-points","M","AMZ"),P("Swim in Rising Water","swim-in-rising-water","H","GOO")],
+  reads:[["Disjoint Set Union (cp-algorithms)","https://cp-algorithms.com/data_structures/disjoint_set_union.html"],["Dijkstra's algorithm (cp-algorithms)","https://cp-algorithms.com/graph/dijkstra.html"],["Splitwise, BookMyShow LLD (awesome-low-level-design)","https://github.com/ashishps1/awesome-low-level-design"]]},
+ {f:"DP 1 · Checkpoint 2",dsa:"1D DP, house robber family, 0/1 knapsack",th:"Revision: all LLD designs",ms:true,
+  tasks:["Solve 12 problems: 1D DP + knapsack","CHECKPOINT: 1 LLD mock (60 min) with a peer","CHECKPOINT: 2 mediums + 1 hard in 75 min","Count solved — target ~180","Contest rating check (goal 1550+)"],
+  probs:[P("Climbing Stairs","climbing-stairs","E","AMZ"),P("House Robber II","house-robber-ii","M","AMZ MSFT"),P("Decode Ways","decode-ways","M","META GOO"),P("Coin Change","coin-change","M","AMZ GOO"),P("Maximum Product Subarray","maximum-product-subarray","M","AMZ MSFT"),P("Word Break","word-break","M","AMZ GOO META"),P("Longest Increasing Subsequence","longest-increasing-subsequence","M","AMZ GOO MSFT"),P("Partition Equal Subset Sum","partition-equal-subset-sum","M","AMZ META")],
+  reads:[["Dynamic programming cheatsheet (Tech Interview Handbook)",TIH("algorithms/dynamic-programming/")]]},
+ {f:"DP 2",dsa:"2D DP: LCS, edit distance, grid paths",th:"HLD 1: scalability, latency vs throughput, CAP & PACELC, consistency models, load balancing",
+  tasks:["Solve 12 problems: 2D DP","Read DDIA ch. 1–2","Notes: back-of-envelope estimation (QPS, storage, bandwidth)","Contest + upsolve 1"],
+  probs:[P("Unique Paths","unique-paths","M","AMZ GOO"),P("Minimum Path Sum","minimum-path-sum","M","AMZ GOO"),P("Longest Common Subsequence","longest-common-subsequence","M","AMZ GOO"),P("Longest Palindromic Subsequence","longest-palindromic-subsequence","M","AMZ"),P("Interleaving String","interleaving-string","M","MSFT"),P("Edit Distance","edit-distance","M","AMZ GOO MSFT"),P("Distinct Subsequences","distinct-subsequences","H","GOO"),P("Burst Balloons","burst-balloons","H","GOO")],
+  reads:[["Scale from zero to millions of users (ByteByteGo)",BB("scale-from-zero-to-millions-of-users")],["Back-of-the-envelope estimation (ByteByteGo)",BB("back-of-the-envelope-estimation")],["Designing Data-Intensive Applications","https://dataintensive.net"]]},
+ {f:"DP 3 + Greedy",dsa:"State-machine DP, greedy proofs",th:"HLD 2: SQL vs NoSQL, indexes, replication, sharding, consistent hashing",
+  tasks:["Solve 12 problems: DP + greedy","Read DDIA ch. 3, 5, 6","Design: Key-value store (consistent hashing, replication)","Contest + upsolve 1"],
+  probs:[P("Jump Game","jump-game","M","AMZ META"),P("Jump Game II","jump-game-ii","M","AMZ GOO"),P("Gas Station","gas-station","M","AMZ GOO"),P("Partition Labels","partition-labels","M","AMZ"),P("Best Time to Buy and Sell Stock with Cooldown","best-time-to-buy-and-sell-stock-with-cooldown","M","AMZ"),P("Longest Palindromic Substring","longest-palindromic-substring","M","AMZ MSFT GOO"),P("Candy","candy","H","AMZ GOO"),P("Regular Expression Matching","regular-expression-matching","H","GOO META AMZ")],
+  reads:[["Design consistent hashing (ByteByteGo)",BB("design-consistent-hashing")],["Design a key-value store (ByteByteGo)",BB("design-a-key-value-store")],["Distributed cache breakdown (Hello Interview)",HI("distributed-cache")]]},
+ {f:"Mixed Review",dsa:"Random mediums across all patterns",th:"HLD 3: Kafka deep dive, queues vs streams, idempotency, outbox, saga, exactly-once",
+  tasks:["Solve 15 mixed problems (no pattern hint)","Read DDIA ch. 11","Rewrite your backup scheduler as a 45-min HLD answer with numbers","Fix the 'exactly-once' wording on your resume","Contest + upsolve 1"],
+  probs:[P("Insert Delete GetRandom O(1)","insert-delete-getrandom-o1","M","AMZ GOO META"),P("Find All Anagrams in a String","find-all-anagrams-in-a-string","M","AMZ META"),P("Top K Frequent Words","top-k-frequent-words","M","AMZ UBER"),P("Snapshot Array","snapshot-array","M","GOO"),P("Minimum Remove to Make Valid Parentheses","minimum-remove-to-make-valid-parentheses","M","META"),P("Random Pick with Weight","random-pick-with-weight","M","META GOO"),P("Reorganize String","reorganize-string","M","AMZ GOO META"),P("Design Twitter","design-twitter","M","AMZ MSFT"),P("Making A Large Island","making-a-large-island","H","META GOO")],
+  reads:[["How Kafka does exactly-once (Confluent)","https://www.confluent.io/blog/exactly-once-semantics-are-possible-heres-how-apache-kafka-does-it/"],["Transactional outbox (microservices.io)","https://microservices.io/patterns/data/transactional-outbox.html"],["Saga pattern (microservices.io)","https://microservices.io/patterns/data/saga.html"],["Kafka design docs","https://kafka.apache.org/documentation/#design"]]},
+ {f:"HLD Case Studies 1",dsa:"Bit manipulation + matrix",th:"HLD 4: URL shortener, Rate limiter (distributed), Notification system",
+  tasks:["Solve 10 problems: bits + matrix","Design: URL shortener (45 min, out loud, recorded)","Design: Distributed rate limiter with Redis","Design: Notification service","Contest + upsolve 1"],
+  probs:[P("Single Number","single-number","E","AMZ"),P("Counting Bits","counting-bits","E",""),P("Reverse Bits","reverse-bits","E","APL"),P("Sum of Two Integers","sum-of-two-integers","M","META"),P("Pow(x, n)","powx-n","M","META AMZ GOO"),P("Rotate Image","rotate-image","M","AMZ MSFT APL"),P("Spiral Matrix","spiral-matrix","M","AMZ MSFT GOO"),P("Set Matrix Zeroes","set-matrix-zeroes","M","MSFT AMZ")],
+  reads:[["URL shortener / Bitly (Hello Interview)",HI("bitly")],["Distributed rate limiter (Hello Interview)",HI("distributed-rate-limiter")],["Notification system (Hello Interview)",HI("notification-system")],["Design a URL shortener (ByteByteGo)",BB("design-a-url-shortener")]]},
+ {f:"HLD Case Studies 2",dsa:"Hard mixed set",th:"HLD 5: News feed, Chat (WhatsApp), Distributed job scheduler",
+  tasks:["Solve 10 problems: hard mixed","Design: News feed (fan-out on write vs read)","Design: Chat system (WebSockets, delivery receipts)","Design: Distributed job scheduler (your home turf)","Contest + upsolve 1"],
+  probs:[P("First Missing Positive","first-missing-positive","H","AMZ MSFT"),P("Longest Increasing Path in a Matrix","longest-increasing-path-in-a-matrix","H","GOO AMZ"),P("Basic Calculator","basic-calculator","H","GOO AMZ"),P("Word Ladder II","word-ladder-ii","H","AMZ"),P("Sliding Puzzle","sliding-puzzle","H","AMZ"),P("Max Points on a Line","max-points-on-a-line","H","GOO AMZ"),P("Count of Smaller Numbers After Self","count-of-smaller-numbers-after-self","H","GOO")],
+  reads:[["News feed (Hello Interview)",HI("fb-news-feed")],["WhatsApp chat (Hello Interview)",HI("whatsapp")],["Job scheduler (Hello Interview)",HI("job-scheduler")],["Design a chat system (ByteByteGo)",BB("design-a-chat-system")]]},
+ {f:"HLD 3 · Checkpoint 3",dsa:"Re-solve your weakest 15",th:"HLD 6: Video streaming, Ride-hailing (geo), Payment system, Search typeahead",ms:true,
+  tasks:["Design: Payment / ledger system (idempotency keys, double-entry)","Design: Uber-style matching (geohash, quadtree)","Design: YouTube / Netflix (CDN, encoding pipeline)","CHECKPOINT: 1 HLD mock with an engineer from a FAANG","Count solved — target ~260"],
+  probs:[P("Trapping Rain Water (re-solve)","trapping-rain-water","H","AMZ GOO META BBG"),P("Merge k Sorted Lists (re-solve)","merge-k-sorted-lists","H","AMZ META GOO MSFT"),P("Serialize and Deserialize Binary Tree (re-solve)","serialize-and-deserialize-binary-tree","H","AMZ GOO META MSFT UBER"),P("Word Break (re-solve)","word-break","M","AMZ GOO META"),P("Course Schedule II (re-solve)","course-schedule-ii","M","AMZ META GOO")],
+  reads:[["Payment system (Hello Interview)",HI("payment-system")],["Uber (Hello Interview)",HI("uber")],["YouTube (Hello Interview)",HI("youtube")],["Designing robust APIs with idempotency (Stripe)","https://stripe.com/blog/idempotency"],["Search autocomplete (ByteByteGo)",BB("design-a-search-autocomplete-system")]]},
+ {f:"Amazon Mode",dsa:"Amazon-frequent problems",th:"Behavioral: 16 Leadership Principles, STAR format",
+  tasks:["Solve 15 Amazon-tagged problems","Write 10 STAR stories (see Story bank)","Map each story to 2–3 principles","Record yourself telling 3 stories; trim to 2–3 min each"],
+  probs:[P("Sort Colors","sort-colors","M","MSFT AMZ"),P("Search a 2D Matrix II","search-a-2d-matrix-ii","M","AMZ MSFT"),P("Find the Duplicate Number","find-the-duplicate-number","M","AMZ MSFT GOO"),P("Maximal Square","maximal-square","M","AMZ GOO"),P("Integer to English Words","integer-to-english-words","H","AMZ META MSFT"),P("LFU Cache","lfu-cache","H","AMZ GOO MSFT")],
+  reads:[["Amazon Leadership Principles","https://www.amazon.jobs/content/en/our-workplace/leadership-principles"],["Behavioral interview guide (Tech Interview Handbook)",TIH("behavioral-interview/")]]},
+ {f:"Brand & Referrals",dsa:"Google-frequent mediums",th:"Resume + LinkedIn rewrite, referral outreach",
+  tasks:["Rewrite every resume bullet in XYZ format with real numbers","Update LinkedIn headline, About, featured project","List 30 engineers at target companies for referrals","Send 10 referral requests with tailored 4-line message","Solve 12 Google-tagged problems"],
+  probs:[P("Decode String","decode-string","M","GOO AMZ"),P("Evaluate Division","evaluate-division","M","GOO AMZ UBER"),P("Longest String Chain","longest-string-chain","M","GOO"),P("My Calendar I","my-calendar-i","M","GOO"),P("Stock Price Fluctuation","stock-price-fluctuation","M","GOO"),P("Minimum Area Rectangle","minimum-area-rectangle","M","GOO"),P("Bus Routes","bus-routes","H","GOO AMZ")],
+  reads:[["Resume guide (Tech Interview Handbook)",TIH("resume/")],["Levels.fyi","https://www.levels.fyi"]]},
+ {f:"Warm-up Applications",dsa:"Google-level hard set, no IDE",th:"Googleyness, ambiguity handling, production-debugging stories",
+  tasks:["Apply to 4–5 warm-up companies (Uber, Atlassian, Salesforce…)","Practise coding in a plain Google Doc, no autocomplete","Solve 10 hard problems","Send 10 more referral requests","Prepare 'questions to ask the interviewer' list"],
+  probs:[P("Text Justification","text-justification","H","GOO AMZ"),P("Frog Jump","frog-jump","H","GOO AMZ"),P("The Skyline Problem","the-skyline-problem","H","GOO AMZ MSFT"),P("Trapping Rain Water II","trapping-rain-water-ii","H","GOO"),P("Minimum Number of Refueling Stops","minimum-number-of-refueling-stops","H","GOO"),P("Shortest Subarray with Sum at Least K","shortest-subarray-with-sum-at-least-k","H","GOO")],
+  reads:[["Google: How we hire","https://www.google.com/about/careers/applications/how-we-hire/"],["Questions to ask your interviewer (Tech Interview Handbook)",TIH("final-questions/")]]},
+ {f:"FAANG Applications",dsa:"Meta / Microsoft-frequent, speed drills",th:"Microsoft & Amazon loop review, OA practice",
+  tasks:["Apply to Amazon, Google, Microsoft (via referrals)","Do 2 timed online assessments (HackerRank style, 90 min)","Speed drill: 2 mediums in 40 min, 3 times","Count solved — target ~320"],
+  probs:[P("Valid Palindrome II","valid-palindrome-ii","E","META"),P("Range Sum of BST","range-sum-of-bst","E","META"),P("Custom Sort String","custom-sort-string","M","META"),P("Max Consecutive Ones III","max-consecutive-ones-iii","M","META GOO"),P("Simplify Path","simplify-path","M","META MSFT"),P("Next Permutation","next-permutation","M","META GOO"),P("Interval List Intersections","interval-list-intersections","M","META"),P("String to Integer (atoi)","string-to-integer-atoi","M","MSFT AMZ"),P("Reverse Nodes in k-Group","reverse-nodes-in-k-group","H","MSFT AMZ META")],
+  reads:[["LeetCode mock assessments","https://leetcode.com/assessment/"]]},
+ {f:"Mock Sprint 1",dsa:"Weak patterns only",th:"Mocks: DSA ×3, HLD ×1, behavioral ×1",
+  tasks:["3 DSA mocks (peers / Pramp / interviewing.io)","1 HLD mock","1 behavioral mock with someone who has been on an Amazon loop","Log every mock mistake; fix top 3 this week"],
+  probs:[],note:"Pick from your mock error log.",
+  reads:[["interviewing.io","https://interviewing.io"],["Pramp","https://www.pramp.com"]]},
+ {f:"Mock Sprint 2",dsa:"Weak patterns only",th:"Mocks + first real screens",
+  tasks:["3 more mocks (mix DSA, LLD, HLD)","Take real phone screens as they come","Re-read DDIA notes and HLD cheat sheet","Sleep 7h+ before every interview"],
+  probs:[],note:"Pick from your mock error log.",
+  reads:[["System design delivery framework (Hello Interview)","https://www.hellointerview.com/learn/system-design/in-a-hurry/delivery"]]},
+ {f:"Loops",dsa:"Light daily practice (2 problems)",th:"Revision only, flashcards",
+  tasks:["Real onsite / virtual loops","Write notes after each interview within 1 hour","Thank-you note to recruiter; ask for feedback","Keep contests going for rhythm"],
+  probs:[],note:"Two a day from the Problem bank, filtered to the company you are interviewing with.",
+  reads:[["LeetCode contests","https://leetcode.com/contest/"]]},
+ {f:"Loops & Offers",dsa:"Light daily practice",th:"Offer evaluation and negotiation",ms:true,
+  tasks:["Finish remaining loops","Compare offers with levels.fyi data (base, RSU vesting, joining bonus)","Negotiate with competing offers in writing","Decide, sign, and update your resume in memory"],
+  probs:[],note:"Maintenance only.",
+  reads:[["Negotiation guide (Tech Interview Handbook)",TIH("negotiation/")],["Levels.fyi","https://www.levels.fyi"]]}
+];
+
+
+/* ---------- more companies ---------- */
+Object.assign(CO,{ADBE:"Adobe",ATL:"Atlassian",GS:"Goldman Sachs",FK:"Flipkart",WMT:"Walmart"});
+// extra tags for problems already in the weekly plan
+const TAGMORE={"two-sum":"ADBE GS WMT","lru-cache":"ATL FK WMT ADBE","trapping-rain-water":"GS ADBE FK","number-of-islands":"ADBE FK WMT","merge-intervals":"ATL GS WMT","sliding-window-maximum":"FK","rotting-oranges":"FK WMT","median-of-two-sorted-arrays":"GS ADBE","group-anagrams":"WMT GS","product-of-array-except-self":"WMT ADBE","longest-palindromic-substring":"ADBE","spiral-matrix":"ADBE","gas-station":"ADBE","koko-eating-bananas":"FK","jump-game":"FK","count-of-smaller-numbers-after-self":"FK","stock-price-fluctuation":"ATL","time-based-key-value-store":"ATL","text-justification":"ATL","daily-temperatures":"WMT","kth-largest-element-in-an-array":"WMT FK","decode-string":"BBG ATL","best-time-to-buy-and-sell-stock-with-cooldown":"GS","course-schedule-ii":"FK","word-break":"WMT","coin-change":"GS FK","top-k-frequent-elements":"WMT ATL","valid-parentheses":"ADBE GS","search-in-rotated-sorted-array":"ADBE","container-with-most-water":"ADBE GS","edit-distance":"FK","longest-increasing-subsequence":"FK","bus-routes":"UBER"};
+
+// company-specific sets: problems commonly reported for that company, beyond the weekly plan
+const CSETS={
+ AMZ:[P("Best Time to Buy and Sell Stock","best-time-to-buy-and-sell-stock","E","AMZ GS"),P("Merge Two Sorted Lists","merge-two-sorted-lists","E","AMZ"),P("Most Common Word","most-common-word","E","AMZ"),P("Maximum Subarray","maximum-subarray","M","AMZ MSFT"),P("Reorder Data in Log Files","reorder-data-in-log-files","M","AMZ"),P("Find K Closest Elements","find-k-closest-elements","M","AMZ META"),P("Course Schedule","course-schedule","M","AMZ META"),P("Search a 2D Matrix","search-a-2d-matrix","M","AMZ"),P("Robot Bounded In Circle","robot-bounded-in-circle","M","AMZ GS"),P("Sum of Subarray Ranges","sum-of-subarray-ranges","M","AMZ"),P("Prison Cells After N Days","prison-cells-after-n-days","M","AMZ"),P("Critical Connections in a Network","critical-connections-in-a-network","H","AMZ"),P("Concatenated Words","concatenated-words","H","AMZ")],
+ GOO:[P("Count Complete Tree Nodes","count-complete-tree-nodes","E","GOO"),P("Fruit Into Baskets","fruit-into-baskets","M","GOO"),P("Minimum Domino Rotations For Equal Row","minimum-domino-rotations-for-equal-row","M","GOO"),P("Find And Replace in String","find-and-replace-in-string","M","GOO"),P("Longest Absolute File Path","longest-absolute-file-path","M","GOO"),P("Number of Matching Subsequences","number-of-matching-subsequences","M","GOO"),P("Kth Smallest Element in a Sorted Matrix","kth-smallest-element-in-a-sorted-matrix","M","GOO"),P("Find Original Array From Doubled Array","find-original-array-from-doubled-array","M","GOO"),P("Russian Doll Envelopes","russian-doll-envelopes","H","GOO"),P("Range Module","range-module","H","GOO"),P("Guess the Word","guess-the-word","H","GOO"),P("Student Attendance Record II","student-attendance-record-ii","H","GOO")],
+ META:[P("Merge Sorted Array","merge-sorted-array","E","META MSFT"),P("Add Strings","add-strings","E","META"),P("Kth Missing Positive Number","kth-missing-positive-number","E","META"),P("Toeplitz Matrix","toeplitz-matrix","E","META"),P("Continuous Subarray Sum","continuous-subarray-sum","M","META"),P("Exclusive Time of Functions","exclusive-time-of-functions","M","META"),P("Sum Root to Leaf Numbers","sum-root-to-leaf-numbers","M","META"),P("Minimum Add to Make Parentheses Valid","minimum-add-to-make-parentheses-valid","M","META"),P("All Nodes Distance K in Binary Tree","all-nodes-distance-k-in-binary-tree","M","META AMZ"),P("Diagonal Traverse","diagonal-traverse","M","META"),P("Remove Invalid Parentheses","remove-invalid-parentheses","H","META"),P("Expression Add Operators","expression-add-operators","H","META GOO"),P("Valid Number","valid-number","H","META")],
+ MSFT:[P("Intersection of Two Linked Lists","intersection-of-two-linked-lists","E","MSFT AMZ"),P("Palindrome Linked List","palindrome-linked-list","E","MSFT"),P("Excel Sheet Column Title","excel-sheet-column-title","E","MSFT"),P("Design HashMap","design-hashmap","E","MSFT"),P("Reverse Words in a String","reverse-words-in-a-string","M","MSFT"),P("Delete Node in a Linked List","delete-node-in-a-linked-list","M","MSFT"),P("Largest Number","largest-number","M","MSFT"),P("Count Good Nodes in Binary Tree","count-good-nodes-in-binary-tree","M","MSFT"),P("Populating Next Right Pointers in Each Node","populating-next-right-pointers-in-each-node","M","MSFT"),P("Maximum Length of a Concatenated String with Unique Characters","maximum-length-of-a-concatenated-string-with-unique-characters","M","MSFT"),P("Minimum Deletions to Make Character Frequencies Unique","minimum-deletions-to-make-character-frequencies-unique","M","MSFT")],
+ APL:[P("Roman to Integer","roman-to-integer","E","APL ADBE"),P("Majority Element","majority-element","E","APL"),P("Missing Number","missing-number","E","APL"),P("Move Zeroes","move-zeroes","E","APL META"),P("Rotate Array","rotate-array","M","APL MSFT"),P("Valid Sudoku","valid-sudoku","M","APL"),P("Flatten Nested List Iterator","flatten-nested-list-iterator","M","APL"),P("Encode and Decode TinyURL","encode-and-decode-tinyurl","M","APL")],
+ UBER:[P("Construct Quad Tree","construct-quad-tree","M","UBER"),P("Exam Room","exam-room","M","UBER GOO"),P("Shortest Bridge","shortest-bridge","M","UBER"),P("Sudoku Solver","sudoku-solver","H","UBER"),P("Insert Delete GetRandom O(1) - Duplicates allowed","insert-delete-getrandom-o1-duplicates-allowed","H","UBER"),P("Find All People With Secret","find-all-people-with-secret","H","UBER GOO"),P("Maximum Profit in Job Scheduling","maximum-profit-in-job-scheduling","H","UBER AMZ")],
+ BBG:[P("Design Underground System","design-underground-system","M","BBG"),P("Design Browser History","design-browser-history","M","BBG"),P("Online Stock Span","online-stock-span","M","BBG"),P("Validate Stack Sequences","validate-stack-sequences","M","BBG"),P("Remove All Adjacent Duplicates in String II","remove-all-adjacent-duplicates-in-string-ii","M","BBG"),P("Flatten a Multilevel Doubly Linked List","flatten-a-multilevel-doubly-linked-list","M","BBG"),P("Find the Winner of the Circular Game","find-the-winner-of-the-circular-game","M","BBG")],
+ ADBE:[P("Sqrt(x)","sqrtx","E","ADBE"),P("Integer to Roman","integer-to-roman","M","ADBE"),P("Count and Say","count-and-say","M","ADBE"),P("Find First and Last Position of Element in Sorted Array","find-first-and-last-position-of-element-in-sorted-array","M","ADBE META"),P("Unique Paths II","unique-paths-ii","M","ADBE")],
+ ATL:[P("Rank Teams by Votes","rank-teams-by-votes","M","ATL"),P("Tweet Counts Per Frequency","tweet-counts-per-frequency","M","ATL"),P("Design a Food Rating System","design-a-food-rating-system","M","ATL"),P("All O`one Data Structure","all-oone-data-structure","H","ATL")],
+ GS:[P("First Unique Character in a String","first-unique-character-in-a-string","E","GS BBG"),P("Find Pivot Index","find-pivot-index","E","GS"),P("Longest Common Prefix","longest-common-prefix","E","GS"),P("String Compression","string-compression","M","GS"),P("Minimum Size Subarray Sum","minimum-size-subarray-sum","M","GS"),P("Fraction to Recurring Decimal","fraction-to-recurring-decimal","M","GS")],
+ FK:[P("Minimum Number of Arrows to Burst Balloons","minimum-number-of-arrows-to-burst-balloons","M","FK"),P("Magnetic Force Between Two Balls","magnetic-force-between-two-balls","M","FK"),P("Maximum Sum Circular Subarray","maximum-sum-circular-subarray","M","FK"),P("Number of Longest Increasing Subsequence","number-of-longest-increasing-subsequence","M","FK")],
+ WMT:[P("Find the Town Judge","find-the-town-judge","E","WMT"),P("Sort Characters By Frequency","sort-characters-by-frequency","M","WMT"),P("Smallest Range Covering Elements from K Lists","smallest-range-covering-elements-from-k-lists","H","WMT")]
+};
+
+// what each loop is known for, beyond LeetCode
+const CBRIEF={
+ AMZ:{slug:"amazon",loop:"OA (2 coding + work simulation) → 4–5 rounds incl. Bar Raiser",focus:["Leadership Principles in every round","HLD at SDE II","Graphs, heaps, intervals, LRU"],design:["Design Amazon order processing / checkout","Design a notification service","Design a distributed job scheduler","Design a rate limiter","Parking lot / locker system (LLD)"],beh:["Tell me about a time you disagreed with your manager","A time you took a calculated risk","Most difficult customer problem you solved","A time you missed a deadline"]},
+ GOO:{slug:"google",loop:"Recruiter → phone screen → 4–5 onsite (coding-heavy) + Googleyness → hiring committee → team match",focus:["Graphs & DP, written cleanly in a doc","Follow-ups that change constraints","Talking through trade-offs"],design:["Design Google Docs collaborative editing","Design a web crawler","Design YouTube view counter / top-K"],beh:["Handling ambiguity on a project","Helping a teammate who was struggling","A time you pushed back on a product decision"]},
+ META:{slug:"facebook",loop:"Screen → 2 coding (2 problems each) + 1 design + 1 behavioral",focus:["Speed: two mediums in 40 min","Trees, strings, intervals, stacks","Product sense in design"],design:["Design Facebook news feed","Design Messenger / WhatsApp","Design live comments","Design Instagram"],beh:["Conflict with a peer","Biggest impact project","A time you received critical feedback"]},
+ MSFT:{slug:"microsoft",loop:"Screen → 4–5 rounds (coding, LLD/HLD) → As-Appropriate with senior leader",focus:["Linked lists, trees, strings","LLD with working classes","Deep dive into past projects"],design:["Design an LRU cache (LLD + thread safety)","Design Teams chat presence","Design a URL shortener"],beh:["Why Microsoft","A time you learned something quickly","Growth mindset example"]},
+ APL:{slug:"apple",loop:"Team-specific: recruiter → hiring-manager → 4–6 team rounds",focus:["Domain depth for the team","Arrays, strings, design of APIs","Concurrency"],design:["Design an iCloud photo sync service","Design a push-notification gateway"],beh:["Attention to detail story","Cross-team collaboration"]},
+ UBER:{slug:"uber",loop:"OA/phone → coding ×2, LLD/machine coding, HLD, hiring manager",focus:["Graphs, geo problems","Machine coding round (working code in 60–90 min)","Real-time systems"],design:["Design Uber ride matching","Design surge pricing","Design a trip ETA service"],beh:["Ownership of an outage","Moving fast with incomplete data"]},
+ BBG:{slug:"bloomberg",loop:"Phone screen → 2 coding onsite → system design → HR + manager",focus:["Design-style data structures","Linked lists, stacks","Clear communication"],design:["Design a stock ticker feed","Design a news alert system"],beh:["Why finance and Bloomberg","Explaining tech to non-engineers"]},
+ ADBE:{slug:"adobe",loop:"OA → 3–4 technical rounds → director/HR",focus:["Arrays, strings, math","OOP and Java fundamentals","Project deep dives"],design:["Design a file storage / sync service","Design a document versioning system"],beh:["A project you are proud of","Handling a production issue"]},
+ ATL:{slug:"atlassian",loop:"Karat/phone → code design (LLD) → DSA → system design → values + manager",focus:["Code design round: extensible, tested classes","Rate limiter, snake game, voting style problems","Values interview"],design:["Design Jira issue tracker","Design a tagging service","Design a rate limiter"],beh:["Atlassian values: 'Don't #@!% the customer', 'Open company, no bullshit'","Team-first example"]},
+ GS:{slug:"goldman-sachs",loop:"HackerRank OA → CoderPad screen → Superday (3–5 rounds)",focus:["Arrays, strings, math","Java depth, concurrency","Clean code under time"],design:["Design a trade order book","Design a payment ledger"],beh:["Why Goldman","Working under pressure"]},
+ FK:{slug:"flipkart",loop:"OA → machine coding (90 min) → DSA → HLD → hiring manager",focus:["Machine coding: working, modular code","Binary search on answer, greedy","E-commerce scale design"],design:["Design flash sale / Big Billion Days","Design inventory management","Design a cart and checkout"],beh:["Ownership","Handling scale incidents"]},
+ WMT:{slug:"walmart",loop:"OA → 2–3 technical rounds (DSA + design) → manager",focus:["Arrays, hashing, heaps","Microservices & Kafka depth","Java + Spring internals"],design:["Design inventory sync across stores","Design an order tracking system"],beh:["Cross-team delivery","Customer impact story"]}
+};
+
+const TOPICS = [
+  {t:"DSA patterns",n:"~380 problems",hi:["Sliding window","Graphs BFS/DFS","DP","Trees"],o:["Two pointers","Binary search on answer","Heaps / Top-K","Monotonic stack","Union-Find","Tries","Backtracking","Intervals","Topological sort","Dijkstra","Bit tricks"]},
+  {t:"Core Java",n:"backend depth",hi:["HashMap internals","Concurrency","CompletableFuture"],o:["JVM memory & GC","Streams","Generics","Immutability","equals / hashCode","Java 17–21 features: records, sealed, virtual threads","Exceptions"]},
+  {t:"Low-level design",n:"8–10 problems",hi:["SOLID","Parking lot","LRU cache","Rate limiter"],o:["Strategy","Observer","Factory","Builder","State","Decorator","Elevator","Splitwise","BookMyShow","Vending machine","Thread safety in LLD"]},
+  {t:"High-level design",n:"12–15 designs",hi:["Caching","Sharding","Kafka / queues","Consistency"],o:["Estimation","Load balancing","Replication","Consistent hashing","CAP / PACELC","Idempotency","Outbox & saga","CDN","Rate limiting","Observability","Leader election"]},
+  {t:"HLD case studies",n:"own each",hi:["Job scheduler","Payment system","Chat","News feed"],o:["URL shortener","Notification system","Typeahead","YouTube","Uber","Key-value store","Distributed cache","Ticket booking"]},
+  {t:"Behavioral",n:"10 stories",hi:["Ownership","Dive Deep","Disagree & commit"],o:["Customer Obsession","Deliver Results","Earn Trust","Bias for Action","Learn & Be Curious","Failure story","Ambiguity","Mentoring"]}
+];
+
+const STORIES = [
+  ["Parallel async API re-architecture (FD, DigiMetal, SIP) at ABC","Dive Deep · Deliver Results","Profiling method, p99 before/after, how partial failures were handled"],
+  ["Kafka job-dispatch pipeline for thousands of devices (Jio)","Think Big · Invent and Simplify","Why Kafka over a DB queue, partition count, consumer-group scaling"],
+  ["Distributed lock on the backup scheduler","Insist on the Highest Standards","The duplicate-job bug you prevented, lock TTL, what happens on lock-holder crash"],
+  ["Refactoring God classes into clean layers","Ownership · Frugality","Why you took it on, how you de-risked it, tests added"],
+  ["Retry + graceful failure for unreachable devices","Customer Obsession","Backoff strategy, alerting, what the ops team saw"],
+  ["Config & automation engine (20% efficiency gain)","Deliver Results · Invent and Simplify","How 20% was measured, what manual work disappeared"],
+  ["A disagreement on design with a senior / manager","Have Backbone; Disagree and Commit","Data you brought, the outcome, what you'd do differently"],
+  ["A production incident or mistake you caused","Earn Trust · Learn and Be Curious","Detection, fix, postmortem action items"],
+  ["Tight deadline with incomplete requirements","Bias for Action · Are Right, A Lot","The reversible decision you made fast, and the one you didn't"],
+  ["Learning Spring AI / RAG quickly for a use case","Learn and Be Curious · Hire and Develop the Best","What you built, how you taught others"]
+];
+
+const RES = [
+  {c:"DSA practice",l:[
+    ["NeetCode 150","https://neetcode.io/practice","Main sheet. Video for every problem."],
+    ["Grind 75 (Tech Interview Handbook)","https://www.techinterviewhandbook.org/grind75","Week-by-week schedule you can tune to your hours."],
+    ["Striver's A2Z DSA Sheet","https://takeuforward.org/strivers-a2z-dsa-course/strivers-a2z-dsa-course-sheet-2","Use for extra depth on a weak pattern only."],
+    ["LeetCode contests","https://leetcode.com/contest/","Weekly Sun 08:00 IST, Biweekly alternate Sat 20:00 IST."],
+    ["Big-O Cheat Sheet","https://www.bigocheatsheet.com","Complexities at a glance."]]},
+  {c:"System design",l:[
+    ["Designing Data-Intensive Applications","https://dataintensive.net","The one book. Chapters 1–3, 5–9, 11 are the core."],
+    ["System Design Primer","https://github.com/donnemartin/system-design-primer","Free, broad reference with exercises."],
+    ["Hello Interview: System Design","https://www.hellointerview.com/learn/system-design/in-a-hurry/introduction","Interview-framed write-ups and delivery framework."],
+    ["ByteByteGo","https://bytebytego.com","Alex Xu's visual case studies (Volume 1 & 2 books)."],
+    ["Excalidraw","https://excalidraw.com","Practise drawing designs exactly as you will in interviews."]]},
+  {c:"Low-level design & Java",l:[
+    ["Refactoring Guru: Design Patterns","https://refactoring.guru/design-patterns","Clear diagrams and Java examples."],
+    ["awesome-low-level-design","https://github.com/ashishps1/awesome-low-level-design","Classic LLD problems with Java solutions."],
+    ["Baeldung","https://www.baeldung.com","Java and Spring deep dives; concurrency series."],
+    ["Java Concurrency in Practice (book)","https://jcip.net","Still the reference for threads, locks and memory model."]]},
+  {c:"Behavioral & company prep",l:[
+    ["Amazon Leadership Principles","https://www.amazon.jobs/content/en/our-workplace/leadership-principles","Learn all 16 by heart."],
+    ["Google: How we hire","https://www.google.com/about/careers/applications/how-we-hire/","Official loop description and tips."],
+    ["Tech Interview Handbook: Behavioral","https://www.techinterviewhandbook.org/behavioral-interview/","STAR structure and common questions."],
+    ["Levels.fyi","https://www.levels.fyi","Comp bands by level and city for negotiation."]]},
+  {c:"Mocks",l:[
+    ["interviewing.io","https://interviewing.io","Anonymous mocks with FAANG engineers (paid)."],
+    ["Pramp","https://www.pramp.com","Free peer mocks, good for volume."],
+    ["LeetCode mock assessments","https://leetcode.com/assessment/","Timed OA-style practice."]]},
+  {c:"Engineering blogs (read on commute)",l:[
+    ["Netflix Tech Blog","https://netflixtechblog.com","Streaming, resilience, data infra."],
+    ["Uber Engineering","https://www.uber.com/blog/engineering/","Geo systems, Kafka at scale."],
+    ["Engineering at Meta","https://engineering.fb.com","Caching, feeds, infra."],
+    ["Gaurav Sen (YouTube)","https://www.youtube.com/@gkcs","System design basics explained simply."]]}
+];
+
+
+/* ---------- helpers ---------- */
+const CV={ADBE:"var(--adbe)",ATL:"var(--atl)",GS:"var(--gs)",FK:"var(--fk)",WMT:"var(--wmt)",AMZ:"var(--amz)",GOO:"var(--goo)",META:"var(--meta)",MSFT:"var(--msft)",APL:"var(--apl)",UBER:"var(--uber)",BBG:"var(--bbg)"};
+const lc=s=>`https://leetcode.com/problems/${s}/`;
+const $=id=>document.getElementById(id);
+const DAY=864e5;
+function wkDates(i){const s=new Date(START);s.setDate(s.getDate()+7*i);const e=new Date(s);e.setDate(e.getDate()+6);return[s,e];}
+const fmt=d=>d.toLocaleDateString("en-IN",{day:"numeric",month:"short"});
+const fmtL=d=>d.toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short",year:"numeric"});
+function phaseOf(w){return PHASES.find(p=>w>=p.weeks[0]&&w<=p.weeks[1]);}
+function today(){const n=new Date();return new Date(n.getFullYear(),n.getMonth(),n.getDate());}
+function currentWeek(){const d=Math.floor((today()-START)/DAY);if(d<0)return 0;const w=Math.floor(d/7)+1;return w>26?27:w;}
+const focusWeek=()=>Math.max(1,Math.min(26,currentWeek()));
+const vars=p=>`--pc:var(--${p.c});--pcs:var(--${p.c}-soft)`;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ---------- state ---------- */
+const done=new Set();let saveTimer=null,docRef=null;const LS="faang-run-2027";
+try{JSON.parse(localStorage.getItem(LS)||"[]").forEach(x=>done.add(x));}catch(e){}
+const tKey=(w,j)=>`w${w}-t${j}`;
+function weekStats(w){const n=W[w-1].tasks.length;let d=0;for(let j=0;j<n;j++)if(done.has(tKey(w,j)))d++;return[d,n];}
+const BANK=[];(()=>{const by={};const merge=(pr,c)=>{c.forEach(t=>{if(!pr.c.includes(t))pr.c.push(t);});};
+  W.forEach((x,i)=>x.probs.forEach(pr=>{if(TAGMORE[pr.s])merge(pr,TAGMORE[pr.s].split(" "));if(by[pr.s]){merge(by[pr.s].pr,pr.c);pr.c=by[pr.s].pr.c;}else{by[pr.s]={pr,w:i+1};BANK.push(by[pr.s]);}}));
+  Object.entries(CSETS).forEach(([co,list])=>list.forEach(pr=>{if(!pr.c.includes(co))pr.c.unshift(co);if(by[pr.s])merge(by[pr.s].pr,pr.c);else{by[pr.s]={pr,w:0};BANK.push(by[pr.s]);}}));
+  W.forEach(x=>x.probs.forEach(pr=>{if(by[pr.s])pr.c=by[pr.s].pr.c;}));})();
+
+/* ---------- rows ---------- */
+function taskRow(w,j,loc){const k=tKey(w,j),t=W[w-1].tasks[j],on=done.has(k),ck=/^CHECKPOINT/.test(t);
+  return `<label class="row task${on?" done":""}" for="${loc}-${k}"><input type="checkbox" id="${loc}-${k}" data-k="${k}" ${on?"checked":""}><span class="tx">${ck?'<span class="tag">checkpoint</span>':""}${esc(t.replace(/^CHECKPOINT:\s*/,""))}</span></label>`;}
+function probRow(pr,w,loc,showWeek){const k="s:"+pr.s,on=done.has(k),id=`${loc}-${w}-${pr.s}`;
+  return `<div class="row prob${on?" done":""}"><input type="checkbox" id="${id}" data-k="${k}" aria-label="Solved ${esc(pr.t)}" ${on?"checked":""}><span class="pt"><a href="${lc(pr.s)}" target="_blank" rel="noopener">${esc(pr.t)}</a><span class="diff ${pr.d}">${{E:"Easy",M:"Medium",H:"Hard"}[pr.d]}</span>${showWeek?`<span class="wk-l">${w?"W"+w:"company set"}</span>`:""}</span><span class="cos">${pr.c.map(c=>`<span class="co" style="--c:${CV[c]}">${CO[c]}</span>`).join("")}</span></div>`;}
+const readsList=x=>`<ul class="reads">${x.reads.map(r=>`<li><a href="${r[1]}" target="_blank" rel="noopener">${esc(r[0])}</a></li>`).join("")}</ul>`;
+
+/* ---------- tabs ---------- */
+const TABS=[["dashboard","Dashboard"],["daily","Daily to-do"],["plan","Plan"],["calendar","Calendar"],["problems","Problems"],["prep","Interview prep"],["resources","Resources"]];
+let tab="dashboard";
+function showTab(t,scroll){tab=t;TABS.forEach(([k])=>{$("tab-"+k).hidden=k!==t;const b=$("tb-"+k);if(b)b.setAttribute("aria-selected",k===t);});
+  try{localStorage.setItem(LS+"-tab",t)}catch(e){}
+  if(scroll){const top=document.querySelector("nav.tabs").offsetTop;if(window.scrollY>top)window.scrollTo({top,behavior:"smooth"});}}
+function renderTabs(){$("tabs").innerHTML=TABS.map(([k,l])=>`<button role="tab" id="tb-${k}" aria-selected="${k===tab}" data-t="${k}">${l}${k==="plan"?'<span class="cnt" id="tabWk"></span>':""}</button>`).join("");
+  $("tabs").querySelectorAll("button").forEach(b=>b.onclick=()=>showTab(b.dataset.t,true));}
+function openWeek(w){showTab("plan");filter="all";renderFilters();applyFilter();const d=$("week-"+w);if(d){d.open=true;setTimeout(()=>d.scrollIntoView({behavior:"smooth",block:"start"}),30);}}
+
+/* ---------- hero ---------- */
+function renderHero(){
+  const cw=currentWeek();
+  $("track").innerHTML=W.map((x,i)=>{const w=i+1,p=phaseOf(w);return `<a class="seg${w===cw?" now":""}${x.ms?" ms":""}" href="#plan" data-w="${w}" style="${vars(p)}" title="Week ${w}: ${esc(x.f)}" aria-label="Week ${w}: ${esc(x.f)}"><i id="sg${w}"></i></a>`;}).join("");
+  $("track").querySelectorAll("a").forEach(a=>a.onclick=e=>{e.preventDefault();openWeek(+a.dataset.w);});
+  $("trackmeta").innerHTML=PHASES.map(p=>`<span style="--n:${p.weeks[1]-p.weeks[0]+1};${vars(p)}">${p.id}. ${p.name}</span>`).join("");
+  let b;
+  if(cw===0){const d=Math.ceil((START-today())/DAY);b=[`Starts in <b>${d} day${d===1?"":"s"}</b>`,`Week 1 · Mon 19 Oct`];}
+  else if(cw>26)b=["Plan complete","Time to update the resume"];
+  else b=[`Week <b>${cw}</b> of 26`,`${phaseOf(cw).name}`];
+  b.push("Target: Amazon · Google · Microsoft");
+  $("badges").innerHTML=b.map(x=>`<span class="badge">${x}</span>`).join("");
+}
+
+/* ---------- dashboard ---------- */
+function renderDash(){
+  const w=focusWeek(),x=W[w-1],p=phaseOf(w),[s,e]=wkDates(w-1),cw=currentWeek();
+  const tw=$("thisWeek");tw.setAttribute("style",vars(p));
+  tw.innerHTML=`<div class="tw-head"><div class="tw-no num">${String(w).padStart(2,"0")}</div><div><div class="d">${cw===0?"UP NEXT · ":"THIS WEEK · "}${fmt(s)} – ${fmt(e)} · ${p.name}</div><h3>${esc(x.f)}</h3></div><div class="ring-s mono num" id="twCount" style="font-size:.8rem;color:var(--muted)"></div></div>
+   <div class="tw-body">
+     <div><div class="lbl-s">Tasks <span id="twTasks"></span></div><div class="rows">${x.tasks.map((_,j)=>taskRow(w,j,"d")).join("")}</div></div>
+     <div class="tw-grid"><div class="mini-card"><div class="lbl-s">DSA pattern</div>${esc(x.dsa)}</div><div class="mini-card"><div class="lbl-s">Theory track</div>${esc(x.th)}</div></div>
+     <div><div class="lbl-s">Practice problems <span>tick when solved</span></div><div class="rows">${x.probs.length?x.probs.map(pr=>probRow(pr,w,"d")).join(""):`<p class="pnote">${esc(x.note||"")}</p>`}</div></div>
+     <div><div class="lbl-s">Read this week</div>${readsList(x)}</div>
+     <div><button class="chip" id="toPlan">Open the full plan →</button></div>
+   </div>`;
+  $("toPlan").onclick=()=>openWeek(w);
+  // next checkpoint
+  const nx=W.findIndex((y,i)=>y.ms&&i+1>=w);const nw=nx+1,np=phaseOf(nw),[,ne]=wkDates(nx);
+  const days=Math.max(0,Math.ceil((ne-today())/DAY));
+  $("nextCk").innerHTML=`<div class="dia" style="${vars(np)};background:var(--pcs);color:var(--pc)">◆</div><div><b>Week ${nw}: ${esc(W[nx].f)}</b><span>${fmt(ne)} · ${days} days away · ${esc(W[nx].tasks.filter(t=>/CHECKPOINT|target/.test(t)).map(t=>t.replace(/^CHECKPOINT:\s*/,"")).join(" · "))}</span></div>`;
+  const ap=new Date(2027,2,15);$("tApply").textContent=Math.max(0,Math.ceil((ap-today())/DAY));
+  $("tPhase").textContent=p.name;$("tPhase").style.color=`var(--${p.c})`;
+  $("tPhaseSub").textContent=`Weeks ${p.weeks[0]}–${p.weeks[1]} · ${p.goal}`;
+  $("tPhaseBar").style.setProperty("--pc",`var(--${p.c})`);
+  $("cobars").innerHTML=Object.keys(CO).map(c=>`<button class="cobar" data-c="${c}" title="Show ${CO[c]} problems"><b style="color:${CV[c]}">${CO[c]}</b><span class="bar"><i id="cb-${c}" style="background:${CV[c]}"></i></span><span class="n num" id="cn-${c}"></span></button>`).join("");
+  $("cobars").querySelectorAll("button").forEach(b=>b.onclick=()=>{coF=b.dataset.c;dF="all";renderBank();showTab("problems",true);});
+}
+
+/* ---------- plan ---------- */
+let filter="all";
+function renderPhases(){
+  $("phaseGrid").innerHTML=PHASES.map(p=>{const[s]=wkDates(p.weeks[0]-1),[,e]=wkDates(p.weeks[1]-1);
+    return `<div class="card phase" style="${vars(p)}"><div class="pn">0${p.id}</div><h3>${p.name}</h3><div class="dates">W${p.weeks[0]}–${p.weeks[1]} · ${fmt(s)} – ${fmt(e)}</div><div style="font-size:.85rem;color:var(--muted)">${p.goal}</div><ul>${p.items.map(i=>`<li>${i}</li>`).join("")}</ul><div class="bar"><i id="pb${p.id}"></i></div><div class="pct num" id="pp${p.id}"></div></div>`;}).join("");
+}
+function renderFilters(){
+  const o=[["all","All weeks"],["now","This week"],["open","Unfinished"],...PHASES.map(p=>["p"+p.id,p.name,p])];
+  $("filters").innerHTML=o.map(([k,l,p])=>`<button class="chip" data-f="${k}" aria-pressed="${k===filter}" ${p?`style="${vars(p)}"`:""}>${p?"<i></i>":""}${l}</button>`).join("");
+  $("filters").querySelectorAll("button").forEach(b=>b.onclick=()=>{filter=b.dataset.f;renderFilters();applyFilter();});
+}
+function applyFilter(){const fw=focusWeek();
+  W.forEach((x,i)=>{const w=i+1,[d,n]=weekStats(w);let show=true;
+    if(filter==="now")show=w===fw;else if(filter==="open")show=d<n;else if(filter.startsWith("p"))show=phaseOf(w).id===+filter.slice(1);
+    $("week-"+w).hidden=!show;});}
+function renderWeeks(){const fw=focusWeek(),cw=currentWeek();
+  $("weekList").innerHTML=W.map((x,i)=>{const w=i+1,p=phaseOf(w),[s,e]=wkDates(i);
+    return `<details class="card week" id="week-${w}" style="${vars(p)}" ${w===fw?"open":""}>
+      <summary><span class="wno num">${String(w).padStart(2,"0")}</span><span class="wmeta"><span class="d">${fmt(s)} – ${fmt(e)} · ${p.name}${x.ms?" · ◆ checkpoint":""}</span><br><span class="t">${esc(x.f)}</span>${w===cw?'<span class="nowpill">NOW</span>':""}</span><span class="wcount num" id="wc${w}"><span></span><span class="bar"><i></i></span></span></summary>
+      <div class="wbody">
+        <div><div class="lbl-s">Tasks</div><div class="rows">${x.tasks.map((_,j)=>taskRow(w,j,"p")).join("")}</div></div>
+        <div class="wside"><div class="mini-card"><div class="lbl-s">DSA pattern</div>${esc(x.dsa)}</div><div class="mini-card"><div class="lbl-s">Theory track</div>${esc(x.th)}</div><div class="mini-card"><div class="lbl-s">Read</div>${readsList(x)}</div></div>
+        <div class="full"><div class="lbl-s">Practice problems <span>LeetCode · tick when solved</span></div><div class="rows">${x.probs.length?x.probs.map(pr=>probRow(pr,w,"p")).join(""):`<p class="pnote">${esc(x.note||"")}</p>`}</div></div>
+      </div></details>`;}).join("");
+}
+
+/* ---------- calendar ---------- */
+const EVENTS=[[6,"Checkpoint 1","~90 problems · 2 mediums in 45 min"],[12,"Checkpoint 2","LLD mock · ~180 problems · rating 1550+"],[18,"Checkpoint 3","HLD mock with a FAANG engineer · ~260 problems"],[20,"Referrals start","Resume rewrite done · 10 requests out"],[21,"Warm-up applications","Uber, Atlassian, Salesforce and similar"],[22,"FAANG applications","Amazon, Google, Microsoft via referrals"],[23,"Mock sprint","12+ mocks across weeks 23–24"],[25,"Interview loops","Notes within an hour of each round"],[26,"Offers","Compare on levels.fyi, negotiate in writing"]];
+function renderCal(){
+  const end=new Date(START);end.setDate(end.getDate()+26*7-1);const td=today();
+  const evDays=new Set(EVENTS.map(([w])=>+wkDates(w-1)[0]));
+  let html="";
+  for(let m=new Date(2026,9,1);m<=end;m=new Date(m.getFullYear(),m.getMonth()+1,1)){
+    const first=new Date(m),lead=(first.getDay()+6)%7,dim=new Date(m.getFullYear(),m.getMonth()+1,0).getDate();
+    let cells=["M","T","W","T","F","S","S"].map(d=>`<span class="dow">${d}</span>`).join("")+"<span></span>".repeat(lead);
+    const wks=new Set();
+    for(let d=1;d<=dim;d++){const dt=new Date(m.getFullYear(),m.getMonth(),d);const idx=Math.floor((dt-START)/DAY);
+      let cls="day",st="",attr="";
+      if(idx>=0&&dt<=end){const w=Math.floor(idx/7)+1,p=phaseOf(w);wks.add(w);cls+=" in";st=vars(p);attr=`data-w="${w}" aria-label="${fmtL(dt)}, week ${w}"`;
+        if(idx%7===0){cls+=" mon";attr+=` data-wn="${w}"`;}
+        if(W[w-1].ms&&idx%7===6)cls+=" ms";
+        if(evDays.has(+dt))cls+=" ev";}
+      if(+dt===+td)cls+=" today";
+      cells+=`<button class="${cls}" style="${st}" ${attr} ${idx%7===0&&idx>=0?`data-w2="W${Math.floor(idx/7)+1}"`:""}>${d}</button>`;}
+    const wl=[...wks];
+    html+=`<div class="card month"><h3>${m.toLocaleDateString("en-IN",{month:"long",year:"numeric"})}<small>${wl.length?`W${wl[0]}–${wl[wl.length-1]}`:""}</small></h3><div class="mgrid">${cells}</div></div>`;}
+  $("months").innerHTML=html;
+  $("months").querySelectorAll(".day.in").forEach(b=>b.onclick=()=>openWeek(+b.dataset.w));
+  // week labels on mondays
+  $("legend").innerHTML=PHASES.map(p=>`<span style="${vars(p)}"><i></i>${p.name}</span>`).join("")+`<span><i style="background:var(--p1);border-color:var(--p1)"></i>Checkpoint day</span><span><i style="border-radius:50%;width:8px;height:8px;background:var(--accent);border:0"></i>Milestone</span><span><i style="background:transparent;border-color:var(--accent)"></i>Today</span>`;
+  $("milestones").innerHTML=`<h3>Milestones</h3>`+EVENTS.map(([w,t,s])=>{const p=phaseOf(w),[d]=wkDates(w-1);return `<div class="mst" style="${vars(p)}"><div class="dt">${d.toLocaleDateString("en-IN",{day:"numeric"})}<br>${d.toLocaleDateString("en-IN",{month:"short"})}</div><div><b>${t}</b><span>Week ${w} · ${s}</span></div></div>`;}).join("");
+}
+
+/* ---------- problems ---------- */
+let coF="all",dF="all";
+function renderBank(){
+  const cos=[["all","All companies","var(--accent)"],...Object.keys(CO).map(c=>[c,CO[c],CV[c]])];
+  $("cofilter").innerHTML=cos.map(([k,l,c])=>{const list=BANK.filter(b=>k==="all"||b.pr.c.includes(k));const sv=list.filter(b=>done.has("s:"+b.pr.s)).length;
+    return `<button data-c="${k}" aria-pressed="${k===coF}" style="--c:${c}"><span>${l}</span><span class="n num">${sv}/${list.length}</span><span class="bar"><i style="width:${list.length?100*sv/list.length:0}%"></i></span></button>`;}).join("");
+  $("cofilter").querySelectorAll("button").forEach(b=>b.onclick=()=>{coF=b.dataset.c;renderBank();});
+  $("dFilters").innerHTML=[["all","Any"],["E","Easy"],["M","Medium"],["H","Hard"],["todo","Unsolved"]].map(([k,l])=>`<button class="chip" data-d="${k}" aria-pressed="${k===dF}">${l}</button>`).join("");
+  $("dFilters").querySelectorAll("button").forEach(b=>b.onclick=()=>{dF=b.dataset.d;renderBank();});
+  const list=BANK.filter(({pr})=>(coF==="all"||pr.c.includes(coF))&&(dF==="all"||(dF==="todo"?!done.has("s:"+pr.s):pr.d===dF)));
+  let html="";
+  if(coF!=="all"&&CBRIEF[coF]){const b=CBRIEF[coF];html+=`<div class="brief" style="--c:${CV[coF]}"><h3>${CO[coF]} interview brief<a href="https://leetcode.com/company/${b.slug}/" target="_blank" rel="noopener">LeetCode company tag ↗</a></h3><div class="loop"><b>Loop:</b> ${esc(b.loop)}</div><div class="bgrid"><div><div class="lbl-s">Focus</div><ul>${b.focus.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div><div><div class="lbl-s">Design questions reported</div><ul>${b.design.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div><div><div class="lbl-s">Behavioral themes</div><ul>${b.beh.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div></div></div>`;}
+  const cs=list.filter(b=>b.w===0);
+  if(cs.length)html+=`<div style="--pc:var(--accent)"><div class="grouph">${coF==="all"?"Company sets":CO[coF]+" set"} · ${cs.length}</div><div class="rows">${cs.map(({pr,w})=>probRow(pr,w,"b",true)).join("")}</div></div>`;
+  PHASES.forEach(p=>{const g=list.filter(b=>b.w&&phaseOf(b.w).id===p.id);if(!g.length)return;
+    html+=`<div style="${vars(p)}"><div class="grouph">${p.name} · ${g.length}</div><div class="rows">${g.map(({pr,w})=>probRow(pr,w,"b",true)).join("")}</div></div>`;});
+  $("bankList").innerHTML=html||`<p class="pnote" style="padding:12px">No problems match these filters.</p>`;
+  $("bankCount").textContent=`${list.length} shown · ${list.filter(b=>done.has("s:"+b.pr.s)).length} solved`;
+}
+
+/* ---------- prep + resources ---------- */
+function renderPrep(){
+  $("storyGrid").innerHTML=STORIES.map((s,i)=>`<div class="card story"><div class="sn num">${String(i+1).padStart(2,"0")}</div><b>${esc(s[0])}</b><div class="lp">${s[1].split(/\s*[·;]\s*/).map(x=>`<span>${esc(x)}</span>`).join("")}</div><div class="mi">Must include: ${esc(s[2])}</div></div>`).join("");
+  $("topicGrid").innerHTML=TOPICS.map(t=>`<div class="card tcard"><h3>${t.t}<small>${t.n}</small></h3><div class="pills">${t.hi.map(x=>`<span class="pill hi">${x}</span>`).join("")}${t.o.map(x=>`<span class="pill">${x}</span>`).join("")}</div></div>`).join("");
+  const pc=["p1","p2","p3","p4","p5","p1"];
+  $("resGrid").innerHTML=RES.map((c,i)=>`<div class="card rcat" style="--pc:var(--${pc[i%6]})"><h3>${c.c}</h3><ul>${c.l.map(r=>`<li><a href="${r[1]}" target="_blank" rel="noopener"><b>${esc(r[0])} ↗</b><span>${esc(r[2])}</span></a></li>`).join("")}</ul></div>`).join("");
+}
+
+/* ---------- stats ---------- */
+function updateStats(){
+  let all=0,tot=0;const ph={};
+  W.forEach((x,i)=>{const w=i+1,[d,n]=weekStats(w);all+=d;tot+=n;const p=phaseOf(w).id;ph[p]=ph[p]||[0,0];ph[p][0]+=d;ph[p][1]+=n;
+    const c=$("wc"+w);if(c){c.firstChild.textContent=`${d}/${n}`;c.querySelector("i").style.width=(100*d/n)+"%";c.classList.toggle("full",d===n);}
+    const sg=$("sg"+w);if(sg)sg.style.height=(100*d/n)+"%";});
+  PHASES.forEach(p=>{const[d,n]=ph[p.id],pc=Math.round(100*d/n);$("pb"+p.id).style.width=pc+"%";$("pp"+p.id).textContent=`${pc}% · ${d}/${n} tasks`;});
+  const sv=BANK.filter(b=>done.has("s:"+b.pr.s)).length;
+  $("pctAll").textContent=Math.round(100*all/tot)+"%";
+  $("countAll").textContent=`${all} / ${tot} tasks`;$("countProb").textContent=`${sv} / ${BANK.length} problems`;
+  $("ringArc").setAttribute("stroke-dashoffset",(314.16*(1-all/tot)).toFixed(1));
+  $("ringProb").setAttribute("stroke-dashoffset",(219.9*(1-sv/BANK.length)).toFixed(1));
+  $("tProb").textContent=sv;$("tProbSub").textContent=`of ${BANK.length} in the plan · aim ~380 incl. extras`;$("tProbBar").style.width=(100*sv/BANK.length)+"%";
+  const fw=focusWeek(),[d,n]=weekStats(fw);$("twCount").textContent=`${d}/${n} tasks`;$("twTasks").textContent=`${d} of ${n} done`;
+  const tw=$("tabWk");if(tw)tw.textContent="W"+fw;
+  const p=phaseOf(fw),[pd,pn]=ph[p.id];$("tPhaseBar").style.width=(100*pd/pn)+"%";
+  Object.keys(CO).forEach(c=>{const l=BANK.filter(b=>b.pr.c.includes(c));const s=l.filter(b=>done.has("s:"+b.pr.s)).length;$("cb-"+c).style.width=(100*s/l.length)+"%";$("cn-"+c).textContent=`${s}/${l.length}`;});
+}
+
+/* ---------- interaction + save ---------- */
+function syncKey(k,on){document.querySelectorAll(`input[data-k="${CSS.escape(k)}"]`).forEach(i=>{i.checked=on;i.closest(".row").classList.toggle("done",on);});}
+document.addEventListener("change",ev=>{const t=ev.target;if(!t.dataset||!t.dataset.k)return;const k=t.dataset.k;t.checked?done.add(k):done.delete(k);syncKey(k,t.checked);updateStats();
+  if(k.startsWith("s:")&&t.closest("#bankList")===null)renderBank();else if(k.startsWith("s:")){const keep=window.scrollY;renderBank();window.scrollTo(0,keep);}
+  if(filter==="open")applyFilter();queueSave();});
+function setSave(t){$("saveState").textContent=t;}
+function queueSave(){try{localStorage.setItem(LS,JSON.stringify([...done]))}catch(e){}
+  if(!docRef){setSave("Saved in this browser");return;}
+  setSave("Saving…");clearTimeout(saveTimer);
+  saveTimer=setTimeout(async()=>{try{await docRef.set({done:[...done],updated:new Date().toISOString()});setSave("Saved to your account");}catch(e){setSave("Saved in this browser (account save failed)");}},700);}
+function refreshAll(){document.querySelectorAll("input[data-k]").forEach(i=>{const on=done.has(i.dataset.k);i.checked=on;i.closest(".row").classList.toggle("done",on);});renderBank();updateStats();applyFilter();}
+
+
+/* ---------- daily log ---------- */
+const CATS=[["DSA","p1"],["LLD","p2"],["HLD","p3"],["Java","p1"],["Behavioral","p4"],["Apply","p5"],["Mock","p4"],["Other","p3"]];
+const catVar=c=>{const f=CATS.find(x=>x[0]===c);return f?f[1]:"p3";};
+const DAYS={};               // "YYYY-MM-DD" -> {items:[{id,text,cat,done,url}],note}
+let dayCol=null, curDay=null;
+const LSD=LS+"-days";
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const fromIso=s=>{const[y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d);};
+const addDays=(s,n)=>{const d=fromIso(s);d.setDate(d.getDate()+n);return iso(d);};
+const getDay=k=>DAYS[k]||(DAYS[k]={items:[],note:""});
+try{Object.assign(DAYS,JSON.parse(localStorage.getItem(LSD)||"{}"));}catch(e){}
+curDay=iso(today());
+const dayTimers={};
+function saveDay(k){try{localStorage.setItem(LSD,JSON.stringify(DAYS))}catch(e){}
+  if(!dayCol){setSave("Saved in this browser");return;}
+  setSave("Saving…");clearTimeout(dayTimers[k]);
+  dayTimers[k]=setTimeout(async()=>{try{const v=DAYS[k];await dayCol.doc(k).set({items:v.items,note:v.note||"",date:k,updated:new Date().toISOString()});setSave("Saved to your account");}catch(e){setSave("Saved in this browser (account save failed)");}},600);}
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+function streak(){let n=0,k=iso(today());if(!(DAYS[k]&&DAYS[k].items.some(i=>i.done)))k=addDays(k,-1);
+  while(DAYS[k]&&DAYS[k].items.some(i=>i.done)){n++;k=addDays(k,-1);}return n;}
+function addItem(text,cat,url){text=text.trim();if(!text)return;const d=getDay(curDay);
+  if(!url){const m=text.match(/https?:\/\/\S+/);if(m)url=m[0];}
+  d.items.push({id:uid(),text,cat:cat||"Other",done:false,url:url||""});saveDay(curDay);renderDaily();}
+
+function renderDaily(){
+  const d=getDay(curDay),td=iso(today()),dt=fromIso(curDay);
+  const idx=Math.floor((dt-START)/DAY),w=idx>=0&&idx<182?Math.floor(idx/7)+1:0;
+  // header
+  $("dDate").textContent=dt.toLocaleDateString("en-IN",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+  $("dSub").textContent=(curDay===td?"Today":curDay===addDays(td,-1)?"Yesterday":curDay===addDays(td,1)?"Tomorrow":"")+(w?`${curDay===td||Math.abs(dt-today())<=DAY?" · ":""}Week ${w} · ${W[w-1].f}`:"");
+  $("dPick").value=curDay;
+  // strip
+  let strip="";for(let i=-3;i<=3;i++){const k=addDays(curDay,i),dd=fromIso(k),v=DAYS[k],tot=v?v.items.length:0,dn=v?v.items.filter(x=>x.done).length:0;
+    strip+=`<button class="dstrip${k===curDay?" on":""}${k===td?" td":""}" data-k="${k}"><span>${dd.toLocaleDateString("en-IN",{weekday:"short"})}</span><b>${dd.getDate()}</b><i style="--f:${tot?dn/tot:0}"></i></button>`;}
+  $("dStrip").innerHTML=strip;$("dStrip").querySelectorAll("button").forEach(b=>b.onclick=()=>{curDay=b.dataset.k;renderDaily();});
+  // lists
+  const todo=d.items.filter(x=>!x.done),dn=d.items.filter(x=>x.done);
+  const row=it=>`<div class="ditem${it.done?" done":""}" style="--pc:var(--${catVar(it.cat)});--pcs:var(--${catVar(it.cat)}-soft)">
+     <input type="checkbox" id="di-${it.id}" data-id="${it.id}" ${it.done?"checked":""} aria-label="Mark ${esc(it.text)} done">
+     <label for="di-${it.id}" class="dtext">${esc(it.text.replace(/https?:\/\/\S+/,"").trim()||it.url)}</label>
+     <span class="dcat">${esc(it.cat)}</span>
+     ${it.url?`<a class="dlink" href="${esc(it.url)}" target="_blank" rel="noopener" aria-label="Open link">↗</a>`:"<span></span>"}
+     <button class="ddel" data-del="${it.id}" aria-label="Delete ${esc(it.text)}">×</button></div>`;
+  $("dTodo").innerHTML=todo.length?todo.map(row).join(""):`<p class="dempty">${d.items.length?"All done for this day. Nice work.":"Nothing planned yet. Add a task above, or pull one in from the plan below."}</p>`;
+  $("dDone").innerHTML=dn.length?dn.map(row).join(""):`<p class="dempty">Ticked tasks land here.</p>`;
+  $("dTodoN").textContent=todo.length;$("dDoneN").textContent=dn.length;
+  const pct=d.items.length?Math.round(100*dn.length/d.items.length):0;
+  $("dPct").textContent=pct+"%";$("dBar").style.width=pct+"%";
+  // note
+  const nt=$("dNote");if(document.activeElement!==nt)nt.value=d.note||"";
+  // carry over
+  let prevK=null;for(let i=1;i<=14;i++){const k=addDays(curDay,-i);if(DAYS[k]&&DAYS[k].items.some(x=>!x.done)){prevK=k;break;}}
+  const carry=$("dCarry");
+  if(prevK){const n=DAYS[prevK].items.filter(x=>!x.done).length;carry.hidden=false;carry.textContent=`Carry over ${n} unfinished from ${fromIso(prevK).toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short"})}`;carry.dataset.k=prevK;}else carry.hidden=true;
+  // suggestions from the plan
+  const fw=w||focusWeek(),x=W[fw-1],have=new Set(d.items.map(i=>i.text));
+  const sug=[...x.tasks.map((t,j)=>({t:t.replace(/^CHECKPOINT:\s*/,""),c:/LLD/.test(t)?"LLD":/Design|HLD/.test(t)?"HLD":/STAR|stor/i.test(t)?"Behavioral":/Apply|referral/i.test(t)?"Apply":/mock/i.test(t)?"Mock":/Solve|problem|Contest/i.test(t)?"DSA":"Other"})),
+    ...x.probs.filter(p=>!done.has("s:"+p.s)).slice(0,6).map(p=>({t:`LeetCode: ${p.t}`,c:"DSA",u:lc(p.s)}))].filter(s=>!have.has(s.t));
+  $("dSugW").textContent=`Week ${fw}`;
+  $("dSug").innerHTML=sug.length?sug.map((s,i)=>`<button class="chip dsug" data-i="${i}" style="--pc:var(--${catVar(s.c)})"><i></i>${esc(s.t)}</button>`).join(""):`<p class="dempty">Everything from this week's plan is already on this day.</p>`;
+  $("dSug").querySelectorAll("button").forEach(b=>b.onclick=()=>{const s=sug[+b.dataset.i];addItem(s.t,s.c,s.u);});
+  renderHeat();
+  $("dStreak").textContent=streak();
+  const allDone=Object.values(DAYS).reduce((a,v)=>a+v.items.filter(i=>i.done).length,0);$("dTotal").textContent=allDone;
+  const active=Object.values(DAYS).filter(v=>v.items.some(i=>i.done)).length;$("dActive").textContent=active;
+  renderTodayCard();
+}
+function renderHeat(){
+  const end=new Date(START);end.setDate(end.getDate()+182);let h="";
+  for(let wk=0;wk<26;wk++){h+=`<div class="hcol">`;for(let d=0;d<7;d++){const dt=new Date(START);dt.setDate(dt.getDate()+wk*7+d);const k=iso(dt),v=DAYS[k],n=v?v.items.filter(i=>i.done).length:0;
+    const lvl=n===0?0:n<3?1:n<5?2:n<8?3:4;h+=`<button class="hc l${lvl}${k===curDay?" on":""}${k===iso(today())?" td":""}" data-k="${k}" title="${dt.toLocaleDateString("en-IN",{day:"numeric",month:"short"})}: ${n} done" aria-label="${dt.toLocaleDateString("en-IN",{day:"numeric",month:"short"})}, ${n} done"></button>`;}h+=`</div>`;}
+  $("dHeat").innerHTML=h;$("dHeat").querySelectorAll("button").forEach(b=>b.onclick=()=>{curDay=b.dataset.k;renderDaily();});
+}
+function renderTodayCard(){const el=$("todayCard");if(!el)return;const v=DAYS[iso(today())],tot=v?v.items.length:0,dn=v?v.items.filter(i=>i.done).length:0;
+  el.innerHTML=`<div><b>${tot?`${dn} of ${tot} done today`:"No tasks logged today"}</b><span>${tot?v.items.filter(i=>!i.done).slice(0,3).map(i=>esc(i.text)).join(" · ")||"Everything ticked.":"Plan today in the Daily log."} · streak ${streak()} day${streak()===1?"":"s"}</span></div><button class="chip" id="toDaily">Open daily log →</button>`;
+  $("toDaily").onclick=()=>{curDay=iso(today());renderDaily();showTab("daily",true);};}
+function wireDaily(){
+  $("dForm").addEventListener("submit",e=>{e.preventDefault();addItem($("dInput").value,$("dCatSel").value);$("dInput").value="";$("dInput").focus();});
+  $("dCatSel").innerHTML=CATS.map(([c])=>`<option>${c}</option>`).join("");
+  $("dPrev").onclick=()=>{curDay=addDays(curDay,-1);renderDaily();};
+  $("dNext").onclick=()=>{curDay=addDays(curDay,1);renderDaily();};
+  $("dToday").onclick=()=>{curDay=iso(today());renderDaily();};
+  $("dPick").onchange=e=>{if(e.target.value){curDay=e.target.value;renderDaily();}};
+  $("dCarry").onclick=()=>{const k=$("dCarry").dataset.k,src=DAYS[k],dst=getDay(curDay);const moving=src.items.filter(x=>!x.done);
+    src.items=src.items.filter(x=>x.done);moving.forEach(m=>dst.items.push({...m,id:uid()}));saveDay(k);saveDay(curDay);renderDaily();};
+  const host=$("tab-daily");
+  host.addEventListener("change",e=>{const id=e.target.dataset&&e.target.dataset.id;if(!id)return;const it=getDay(curDay).items.find(x=>x.id===id);if(it){it.done=e.target.checked;saveDay(curDay);renderDaily();}});
+  host.addEventListener("click",e=>{const b=e.target.closest("[data-del]");if(!b)return;const d=getDay(curDay);const i=d.items.findIndex(x=>x.id===b.dataset.del);if(i<0)return;
+    const [gone]=d.items.splice(i,1);saveDay(curDay);renderDaily();showUndo(gone,i);});
+  $("dNote").addEventListener("input",e=>{getDay(curDay).note=e.target.value;saveDay(curDay);});
+}
+let undoT=null;
+function showUndo(item,i){const u=$("dUndo");u.hidden=false;u.innerHTML=`Deleted “${esc(item.text.slice(0,40))}” <button class="chip" id="dUndoB">Undo</button>`;
+  $("dUndoB").onclick=()=>{getDay(curDay).items.splice(i,0,item);saveDay(curDay);u.hidden=true;renderDaily();};
+  clearTimeout(undoT);undoT=setTimeout(()=>u.hidden=true,6000);}
+async function loadDays(d,id){
+  dayCol=d.doc(`data/users/${id}/todo`).collection("days");
+  const qs=await dayCol.get();let any=false;
+  (qs.docs||[]).forEach(s=>{const v=s.data&&s.data();if(v&&v.date){DAYS[v.date]={items:Array.isArray(v.items)?v.items:[],note:v.note||""};any=true;}});
+  if(!any){Object.keys(DAYS).forEach(k=>{if(DAYS[k].items.length||DAYS[k].note)saveDay(k);});}
+  try{localStorage.setItem(LSD,JSON.stringify(DAYS))}catch(e){}
+  renderDaily();
+}
+
+/* ---------- boot ---------- */
+try{const t=localStorage.getItem(LS+"-tab");if(t&&TABS.some(x=>x[0]===t))tab=t;}catch(e){}
+const h=(location.hash||"").slice(1);if(TABS.some(x=>x[0]===h))tab=h;
+renderTabs();renderHero();renderDash();renderPhases();renderFilters();renderWeeks();renderCal();renderBank();renderPrep();updateStats();applyFilter();wireDaily();renderDaily();showTab(tab);
+if(currentWeek()===0)setSave(`Week 1 starts ${fmtL(START)}`);
+(async()=>{
+  if(!window.claude||!window.claude.use){setSave("Saved in this browser");return;}
+  try{const[d,u]=await Promise.all([window.claude.use("db"),window.claude.use("user")]);
+    if(!d||!u){setSave("Saved in this browser");return;}
+    const id=await u.id();if(!id){setSave("Saved in this browser");return;}
+    docRef=d.doc(`data/users/${id}/progress`);loadDays(d,id).catch(()=>{});const snap=await docRef.get();
+    if(snap.exists){const arr=(snap.data()||{}).done;if(Array.isArray(arr)){done.clear();arr.forEach(x=>done.add(String(x)));refreshAll();try{localStorage.setItem(LS,JSON.stringify([...done]))}catch(e){}}}
+    else if(done.size){await docRef.set({done:[...done],updated:new Date().toISOString()});}
+    setSave("Synced to your account");
+  }catch(e){setSave("Saved in this browser");}
+})();
+</script>
+
+</body></html>
