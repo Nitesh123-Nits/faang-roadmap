@@ -335,6 +335,57 @@ td .cname{font-family:var(--display);font-weight:800;font-size:1.05rem;color:var
 .bgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 @media (max-width:760px){.bgrid{grid-template-columns:1fr}}
 .bgrid ul{margin:0;padding-left:18px;font-size:.86rem;display:grid;gap:4px}
+/* patterns deep */
+.pdef{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:600px){.pdef{grid-template-columns:1fr}}
+.pdef p{margin:0;line-height:1.6}
+.pvar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (max-width:600px){.pvar{grid-template-columns:1fr}}
+.pvar div{background:var(--pcs);border-radius:10px;padding:8px 10px;display:grid;gap:2px}
+.pvar b{font-size:.84rem;color:var(--pc)}
+.pvar span{font-size:.82rem}
+.psteps{margin:0;padding-left:20px;display:grid;gap:4px;font-size:.88rem}
+.psteps li::marker{color:var(--pc);font-weight:700;font-family:var(--mono)}
+.pqc{font:600 .7rem var(--mono);color:var(--pc)}
+.prem{font:600 .6rem var(--mono);padding:2px 6px;border-radius:4px;background:var(--surface-2);color:var(--muted)}
+/* patterns */
+.patcats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:860px){.patcats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.patcat{display:grid;gap:4px;text-align:left;padding:16px;cursor:pointer;color:var(--fg);font-family:var(--body);position:relative;overflow:hidden;border-top:4px solid var(--pc)}
+.patcat .pcn{font:700 .95rem var(--display)}
+.patcat b{font-family:var(--display);font-size:2rem;font-weight:800;color:var(--pc);line-height:1}
+.patcat b small{font-size:1rem;color:var(--muted);font-weight:600}
+.patcat .pcl{font-size:.76rem;color:var(--muted)}
+.patcat .bar{margin-top:6px}
+.patcat[aria-pressed="true"]{background:linear-gradient(160deg,var(--pcs),var(--surface) 75%);border-color:var(--pc);box-shadow:0 0 0 1px var(--pc),var(--shadow)}
+.pattools{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.pattools input{flex:1 1 260px;height:40px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--fg);padding:0 14px;font:500 .9rem var(--body);min-width:0}
+.patgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
+.patgrid.wide{grid-template-columns:1fr}
+@media (max-width:900px){.patgrid{grid-template-columns:1fr}}
+details.pat{overflow:hidden;border-left:5px solid var(--pc)}
+details.pat summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:start;padding:14px 16px}
+details.pat summary::-webkit-details-marker{display:none}
+details.pat[open] summary{background:linear-gradient(90deg,var(--pcs),transparent 70%);border-bottom:1px solid var(--line)}
+.pno{font:800 1.3rem var(--display);color:var(--pc);line-height:1.2}
+.pttl{display:grid;gap:6px;min-width:0}
+.pttl b{font:700 1.02rem var(--display)}
+.psig{display:flex;flex-wrap:wrap;gap:4px}
+.psig span{font-size:.72rem;padding:2px 8px;border-radius:999px;background:var(--surface-2);color:var(--muted)}
+.row.patm{display:flex;gap:6px;align-items:center;padding:4px 10px;border-radius:999px;border:1px solid var(--line);font:600 .72rem var(--mono);color:var(--muted);background:var(--surface);white-space:nowrap}
+.row.patm input{width:15px;height:15px;accent-color:var(--p5)}
+details.pat.mastered .row.patm{background:var(--p5-soft);color:var(--p5);border-color:transparent}
+details.pat.mastered .pttl b::after{content:" ✓";color:var(--p5)}
+.pbody{padding:14px 16px 16px;display:grid;gap:12px;font-size:.9rem}
+.pidea{margin:0}
+.pcode{border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.pcode-h{display:flex;justify-content:space-between;gap:8px;padding:6px 12px;background:var(--surface-2);font:600 .66rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pcode-h .cx{text-transform:none;letter-spacing:0;color:var(--pc)}
+.pcode pre{margin:0;padding:12px 14px;overflow-x:auto;background:var(--hero);color:#e3e8ff;font:400 .78rem/1.6 var(--mono)}
+.pcode .cm{color:#8f9bc4;font-style:italic}
+.pinfo{background:var(--surface-2);border-radius:12px;padding:10px 12px}
+.ptrap{background:var(--accent-soft);border-radius:12px;padding:10px 12px;font-size:.86rem}
+.ptrap b{color:var(--accent);font:700 .66rem var(--mono);letter-spacing:.1em;text-transform:uppercase;margin-right:6px}
 footer{padding-block:20px 50px;color:var(--muted);font-size:.8rem}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -459,6 +510,19 @@ footer{padding-block:20px 50px;color:var(--muted);font-size:.8rem}
     </div>
   </section>
 
+  <!-- PATTERNS -->
+  <section class="panel" id="tab-patterns" role="tabpanel" hidden>
+    <div class="phead"><div class="eyebrow">Recognise · template · trade-off</div><h2>Patterns</h2><p>Sixty-seven patterns in four families. Open a card for the signals that give it away, a Java template or real-world use, the classic trap, and problems to practise. Mark each one as mastered once you can explain it without notes.</p></div>
+    <div class="patcats" id="patCats"></div>
+    <div class="pattools">
+      <input id="patSearch" type="search" placeholder="Search patterns, e.g. 'kafka', 'subarray', 'undo'" aria-label="Search patterns">
+      <div class="chips" id="patOnly"><button class="chip" data-o="all">All</button><button class="chip" data-o="todo">To learn</button><button class="chip" data-o="done">Mastered</button></div>
+      <button class="chip" id="patExpand">Expand all</button>
+    </div>
+    <p class="note" id="patBlurb"></p>
+    <div class="patgrid" id="patGrid"></div>
+  </section>
+
   <!-- PREP -->
   <section class="panel" id="tab-prep" role="tabpanel" hidden>
     <div class="phead"><div class="eyebrow">Interview prep</div><h2>Where to aim and what to say</h2><p>Target companies at your level, what your resume gives you, the story bank, and the full syllabus.</p></div>
@@ -498,7 +562,7 @@ footer{padding-block:20px 50px;color:var(--muted);font-size:.8rem}
     <div class="phead" id="stories"><h3>Story bank</h3><p>Ten STAR stories from your own work, mapped to the Amazon Leadership Principles they prove best. The same stories serve Google's Googleyness round and Microsoft's final round.</p></div>
     <div class="stories" id="storyGrid"></div>
 
-    <div class="phead" id="syllabus"><h3>Syllabus</h3><p>Dark pills come up most often in SDE-2 backend loops.</p></div>
+    <div class="phead" id="syllabus"><h3>Syllabus</h3><p>Dark pills come up most often in SDE-2 backend loops. The Patterns tab has templates and practice for each.</p></div>
     <div class="tgrid" id="topicGrid"></div>
   </section>
 
@@ -676,6 +740,434 @@ const CBRIEF={
  WMT:{slug:"walmart",loop:"OA → 2–3 technical rounds (DSA + design) → manager",focus:["Arrays, hashing, heaps","Microservices & Kafka depth","Java + Spring internals"],design:["Design inventory sync across stores","Design an order tracking system"],beh:["Cross-team delivery","Customer impact story"]}
 };
 
+
+/* ---------- patterns ---------- */
+// L(slug) = LeetCode problem; Q(text,url) = question/reading
+const L=(t,s)=>({t,u:"https://leetcode.com/problems/"+s+"/"});
+const Q=(t,u)=>({t,u});
+const PATS={
+ dsa:{name:"DSA patterns",c:"p1",blurb:"Recognise the pattern from the problem statement, then reach for the template. Most mediums are one of these sixteen.",items:[
+  {id:"two-ptr",n:"Two pointers",sig:["Sorted array or string","Find a pair / triplet with a target","In-place partition or dedupe"],idea:"Move two indices toward each other (or same direction) so each step discards part of the search space. O(n) instead of O(n²).",
+   code:`int l = 0, r = a.length - 1;
+while (l < r) {
+  int s = a[l] + a[r];
+  if (s == target) return new int[]{l, r};
+  if (s < target) l++; else r--;
+}`,cx:"O(n) time · O(1) space",trap:"Needs sorted input or a monotonic property; sorting first costs O(n log n).",ex:[L("3Sum","3sum"),L("Container With Most Water","container-with-most-water"),L("Trapping Rain Water","trapping-rain-water")]},
+  {id:"window",n:"Sliding window",sig:["Contiguous subarray / substring","Longest / shortest / count with a constraint","'At most K distinct'"],idea:"Grow the right edge, shrink the left edge while the window is invalid. Track window state in a map or counter.",
+   code:`Map<Character,Integer> cnt = new HashMap<>();
+int l = 0, best = 0;
+for (int r = 0; r < s.length(); r++) {
+  cnt.merge(s.charAt(r), 1, Integer::sum);
+  while (cnt.get(s.charAt(r)) > 1) {        // invalid
+    cnt.merge(s.charAt(l++), -1, Integer::sum);
+  }
+  best = Math.max(best, r - l + 1);
+}`,cx:"O(n) time · O(k) space",trap:"Negative numbers break the 'shrink while sum > k' logic; use prefix sums + map instead.",ex:[L("Longest Substring Without Repeating Characters","longest-substring-without-repeating-characters"),L("Minimum Window Substring","minimum-window-substring"),L("Max Consecutive Ones III","max-consecutive-ones-iii")]},
+  {id:"prefix",n:"Prefix sum + hashmap",sig:["Subarray sum equals K","Count subarrays with property","Range sum queries"],idea:"prefix[j] − prefix[i] = sum(i..j). Store prefix counts in a map to find matching starts in O(1).",
+   code:`Map<Integer,Integer> seen = new HashMap<>(Map.of(0, 1));
+int sum = 0, count = 0;
+for (int x : nums) {
+  sum += x;
+  count += seen.getOrDefault(sum - k, 0);
+  seen.merge(sum, 1, Integer::sum);
+}`,cx:"O(n) time · O(n) space",trap:"Seed the map with {0:1} or you miss subarrays starting at index 0.",ex:[L("Subarray Sum Equals K","subarray-sum-equals-k"),L("Continuous Subarray Sum","continuous-subarray-sum"),L("Product of Array Except Self","product-of-array-except-self")]},
+  {id:"fastslow",n:"Fast & slow pointers",sig:["Cycle in linked list or sequence","Middle of a list","Duplicate number in 1..n"],idea:"One pointer moves 2×. They meet inside a cycle; resetting one to head finds the cycle entry.",
+   code:`ListNode slow = head, fast = head;
+while (fast != null && fast.next != null) {
+  slow = slow.next; fast = fast.next.next;
+  if (slow == fast) {                 // cycle found
+    slow = head;
+    while (slow != fast) { slow = slow.next; fast = fast.next; }
+    return slow;                      // entry
+  }
+}
+return null;`,cx:"O(n) time · O(1) space",trap:"Check fast != null && fast.next != null before advancing.",ex:[L("Linked List Cycle II","linked-list-cycle-ii"),L("Find the Duplicate Number","find-the-duplicate-number"),L("Reorder List","reorder-list")]},
+  {id:"bsearch",n:"Binary search on answer",sig:["Minimise the maximum / maximise the minimum","'At least K days / capacity'","Monotonic yes/no check"],idea:"If feasible(x) is monotonic, binary search x over its range and test feasibility greedily.",
+   code:`int lo = 1, hi = maxPossible;
+while (lo < hi) {
+  int mid = lo + (hi - lo) / 2;
+  if (feasible(mid)) hi = mid; else lo = mid + 1;
+}
+return lo;`,cx:"O(n log range)",trap:"Use lo + (hi−lo)/2 to avoid overflow; decide carefully between hi = mid and hi = mid − 1.",ex:[L("Koko Eating Bananas","koko-eating-bananas"),L("Split Array Largest Sum","split-array-largest-sum"),L("Magnetic Force Between Two Balls","magnetic-force-between-two-balls")]},
+  {id:"monostack",n:"Monotonic stack",sig:["Next greater / smaller element","Span or width until a bigger bar","Histogram area"],idea:"Keep a stack of indices in increasing or decreasing order; popping resolves answers for popped elements.",
+   code:`int[] res = new int[n];
+Deque<Integer> st = new ArrayDeque<>();
+for (int i = 0; i < n; i++) {
+  while (!st.isEmpty() && t[i] > t[st.peek()]) {
+    int j = st.pop(); res[j] = i - j;
+  }
+  st.push(i);
+}`,cx:"O(n) time · O(n) space",trap:"Store indices, not values, when you need distances.",ex:[L("Daily Temperatures","daily-temperatures"),L("Largest Rectangle in Histogram","largest-rectangle-in-histogram"),L("Online Stock Span","online-stock-span")]},
+  {id:"intervals",n:"Merge intervals / sweep line",sig:["Overlapping ranges","Meeting rooms needed","Insert into a schedule"],idea:"Sort by start, then merge or count overlaps. For max concurrency, sweep +1 at start, −1 at end.",
+   code:`Arrays.sort(iv, (a, b) -> a[0] - b[0]);
+List<int[]> out = new ArrayList<>();
+for (int[] cur : iv) {
+  if (out.isEmpty() || out.get(out.size()-1)[1] < cur[0]) out.add(cur);
+  else out.get(out.size()-1)[1] = Math.max(out.get(out.size()-1)[1], cur[1]);
+}`,cx:"O(n log n)",trap:"Clarify whether touching intervals [1,2],[2,3] count as overlapping.",ex:[L("Merge Intervals","merge-intervals"),L("Meeting Rooms II","meeting-rooms-ii"),L("Non-overlapping Intervals","non-overlapping-intervals")]},
+  {id:"heap",n:"Top-K / heap",sig:["K largest / smallest / most frequent","Stream median","Merge K sorted"],idea:"Keep a size-K heap of the best candidates; or two heaps (max-left, min-right) for medians.",
+   code:`PriorityQueue<Integer> pq = new PriorityQueue<>(); // min-heap
+for (int x : nums) {
+  pq.offer(x);
+  if (pq.size() > k) pq.poll();
+}
+return pq.peek();  // kth largest`,cx:"O(n log k)",trap:"Min-heap for K largest, max-heap for K smallest. Quickselect gives O(n) average.",ex:[L("Kth Largest Element in an Array","kth-largest-element-in-an-array"),L("Find Median from Data Stream","find-median-from-data-stream"),L("Merge k Sorted Lists","merge-k-sorted-lists")]},
+  {id:"treedfs",n:"Tree DFS (return values up)",sig:["Height, diameter, path sums","Validate BST","LCA"],idea:"Recurse; each call returns what the parent needs, and updates a global best on the way.",
+   code:`int best = Integer.MIN_VALUE;
+int gain(TreeNode n) {
+  if (n == null) return 0;
+  int l = Math.max(0, gain(n.left)), r = Math.max(0, gain(n.right));
+  best = Math.max(best, n.val + l + r);   // path through n
+  return n.val + Math.max(l, r);          // path up to parent
+}`,cx:"O(n) time · O(h) stack",trap:"Distinguish 'answer through this node' from 'value returned to parent'.",ex:[L("Binary Tree Maximum Path Sum","binary-tree-maximum-path-sum"),L("Diameter of Binary Tree","diameter-of-binary-tree"),L("Lowest Common Ancestor of a Binary Tree","lowest-common-ancestor-of-a-binary-tree")]},
+  {id:"bfs",n:"BFS / multi-source BFS",sig:["Shortest path in unweighted graph or grid","Level-by-level","Spreading (rot, fire, distance)"],idea:"Queue; process level by level. Seed all sources at once for multi-source distance.",
+   code:`Deque<int[]> q = new ArrayDeque<>(sources);
+int steps = 0;
+while (!q.isEmpty()) {
+  for (int sz = q.size(); sz > 0; sz--) {
+    int[] c = q.poll();
+    for (int[] d : DIRS) { /* bounds + visited check, then q.offer */ }
+  }
+  steps++;
+}`,cx:"O(V + E)",trap:"Mark visited when enqueuing, not when dequeuing, or nodes get added many times.",ex:[L("Rotting Oranges","rotting-oranges"),L("Word Ladder","word-ladder"),L("Shortest Path in Binary Matrix","shortest-path-in-binary-matrix")]},
+  {id:"topo",n:"Topological sort",sig:["Prerequisites / dependencies","Build order","Detect cycle in directed graph"],idea:"Kahn's algorithm: repeatedly take nodes with in-degree 0. If not all nodes are taken, there is a cycle.",
+   code:`Deque<Integer> q = new ArrayDeque<>();
+for (int i = 0; i < n; i++) if (indeg[i] == 0) q.offer(i);
+List<Integer> order = new ArrayList<>();
+while (!q.isEmpty()) {
+  int u = q.poll(); order.add(u);
+  for (int v : adj.get(u)) if (--indeg[v] == 0) q.offer(v);
+}
+return order.size() == n ? order : List.of(); // cycle`,cx:"O(V + E)",trap:"Edge direction: [a, b] in 'Course Schedule' means b → a.",ex:[L("Course Schedule II","course-schedule-ii"),L("Alien Dictionary","alien-dictionary"),L("Course Schedule","course-schedule")]},
+  {id:"uf",n:"Union-Find",sig:["Connected components","Merge groups / accounts","Detect cycle in undirected graph"],idea:"Disjoint sets with path compression + union by rank: near O(1) per operation.",
+   code:`int find(int x) { return p[x] == x ? x : (p[x] = find(p[x])); }
+boolean union(int a, int b) {
+  int ra = find(a), rb = find(b);
+  if (ra == rb) return false;            // already connected
+  if (rank[ra] < rank[rb]) { int t = ra; ra = rb; rb = t; }
+  p[rb] = ra; if (rank[ra] == rank[rb]) rank[ra]++;
+  return true;
+}`,cx:"O(α(n)) per op",trap:"Initialise p[i] = i for every node.",ex:[L("Number of Provinces","number-of-provinces"),L("Redundant Connection","redundant-connection"),L("Accounts Merge","accounts-merge")]},
+  {id:"dijkstra",n:"Dijkstra / weighted shortest path",sig:["Non-negative weighted edges","Min cost / min time to reach","'Minimum effort' path"],idea:"Min-heap by distance; relax neighbours; skip stale heap entries.",
+   code:`PriorityQueue<int[]> pq = new PriorityQueue<>((a,b) -> a[1]-b[1]);
+pq.offer(new int[]{src, 0}); dist[src] = 0;
+while (!pq.isEmpty()) {
+  int[] c = pq.poll();
+  if (c[1] > dist[c[0]]) continue;       // stale
+  for (int[] e : adj.get(c[0]))
+    if (c[1] + e[1] < dist[e[0]]) { dist[e[0]] = c[1] + e[1]; pq.offer(new int[]{e[0], dist[e[0]]}); }
+}`,cx:"O(E log V)",trap:"Negative weights need Bellman-Ford. 'Within K stops' needs state (node, stops).",ex:[L("Network Delay Time","network-delay-time"),L("Path With Minimum Effort","path-with-minimum-effort"),L("Cheapest Flights Within K Stops","cheapest-flights-within-k-stops")]},
+  {id:"backtrack",n:"Backtracking",sig:["All subsets / permutations / combinations","Constraint placement (N-Queens, Sudoku)","Generate all valid strings"],idea:"Choose → explore → un-choose. Prune early when a partial choice can't lead to an answer.",
+   code:`void bt(int start, List<Integer> path) {
+  res.add(new ArrayList<>(path));
+  for (int i = start; i < nums.length; i++) {
+    if (i > start && nums[i] == nums[i-1]) continue; // skip dupes
+    path.add(nums[i]);
+    bt(i + 1, path);
+    path.remove(path.size() - 1);
+  }
+}`,cx:"Exponential; prune hard",trap:"Copy the path when adding to results; sort first to skip duplicates.",ex:[L("Subsets","subsets"),L("Combination Sum","combination-sum"),L("N-Queens","n-queens")]},
+  {id:"dp",n:"Dynamic programming",sig:["Count ways / min cost / max value","Choices at each step with overlapping subproblems","'Can you reach / partition'"],idea:"Define state, transition, base case. Start top-down with memo, then convert to a bottom-up table and shrink space.",
+   code:`int[] dp = new int[amount + 1];
+Arrays.fill(dp, amount + 1); dp[0] = 0;
+for (int a = 1; a <= amount; a++)
+  for (int c : coins)
+    if (c <= a) dp[a] = Math.min(dp[a], dp[a - c] + 1);
+return dp[amount] > amount ? -1 : dp[amount];`,cx:"O(states × transitions)",trap:"Say the state in words before coding: 'dp[i] = min coins to make i'.",ex:[L("Coin Change","coin-change"),L("Longest Increasing Subsequence","longest-increasing-subsequence"),L("Edit Distance","edit-distance")]},
+  {id:"trie",n:"Trie",sig:["Prefix search / autocomplete","Many words against a grid","Word dictionary with wildcards"],idea:"Tree of characters; each node has children[26] and an end flag. Shared prefixes stored once.",
+   code:`class Node { Node[] next = new Node[26]; boolean end; }
+void insert(String w) {
+  Node cur = root;
+  for (char ch : w.toCharArray()) {
+    int i = ch - 'a';
+    if (cur.next[i] == null) cur.next[i] = new Node();
+    cur = cur.next[i];
+  }
+  cur.end = true;
+}`,cx:"O(L) per op",trap:"Memory heavy; a HashMap of children helps for large alphabets.",ex:[L("Implement Trie (Prefix Tree)","implement-trie-prefix-tree"),L("Word Search II","word-search-ii"),L("Search Suggestions System","search-suggestions-system")]}
+ ]},
+ lld:{name:"Design patterns",c:"p2",blurb:"The GoF patterns that actually come up in LLD rounds, each tied to a problem you'll be asked to design. Interviewers want the reason, not the name.",items:[
+  {id:"solid",n:"SOLID principles",sig:["Every LLD round","Refactoring questions","'How would you extend this?'"],idea:"Single responsibility, Open/closed, Liskov substitution, Interface segregation, Dependency inversion. Your God-class refactor at Aditya Birla Capital is a ready example.",
+   code:`// Dependency inversion: depend on the abstraction
+class PaymentService {
+  private final PaymentGateway gateway;      // interface
+  PaymentService(PaymentGateway g) { this.gateway = g; }
+}`,trap:"Don't recite definitions; show one before/after from your own code.",ex:[Q("SOLID principles (Baeldung)","https://www.baeldung.com/solid-principles")],link:"https://www.baeldung.com/solid-principles"},
+  {id:"strategy",n:"Strategy",sig:["Swappable algorithms","Pricing, split rules, rate-limit algorithms","Avoiding big if/else on type"],idea:"Define a family of algorithms behind one interface; pick one at runtime.",
+   code:`interface SplitStrategy { Map<User,Double> split(double amt, List<User> u); }
+class EqualSplit implements SplitStrategy { ... }
+class PercentSplit implements SplitStrategy { ... }
+expense.setStrategy(new EqualSplit());`,trap:"Overkill for two fixed branches.",ex:[Q("LLD: Splitwise expense splits","https://github.com/ashishps1/awesome-low-level-design"),Q("LLD: Rate limiter (token bucket vs sliding window)","https://bytebytego.com/courses/system-design-interview/design-a-rate-limiter")],link:"https://refactoring.guru/design-patterns/strategy"},
+  {id:"observer",n:"Observer",sig:["Notify many listeners on change","Event subscriptions, price alerts","Decoupling publisher from consumers"],idea:"Subject keeps a list of observers and calls them on state change. In-process version of pub/sub.",
+   code:`interface Listener { void onEvent(Event e); }
+class EventBus {
+  private final List<Listener> ls = new CopyOnWriteArrayList<>();
+  void subscribe(Listener l) { ls.add(l); }
+  void publish(Event e) { ls.forEach(l -> l.onEvent(e)); }
+}`,trap:"Slow listeners block the publisher; consider async dispatch.",ex:[Q("LLD: Stock price alert system","https://refactoring.guru/design-patterns/observer"),Q("LLD: Notification service","https://github.com/ashishps1/awesome-low-level-design")],link:"https://refactoring.guru/design-patterns/observer"},
+  {id:"factory",n:"Factory / Abstract factory",sig:["Create objects by type without exposing constructors","Vehicle types, notification channels","Config-driven creation"],idea:"Centralise creation logic; callers ask for an interface, not a concrete class.",
+   code:`class NotifierFactory {
+  static Notifier of(Channel c) {
+    return switch (c) {
+      case EMAIL -> new EmailNotifier();
+      case SMS   -> new SmsNotifier();
+      case PUSH  -> new PushNotifier();
+    };
+  }
+}`,trap:"Switch-based factories violate open/closed; a registry map scales better.",ex:[Q("LLD: Parking lot vehicle/spot types","https://github.com/ashishps1/awesome-low-level-design")],link:"https://refactoring.guru/design-patterns/factory-method"},
+  {id:"builder",n:"Builder",sig:["Many optional fields","Immutable objects","Readable construction"],idea:"Step-by-step construction ending in build(); avoids telescoping constructors. Lombok @Builder does it for you.",
+   code:`Order o = Order.builder()
+    .id(id).userId(uid)
+    .items(items).coupon("DIWALI")
+    .build();`,trap:"Validate required fields in build().",ex:[Q("Builder (Refactoring Guru)","https://refactoring.guru/design-patterns/builder")],link:"https://refactoring.guru/design-patterns/builder"},
+  {id:"singleton",n:"Singleton",sig:["One shared instance (config, cache, registry)","Thread-safety follow-up questions"],idea:"Private constructor plus one static instance. In Spring, beans are singletons by default.",
+   code:`public enum Registry {           // simplest thread-safe singleton
+  INSTANCE;
+  private final Map<String,Object> m = new ConcurrentHashMap<>();
+}
+// or: double-checked locking with a volatile field`,trap:"Expect 'make it thread-safe' and 'why volatile?' follow-ups.",ex:[Q("Double-checked locking (Baeldung)","https://www.baeldung.com/java-singleton-double-checked-locking")],link:"https://refactoring.guru/design-patterns/singleton"},
+  {id:"state",n:"State",sig:["Object behaves differently per state","Elevator, vending machine, order lifecycle","Transitions with rules"],idea:"Each state is a class handling events and deciding the next state. Removes big switch statements.",
+   code:`interface VendingState { void insertCoin(Machine m); void select(Machine m, int id); }
+class Idle implements VendingState {
+  public void insertCoin(Machine m) { m.setState(new HasCoin()); }
+  public void select(Machine m, int id) { throw new IllegalStateException("Insert coin"); }
+}`,trap:"Draw the state diagram first, then code it.",ex:[Q("LLD: Vending machine","https://github.com/ashishps1/awesome-low-level-design"),Q("LLD: Elevator system","https://github.com/ashishps1/awesome-low-level-design")],link:"https://refactoring.guru/design-patterns/state"},
+  {id:"decorator",n:"Decorator",sig:["Add behaviour without subclass explosion","Logging, caching, retries around a call","Pizza toppings / pricing add-ons"],idea:"Wrap an object implementing the same interface and add behaviour before/after delegating.",
+   code:`class CachingRepo implements UserRepo {
+  private final UserRepo inner; private final Map<Long,User> cache = new ConcurrentHashMap<>();
+  public User find(long id) { return cache.computeIfAbsent(id, inner::find); }
+}`,trap:"Deep wrapper chains are hard to debug.",ex:[Q("Decorator (Refactoring Guru)","https://refactoring.guru/design-patterns/decorator")],link:"https://refactoring.guru/design-patterns/decorator"},
+  {id:"adapter",n:"Adapter",sig:["Integrate a third-party API with a different interface","Legacy system wrapping","Multiple payment gateways"],idea:"Translate one interface into another the client expects.",
+   code:`class RazorpayAdapter implements PaymentGateway {
+  private final RazorpayClient client;
+  public Receipt pay(Payment p) { return toReceipt(client.createOrder(toRzp(p))); }
+}`,trap:"Keep adapters thin; no business logic inside.",ex:[Q("LLD: Payment gateway integration","https://refactoring.guru/design-patterns/adapter")],link:"https://refactoring.guru/design-patterns/adapter"},
+  {id:"cor",n:"Chain of responsibility",sig:["Pipeline of checks / handlers","Request validation, auth filters","Approval workflows, ATM cash dispensing"],idea:"Pass a request along a chain; each handler handles it or forwards. Spring Security filters work this way.",
+   code:`abstract class Handler {
+  private Handler next;
+  Handler then(Handler n) { this.next = n; return n; }
+  void handle(Req r) { if (next != null) next.handle(r); }
+}
+auth.then(rateLimit).then(validate);`,trap:"Make sure some handler terminates the request.",ex:[Q("LLD: ATM cash dispenser","https://github.com/ashishps1/awesome-low-level-design")],link:"https://refactoring.guru/design-patterns/chain-of-responsibility"},
+  {id:"command",n:"Command",sig:["Undo / redo","Queue or log operations","Text editor, remote control"],idea:"Wrap a request as an object with execute() and undo(); keep a history stack.",
+   code:`interface Command { void execute(); void undo(); }
+Deque<Command> history = new ArrayDeque<>();
+void run(Command c) { c.execute(); history.push(c); }
+void undo() { if (!history.isEmpty()) history.pop().undo(); }`,trap:"Undo needs enough state captured at execute time.",ex:[Q("Command (Refactoring Guru)","https://refactoring.guru/design-patterns/command")],link:"https://refactoring.guru/design-patterns/command"},
+  {id:"template",n:"Template method",sig:["Same algorithm skeleton, different steps","Report generators, data importers","Spring's JdbcTemplate / RestTemplate"],idea:"Base class defines the steps in a final method; subclasses fill in the variable steps.",
+   code:`abstract class Importer {
+  final void run() { var raw = read(); var rows = parse(raw); save(rows); }
+  abstract String read(); abstract List<Row> parse(String s);
+  void save(List<Row> r) { repo.saveAll(r); }
+}`,trap:"Inheritance-based; prefer Strategy when steps vary independently.",ex:[Q("Template method (Refactoring Guru)","https://refactoring.guru/design-patterns/template-method")],link:"https://refactoring.guru/design-patterns/template-method"},
+  {id:"proxy",n:"Proxy",sig:["Lazy loading, access control, remote calls","Spring AOP, @Transactional, Hibernate lazy entities"],idea:"Stand-in with the same interface that controls access to the real object.",
+   code:`// Spring creates this for you around @Transactional beans:
+// proxy.begin(); target.method(); proxy.commit();
+// Gotcha: self-invocation bypasses the proxy.`,trap:"Classic interview question: why doesn't @Transactional work on a private or self-invoked method?",ex:[Q("Spring proxies and @Transactional (Baeldung)","https://www.baeldung.com/transaction-configuration-with-jpa-and-spring")],link:"https://refactoring.guru/design-patterns/proxy"}
+ ]},
+ dist:{name:"Distributed system patterns",c:"p3",blurb:"The building blocks every HLD answer is made of. Know the problem each one solves and the cost it adds.",items:[
+  {id:"hashing",n:"Consistent hashing",sig:["Distribute keys across changing nodes","Sharded cache / KV store","Minimise reshuffling on scale-out"],idea:"Place nodes and keys on a hash ring; a key belongs to the next node clockwise. Virtual nodes even out load.",how:"Add a node and only ~1/N keys move. Used by Cassandra, DynamoDB, Redis Cluster (hash slots variant).",trap:"Hot keys still overload one node; add replication or key splitting.",ex:[Q("Design consistent hashing (ByteByteGo)","https://bytebytego.com/courses/system-design-interview/design-consistent-hashing"),Q("Design a key-value store (ByteByteGo)","https://bytebytego.com/courses/system-design-interview/design-a-key-value-store")]},
+  {id:"replication",n:"Replication (leader–follower, multi-leader, leaderless)",sig:["High availability","Read scaling","Geo distribution"],idea:"Copy data across nodes. Leader-follower is simplest; leaderless (Dynamo) uses quorums.",how:"Sync vs async replication trades durability for latency. Read-your-writes needs reads from the leader or session stickiness.",trap:"Replication lag causes stale reads; say how you handle it.",ex:[Q("DDIA chapter 5: Replication","https://dataintensive.net")]},
+  {id:"sharding",n:"Sharding / partitioning",sig:["Data outgrows one machine","Write throughput limits","Tenant isolation"],idea:"Split data by key range or hash. Pick a shard key with even distribution and few cross-shard queries.",how:"Range partitioning helps scans but risks hotspots; hash partitioning spreads load but kills range queries.",trap:"Resharding is painful; plan for it (consistent hashing, logical shards).",ex:[Q("DDIA chapter 6: Partitioning","https://dataintensive.net"),Q("Instagram: sharding IDs","https://instagram-engineering.com/sharding-ids-at-instagram-1cf5a71e5a5c")]},
+  {id:"quorum",n:"Quorum reads/writes",sig:["Leaderless replication","Tunable consistency","Dynamo-style stores"],idea:"With N replicas, write to W and read from R. If R + W > N, reads see the latest write.",how:"N=3, W=2, R=2 is the common default. Lower W for faster writes, lower R for faster reads.",trap:"Sloppy quorums and hinted handoff weaken the guarantee.",ex:[Q("Design a key-value store (ByteByteGo)","https://bytebytego.com/courses/system-design-interview/design-a-key-value-store")]},
+  {id:"consensus",n:"Leader election & consensus (Raft)",sig:["One node must coordinate","Distributed locks, config, metadata","Avoid split brain"],idea:"Raft elects a leader by majority vote and replicates a log; a majority must ack each entry.",how:"ZooKeeper, etcd and Kafka KRaft use consensus. Your scheduler's distributed lock is a lighter version of this problem.",trap:"Needs 2f+1 nodes to tolerate f failures.",ex:[Q("The Raft visualisation","https://raft.github.io"),Q("Job scheduler (Hello Interview)","https://www.hellointerview.com/learn/system-design/problem-breakdowns/job-scheduler")]},
+  {id:"lock",n:"Distributed lock with fencing",sig:["Only one worker may act","Scheduler de-duplication","Seat or inventory hold"],idea:"Acquire a lease (Redis SET NX PX, ZooKeeper ephemeral node); include a fencing token so stale holders are rejected.",how:"Directly relevant to your backup scheduler. Be ready to explain what happens when the lock holder pauses (GC) past its TTL.",trap:"A lock alone doesn't give exactly-once; pair it with idempotent writes.",ex:[Q("How to do distributed locking (Martin Kleppmann)","https://martin.kleppmann.com/2016/02/08/how-to-do-distributed-locking.html"),Q("Ticketmaster seat holds (Hello Interview)","https://www.hellointerview.com/learn/system-design/problem-breakdowns/ticketmaster")]},
+  {id:"idem",n:"Idempotency keys",sig:["Retries on payments or orders","At-least-once delivery","Client timeouts"],idea:"Client sends a unique key; server stores key → result and returns the stored result on repeats.",how:"Store the key in the same transaction as the side effect. Expire keys after a window.",trap:"Without it, retries double-charge. Every payment design needs this.",ex:[Q("Designing robust APIs with idempotency (Stripe)","https://stripe.com/blog/idempotency"),Q("Payment system (Hello Interview)","https://www.hellointerview.com/learn/system-design/problem-breakdowns/payment-system")]},
+  {id:"delivery",n:"Delivery semantics & exactly-once",sig:["Message queues, Kafka consumers","Duplicate events","'Exactly once' claims"],idea:"At-most-once loses messages, at-least-once duplicates them. Effective exactly-once = at-least-once + idempotent processing, or Kafka transactions for read-process-write.",how:"This is the line on your resume interviewers will probe. Explain consumer offsets, commit after processing, and dedupe by key.",trap:"Exactly-once across external systems (DB + email) isn't free; you need the outbox or idempotency.",ex:[Q("Exactly-once semantics in Kafka (Confluent)","https://www.confluent.io/blog/exactly-once-semantics-are-possible-heres-how-apache-kafka-does-it/")]},
+  {id:"cache",n:"Caching strategies",sig:["Read-heavy workloads","Slow downstream","Hot keys"],idea:"Cache-aside (lazy load), read-through, write-through, write-behind. Add TTLs and an eviction policy (LRU/LFU).",how:"You did cache-aside with Redis at Aditya Birla Capital. Know how you invalidate on writes and protect against stampedes (locks, jittered TTL, request coalescing).",trap:"Cache invalidation and thundering herd are the usual follow-ups.",ex:[Q("Distributed cache (Hello Interview)","https://www.hellointerview.com/learn/system-design/problem-breakdowns/distributed-cache"),Q("Scaling Memcache at Facebook (paper)","https://www.usenix.org/system/files/conference/nsdi13/nsdi13-final170_update.pdf")]},
+  {id:"ratelimit",n:"Rate limiting",sig:["Protect APIs from abuse","Per-user quotas","Gateway design"],idea:"Token bucket (bursty), leaky bucket (smooth), fixed window, sliding window log/counter. Store counters in Redis for a distributed limiter.",how:"Use a Lua script or INCR + EXPIRE for atomicity. Return 429 with Retry-After.",trap:"Race conditions across instances; centralise state or accept approximation.",ex:[Q("Distributed rate limiter (Hello Interview)","https://www.hellointerview.com/learn/system-design/problem-breakdowns/distributed-rate-limiter"),Q("Design a rate limiter (ByteByteGo)","https://bytebytego.com/courses/system-design-interview/design-a-rate-limiter")]},
+  {id:"backpressure",n:"Queues & backpressure",sig:["Spiky traffic","Slow consumers","Decouple producers and consumers"],idea:"Buffer work in a queue; consumers pull at their pace. Bound the queue and shed or slow producers when full.",how:"Kafka partitions = unit of parallelism; consumer lag is your health metric.",trap:"Unbounded queues just move the outage.",ex:[Q("Distributed message queue (ByteByteGo)","https://bytebytego.com/courses/system-design-interview/foreword"),Q("Kafka design docs","https://kafka.apache.org/documentation/#design")]},
+  {id:"cap",n:"CAP & PACELC",sig:["Consistency vs availability choices","Every HLD trade-off discussion"],idea:"During a partition choose consistency or availability; else choose latency or consistency (PACELC).",how:"Payments and inventory lean CP; feeds and likes lean AP.",trap:"Don't say 'we pick two of three'; partitions aren't optional.",ex:[Q("CAP theorem explained (Hello Interview)","https://www.hellointerview.com/learn/system-design/core-concepts/cap-theorem")]},
+  {id:"gossip",n:"Gossip & heartbeats",sig:["Failure detection","Cluster membership","Large peer-to-peer clusters"],idea:"Nodes periodically exchange state with random peers; info spreads in O(log N) rounds. Heartbeats with timeouts detect failures.",how:"Cassandra and Consul use gossip; phi-accrual detectors reduce false positives.",trap:"Timeouts can't tell 'dead' from 'slow'.",ex:[Q("Design a key-value store (ByteByteGo)","https://bytebytego.com/courses/system-design-interview/design-a-key-value-store")]},
+  {id:"bloom",n:"Bloom filter",sig:["'Have we seen this?' at huge scale","Avoid disk lookups for missing keys","Web crawler URL dedupe"],idea:"Bit array + k hashes. No false negatives, tunable false positives, tiny memory.",how:"LSM-tree stores (Cassandra, RocksDB) use them per SSTable.",trap:"Can't delete without a counting variant.",ex:[Q("Web crawler (Hello Interview)","https://www.hellointerview.com/learn/system-design/problem-breakdowns/web-crawler")]},
+  {id:"geohash",n:"Geo-indexing (geohash, quadtree)",sig:["Nearby drivers / restaurants","Proximity search"],idea:"Encode lat/long into a prefix-searchable string or recursively split space into cells.",how:"Redis GEO commands use geohash. Quadtrees adapt to density.",trap:"Edge-of-cell queries need neighbouring cells.",ex:[Q("Uber (Hello Interview)","https://www.hellointerview.com/learn/system-design/problem-breakdowns/uber"),Q("Yelp (Hello Interview)","https://www.hellointerview.com/learn/system-design/problem-breakdowns/yelp")]},
+  {id:"fanout",n:"Fan-out on write vs read",sig:["News feeds, timelines","Celebrity / hot-user problem"],idea:"Push posts into followers' feeds at write time (fast reads) or assemble at read time (cheap writes). Hybrid for celebrities.",how:"Most feeds are hybrid: push for normal users, pull for accounts with millions of followers.",trap:"Pure push breaks on celebrities; pure pull is slow for heavy readers.",ex:[Q("News feed (Hello Interview)","https://www.hellointerview.com/learn/system-design/problem-breakdowns/fb-news-feed")]}
+ ]},
+ ms:{name:"Microservices patterns",c:"p4",blurb:"Patterns from your day job, framed the way interviewers ask about them. You already use many of these with Spring Cloud and Kafka.",items:[
+  {id:"gateway",n:"API gateway",sig:["Single entry point for clients","Auth, rate limiting, routing","Aggregating calls"],idea:"One edge service routes requests, terminates auth, and applies cross-cutting policy.",how:"Spring Cloud Gateway, Kong, AWS API Gateway. Your resume lists API Gateway; be ready to explain your filters.",trap:"Becomes a bottleneck or a monolith if business logic leaks in.",ex:[Q("API gateway (microservices.io)","https://microservices.io/patterns/apigateway.html")]},
+  {id:"bff",n:"Backend for frontend (BFF)",sig:["Mobile and web need different shapes","Chatty clients"],idea:"A thin gateway per client type that aggregates and tailors responses.",how:"Pairs naturally with parallel async calls, like your FD/SIP aggregation work.",trap:"Duplication across BFFs.",ex:[Q("BFF pattern (Sam Newman)","https://samnewman.io/patterns/architectural/bff/")]},
+  {id:"discovery",n:"Service discovery",sig:["Dynamic instances","Client-side vs server-side load balancing"],idea:"Services register on start; clients look them up (Eureka) or the platform routes for them (Kubernetes Services).",how:"You've used both Eureka and Kubernetes. Know why Kubernetes DNS often replaces Eureka.",trap:"Stale registrations; rely on health checks.",ex:[Q("Service registry (microservices.io)","https://microservices.io/patterns/service-registry.html")]},
+  {id:"config",n:"Externalized configuration",sig:["Same image across environments","Secrets and feature flags"],idea:"Keep config outside the artifact: Spring Cloud Config, ConfigMaps, Secrets, Vault.",how:"Refresh scope or rolling restarts to apply changes.",trap:"Never bake secrets into images.",ex:[Q("Externalized configuration (microservices.io)","https://microservices.io/patterns/externalized-configuration.html")]},
+  {id:"dbper",n:"Database per service",sig:["Loose coupling","Independent scaling and schema changes"],idea:"Each service owns its data; others go through its API or events.",how:"Leads straight to the questions about joins and transactions across services: answer with Saga, CQRS and API composition.",trap:"Cross-service queries and consistency get harder.",ex:[Q("Database per service (microservices.io)","https://microservices.io/patterns/data/database-per-service.html")]},
+  {id:"saga",n:"Saga (choreography / orchestration)",sig:["Business transaction across services","Order → payment → inventory","No distributed 2PC"],idea:"Sequence of local transactions; on failure run compensating actions. Choreography uses events; orchestration uses a coordinator.",how:"Orchestration (Temporal, a state machine) is easier to reason about at 4+ steps.",trap:"Compensations must be idempotent; intermediate states are visible.",ex:[Q("Saga pattern (microservices.io)","https://microservices.io/patterns/data/saga.html"),Q("Payment system (Hello Interview)","https://www.hellointerview.com/learn/system-design/problem-breakdowns/payment-system")]},
+  {id:"outbox",n:"Transactional outbox",sig:["Update DB and publish event atomically","Avoid dual writes"],idea:"Write the event to an outbox table in the same transaction; a relay (polling or Debezium CDC) publishes it to Kafka.",how:"The honest answer to 'how do you guarantee the event is sent?' on your Kafka pipelines.",trap:"Consumers still need idempotency (relay may publish twice).",ex:[Q("Transactional outbox (microservices.io)","https://microservices.io/patterns/data/transactional-outbox.html"),Q("Debezium outbox event router","https://debezium.io/documentation/reference/stable/transformations/outbox-event-router.html")]},
+  {id:"cqrs",n:"CQRS",sig:["Read and write loads differ a lot","Complex queries over many services"],idea:"Separate write model from read model; project events into read-optimised views.",how:"Read side can be Elasticsearch or a denormalised table updated from Kafka.",trap:"Eventual consistency between write and read sides.",ex:[Q("CQRS (microservices.io)","https://microservices.io/patterns/data/cqrs.html")]},
+  {id:"es",n:"Event sourcing",sig:["Full audit trail","Rebuild state at any point","Ledgers"],idea:"Store state changes as an append-only event log; current state is a fold over events.",how:"Natural fit for financial ledgers; snapshot periodically for speed.",trap:"Schema evolution of events and harder querying.",ex:[Q("Event sourcing (microservices.io)","https://microservices.io/patterns/data/event-sourcing.html")]},
+  {id:"cb",n:"Circuit breaker",sig:["Downstream is failing or slow","Prevent cascading failure"],idea:"Closed → open after failures → half-open to probe. Fail fast with a fallback while open.",how:"Resilience4j @CircuitBreaker in Spring Boot; combine with timeouts.",trap:"Tune thresholds; a breaker without a timeout still hangs threads.",ex:[Q("Circuit breaker (microservices.io)","https://microservices.io/patterns/reliability/circuit-breaker.html"),Q("Resilience4j docs","https://resilience4j.readme.io/docs/circuitbreaker")]},
+  {id:"retry",n:"Retry with backoff & jitter",sig:["Transient failures","Network blips, 503s"],idea:"Retry with exponential backoff plus random jitter; cap attempts. Only retry idempotent operations.",how:"Your device provisioning retries are a story here. Mention dead-letter queues for poison messages.",trap:"Synchronised retries cause retry storms; jitter fixes that.",ex:[Q("Exponential backoff and jitter (AWS)","https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/")]},
+  {id:"bulkhead",n:"Bulkhead & timeouts",sig:["One slow dependency shouldn't starve others","Thread pool isolation"],idea:"Separate thread pools or connection pools per dependency; set timeouts on every remote call.",how:"Resilience4j Bulkhead, separate executors for CompletableFuture calls.",trap:"Default HTTP client timeouts are often infinite.",ex:[Q("Bulkhead (Resilience4j)","https://resilience4j.readme.io/docs/bulkhead")]},
+  {id:"dlq",n:"Dead-letter queue",sig:["Messages that keep failing","Poison pills in Kafka/RabbitMQ"],idea:"After N failed attempts, park the message in a DLQ for inspection and replay.",how:"Spring Kafka DefaultErrorHandler + DeadLetterPublishingRecoverer.",trap:"Someone must monitor and replay the DLQ.",ex:[Q("Spring Kafka error handling","https://docs.spring.io/spring-kafka/reference/kafka/annotation-error-handling.html")]},
+  {id:"strangler",n:"Strangler fig",sig:["Migrating a monolith","Incremental rewrite"],idea:"Route slices of traffic to new services behind a facade until the monolith is empty.",how:"Pairs with your monolith-to-microservices notes.",trap:"Shared database during migration is the hard part.",ex:[Q("Strangler fig (Martin Fowler)","https://martinfowler.com/bliki/StranglerFigApplication.html")]},
+  {id:"sidecar",n:"Sidecar & service mesh",sig:["Cross-cutting networking (mTLS, retries, metrics)","Polyglot services"],idea:"A proxy container next to each service handles traffic concerns (Envoy, Istio, Linkerd).",how:"Moves retries and TLS out of application code.",trap:"Operational complexity and extra latency hop.",ex:[Q("Sidecar pattern (Azure architecture)","https://learn.microsoft.com/en-us/azure/architecture/patterns/sidecar")]},
+  {id:"observ",n:"Observability: tracing, metrics, logs",sig:["Debugging across services","SLOs and alerting"],idea:"Correlate a request across services with trace IDs; RED/USE metrics; structured logs.",how:"Your OpenTelemetry + Prometheus + Grafana + Loki + Tempo stack is a strong talking point.",trap:"High-cardinality labels blow up Prometheus.",ex:[Q("Distributed tracing (microservices.io)","https://microservices.io/patterns/observability/distributed-tracing.html"),Q("OpenTelemetry docs","https://opentelemetry.io/docs/")]},
+  {id:"deploy",n:"Blue-green & canary deploys",sig:["Zero-downtime releases","Safe rollouts"],idea:"Blue-green flips all traffic between two environments; canary shifts a small percentage first and watches metrics.",how:"Kubernetes rolling updates, Argo Rollouts, or Istio traffic splitting.",trap:"Database migrations must be backward compatible (expand → migrate → contract).",ex:[Q("Canary release (Martin Fowler)","https://martinfowler.com/bliki/CanaryRelease.html")]}
+ ]}
+};
+
+/* ---------- DSA pattern deep dives ---------- */
+const DSA_EXT={
+ "two-ptr":{what:"Two pointers uses two indices that walk the same array or string, either from opposite ends toward each other or in the same direction at different speeds. Each step uses what you know about the data (usually that it is sorted) to throw away a whole set of candidates at once, so a nested O(n²) scan becomes a single O(n) pass.",
+  why:"In a sorted array, if a[l] + a[r] is too small, every pair using a[l] with anything left of r is also too small, so l can move right. That one comparison rules out r − l pairs. The same idea works for partitioning: a slow pointer marks the boundary of the 'good' region while a fast pointer scans.",
+  variants:[["Opposite ends","Pair sums, palindromes, container area. l starts at 0, r at n−1."],["Same direction (read/write)","Remove duplicates, move zeroes, partition. Slow pointer = write position."],["Fix one + two pointers","3Sum / 4Sum: loop i, then two-pointer on the rest. Skip duplicates."],["Two arrays","Merge sorted arrays, intersections. One pointer per array."]],
+  steps:["Check the input is sorted (or sort it if O(n log n) is fine).","Decide: opposite ends or read/write?","Write the move rule: which pointer moves on each comparison and why.","Handle duplicates explicitly if the output must be unique.","Stop when pointers cross (l < r) or the fast pointer hits the end."],
+  qs:[P("Valid Palindrome","valid-palindrome","E","META AMZ MSFT"),P("Merge Sorted Array","merge-sorted-array","E","META MSFT"),P("Move Zeroes","move-zeroes","E","META APL"),P("Remove Duplicates from Sorted Array","remove-duplicates-from-sorted-array","E","AMZ"),P("Squares of a Sorted Array","squares-of-a-sorted-array","E","META UBER"),P("Two Sum II - Input Array Is Sorted","two-sum-ii-input-array-is-sorted","M","AMZ"),P("3Sum","3sum","M","AMZ META MSFT APL"),P("3Sum Closest","3sum-closest","M","META GOO"),P("4Sum","4sum","M","AMZ"),P("Container With Most Water","container-with-most-water","M","AMZ GOO"),P("Sort Colors","sort-colors","M","MSFT AMZ"),P("Valid Palindrome II","valid-palindrome-ii","E","META"),P("Boats to Save People","boats-to-save-people","M","AMZ"),P("Trapping Rain Water","trapping-rain-water","H","AMZ GOO GS")]},
+ window:{what:"Sliding window keeps a contiguous range [l, r] over an array or string and moves it forward instead of recomputing every subarray. The right edge expands to take in new elements; the left edge shrinks when the window breaks a rule. Window state (sum, counts, distinct characters) is updated in O(1) as elements enter and leave.",
+  why:"For 'longest/shortest contiguous X' problems, once a window is invalid, any bigger window with the same left edge is also invalid, so l only ever moves forward. Each element enters and leaves once, giving O(n).",
+  variants:[["Fixed size k","Max sum of k elements, averages, anagram windows. Add a[r], remove a[r−k]."],["Variable, find longest","Expand r always; shrink l while invalid; record r − l + 1."],["Variable, find shortest","Expand r until valid; then shrink l while still valid, recording the minimum."],["Count subarrays","'At most K' trick: exactly(K) = atMost(K) − atMost(K−1)."]],
+  steps:["Confirm it's contiguous (subarray/substring), not a subsequence.","Pick window state: running sum, HashMap counts, or int[26].","Define 'invalid' precisely.","Loop r; add a[r]; while invalid, remove a[l] and l++.","Update the answer at the right moment (after shrinking for longest, during shrinking for shortest)."],
+  qs:[P("Best Time to Buy and Sell Stock","best-time-to-buy-and-sell-stock","E","AMZ META GS"),P("Maximum Average Subarray I","maximum-average-subarray-i","E","GOO"),P("Longest Substring Without Repeating Characters","longest-substring-without-repeating-characters","M","AMZ MSFT BBG"),P("Longest Repeating Character Replacement","longest-repeating-character-replacement","M","GOO"),P("Permutation in String","permutation-in-string","M","MSFT AMZ"),P("Find All Anagrams in a String","find-all-anagrams-in-a-string","M","AMZ META"),P("Max Consecutive Ones III","max-consecutive-ones-iii","M","META GOO"),P("Fruit Into Baskets","fruit-into-baskets","M","GOO"),P("Minimum Size Subarray Sum","minimum-size-subarray-sum","M","GS"),P("Subarrays with K Different Integers","subarrays-with-k-different-integers","H","AMZ"),P("Minimum Window Substring","minimum-window-substring","H","META AMZ GOO UBER"),P("Sliding Window Maximum","sliding-window-maximum","H","AMZ GOO FK")]},
+ prefix:{what:"A prefix sum array stores the running total up to each index, so the sum of any range i..j is prefix[j+1] − prefix[i] in O(1). Pairing prefix sums with a hashmap lets you count or find subarrays with a target sum in one pass, even when numbers are negative (where sliding window fails).",
+  why:"sum(i..j) = k is the same as prefix[j] − prefix[i−1] = k, so while scanning you only need to know how many earlier prefixes equal prefix[j] − k. A map from prefix value to count answers that instantly.",
+  variants:[["Range sum query","Precompute prefix[]; answer queries in O(1)."],["Count subarrays = k","Map<prefix, count>, seeded with {0:1}."],["Divisible by k / modulo","Store prefix % k; equal remainders mean a divisible subarray."],["Balance tricks","Map 0 → −1 so 'equal 0s and 1s' becomes 'sum = 0'."],["2D prefix sums","Matrix region sums with inclusion–exclusion."],["Prefix/suffix products","Product except self without division."]],
+  steps:["Ask: is it about subarray sums or counts? Are there negatives?","Write the identity prefix[j] − prefix[i] = target.","Seed the map ({0:1} for counts, {0:−1} for longest length).","Scan: update running sum, query the map, then insert.","For 'longest', store only the first index of each prefix."],
+  qs:[P("Running Sum of 1d Array","running-sum-of-1d-array","E","AMZ"),P("Find Pivot Index","find-pivot-index","E","GS"),P("Range Sum Query - Immutable","range-sum-query-immutable","E","META"),P("Subarray Sum Equals K","subarray-sum-equals-k","M","META GOO AMZ"),P("Continuous Subarray Sum","continuous-subarray-sum","M","META"),P("Subarray Sums Divisible by K","subarray-sums-divisible-by-k","M","AMZ"),P("Contiguous Array","contiguous-array","M","META AMZ"),P("Product of Array Except Self","product-of-array-except-self","M","AMZ META MSFT"),P("Range Sum Query 2D - Immutable","range-sum-query-2d-immutable","M","META"),P("Random Pick with Weight","random-pick-with-weight","M","META GOO"),P("Count Number of Nice Subarrays","count-number-of-nice-subarrays","M","AMZ"),P("Shortest Subarray with Sum at Least K","shortest-subarray-with-sum-at-least-k","H","GOO")]},
+ fastslow:{what:"Fast and slow pointers (Floyd's tortoise and hare) move two pointers through a linked list or an implicit sequence at different speeds, usually 1 and 2 steps. They detect cycles, find the middle, and locate the cycle entry using O(1) extra memory.",
+  why:"If there is a cycle, the fast pointer gains one step per move on the slow pointer, so it must land on it. After they meet, the distance from head to the cycle entry equals the distance from the meeting point to the entry, so moving one pointer back to head and stepping both by 1 meets at the entry.",
+  variants:[["Cycle detection","Return true when slow == fast."],["Cycle entry","Reset one pointer to head after meeting."],["Middle of list","When fast reaches the end, slow is in the middle; used for palindrome and reorder."],["Implicit sequences","Happy Number, Find the Duplicate Number: treat value → next index as a linked list."]],
+  steps:["Spot the signal: linked list with O(1) space, or 'cycle', or 'middle'.","Guard the loop: fast != null && fast.next != null.","Move slow 1, fast 2; compare after moving.","For entry: reset slow to head, move both by 1.","For palindrome/reorder: find middle, reverse second half, then compare or weave."],
+  qs:[P("Middle of the Linked List","middle-of-the-linked-list","E","AMZ"),P("Linked List Cycle","linked-list-cycle","E","AMZ MSFT"),P("Happy Number","happy-number","E","GOO"),P("Palindrome Linked List","palindrome-linked-list","E","MSFT META"),P("Linked List Cycle II","linked-list-cycle-ii","M","MSFT AMZ"),P("Reorder List","reorder-list","M","AMZ META"),P("Find the Duplicate Number","find-the-duplicate-number","M","AMZ MSFT GOO"),P("Remove Nth Node From End of List","remove-nth-node-from-end-of-list","M","META AMZ"),P("Maximum Twin Sum of a Linked List","maximum-twin-sum-of-a-linked-list","M","AMZ"),P("Circular Array Loop","circular-array-loop","M","MSFT")]},
+ bsearch:{what:"Binary search halves a search space each step by asking a yes/no question whose answer flips exactly once. Beyond sorted arrays, the most powerful form is binary search on the answer: when the question 'can we do it with value x?' is monotonic (if x works, every bigger x works), search x directly.",
+  why:"Monotonicity means the space looks like [no, no, …, no, yes, yes, …]. Each probe at mid tells you which half contains the first 'yes', so you finish in O(log range) probes, each costing an O(n) feasibility check.",
+  variants:[["Exact match","Classic sorted array search."],["Lower / upper bound","First index ≥ target, last index ≤ target (first/last position)."],["Rotated array","One half is always sorted; decide which side holds the target."],["On the answer","Min capacity, min speed, max min-distance. Write feasible(x)."],["On real numbers","Iterate a fixed number of times (sqrt, median of two arrays)."]],
+  steps:["Find the monotonic yes/no question.","Set lo and hi to bounds that surely contain the answer.","Use mid = lo + (hi − lo) / 2.","Pick the template: while (lo < hi) with hi = mid / lo = mid + 1 for 'first yes'.","Write feasible(mid) greedily and test edge cases (one element, all same)."],
+  qs:[P("Binary Search","binary-search","E","AMZ"),P("Search Insert Position","search-insert-position","E","AMZ"),P("First Bad Version","first-bad-version","E","META"),P("Sqrt(x)","sqrtx","E","ADBE"),P("Find First and Last Position of Element in Sorted Array","find-first-and-last-position-of-element-in-sorted-array","M","META ADBE"),P("Search in Rotated Sorted Array","search-in-rotated-sorted-array","M","META AMZ MSFT"),P("Find Minimum in Rotated Sorted Array","find-minimum-in-rotated-sorted-array","M","AMZ MSFT"),P("Find Peak Element","find-peak-element","M","META GOO"),P("Search a 2D Matrix","search-a-2d-matrix","M","AMZ"),P("Koko Eating Bananas","koko-eating-bananas","M","GOO META FK"),P("Capacity To Ship Packages Within D Days","capacity-to-ship-packages-within-d-days","M","AMZ"),P("Magnetic Force Between Two Balls","magnetic-force-between-two-balls","M","FK"),P("Split Array Largest Sum","split-array-largest-sum","H","GOO AMZ"),P("Median of Two Sorted Arrays","median-of-two-sorted-arrays","H","GOO AMZ GS")]},
+ monostack:{what:"A monotonic stack keeps indices whose values are always increasing (or decreasing) from bottom to top. When a new element breaks the order, you pop, and each pop is the moment you learn that element's 'next greater' or 'next smaller' neighbour.",
+  why:"Every index is pushed once and popped once, so the whole scan is O(n). An element stays on the stack exactly until something bigger (or smaller) arrives, which is precisely the answer it is waiting for.",
+  variants:[["Next greater element","Decreasing stack; pop while current > top."],["Next smaller element","Increasing stack; pop while current < top."],["Previous greater/smaller","Read the top before pushing."],["Area / span","Histogram, stock span: width = distance between boundaries."],["Monotonic deque","Sliding window max/min: pop from both ends."],["Greedy removal","Remove K digits, smallest subsequence: pop while it improves the result."]],
+  steps:["Spot the signal: 'next greater', 'days until warmer', widths bounded by taller bars.","Decide increasing or decreasing.","Store indices.","On each element: while the stack breaks the order, pop and resolve the popped index.","Handle leftovers after the loop (no greater element → −1 or n)."],
+  qs:[P("Next Greater Element I","next-greater-element-i","E","AMZ BBG"),P("Remove All Adjacent Duplicates In String","remove-all-adjacent-duplicates-in-string","E","META"),P("Daily Temperatures","daily-temperatures","M","AMZ GOO META WMT"),P("Next Greater Element II","next-greater-element-ii","M","AMZ"),P("Online Stock Span","online-stock-span","M","BBG"),P("Asteroid Collision","asteroid-collision","M","AMZ GOO"),P("Remove K Digits","remove-k-digits","M","AMZ"),P("Sum of Subarray Minimums","sum-of-subarray-minimums","M","AMZ"),P("132 Pattern","132-pattern","M","AMZ"),P("Car Fleet","car-fleet","M","GOO"),P("Largest Rectangle in Histogram","largest-rectangle-in-histogram","H","GOO AMZ"),P("Maximal Rectangle","maximal-rectangle","H","GOO AMZ")]},
+ intervals:{what:"Interval problems deal with ranges [start, end]. Sorting by start time puts overlapping intervals next to each other, so a single pass can merge them, count conflicts, or insert new ones. For 'how many at once', a sweep line turns each interval into +1 at start and −1 at end.",
+  why:"After sorting by start, an interval can only overlap the most recent merged interval, never an earlier one, so you only compare with the last element. Sorting by end time is the greedy choice when you want to keep the most non-overlapping intervals.",
+  variants:[["Merge","Sort by start; extend the last interval or append."],["Insert","Add the left part, merge overlaps, add the right part."],["Max overlap / rooms","Min-heap of end times, or sort starts and ends separately."],["Remove minimum to avoid overlap","Sort by end; greedily keep the earliest finishing."],["Intersections","Two pointers over two sorted lists."]],
+  steps:["Ask whether touching endpoints overlap.","Sort by start (merge/insert) or by end (greedy keep).","Compare each interval with the last kept one.","For concurrency, use a heap of end times or a sweep of events.","Return a new list; avoid mutating input unless allowed."],
+  qs:[P("Meeting Rooms","meeting-rooms","E","AMZ META"),P("Summary Ranges","summary-ranges","E","GOO"),P("Merge Intervals","merge-intervals","M","GOO META AMZ MSFT"),P("Insert Interval","insert-interval","M","GOO"),P("Non-overlapping Intervals","non-overlapping-intervals","M","META"),P("Meeting Rooms II","meeting-rooms-ii","M","AMZ GOO META"),P("Minimum Number of Arrows to Burst Balloons","minimum-number-of-arrows-to-burst-balloons","M","FK"),P("Interval List Intersections","interval-list-intersections","M","META"),P("Car Pooling","car-pooling","M","AMZ"),P("My Calendar I","my-calendar-i","M","GOO"),P("Employee Free Time","employee-free-time","H","AMZ GOO"),P("Data Stream as Disjoint Intervals","data-stream-as-disjoint-intervals","H","GOO")]},
+ heap:{what:"A heap (PriorityQueue in Java) always gives you the smallest (or largest) element in O(log n). It shines when you need the best K items, a running median, or the next smallest item across many sorted sources, without sorting everything.",
+  why:"To keep the K largest, a min-heap of size K holds the current top K and its root is the weakest member. Any new element bigger than the root replaces it. You never pay for sorting the other n − K elements, so the cost is O(n log K).",
+  variants:[["Top K","Min-heap of size K for largest; max-heap for smallest."],["Two heaps","Max-heap (lower half) + min-heap (upper half) for medians."],["K-way merge","Heap of (value, list, index) across K sorted lists."],["Scheduling","Heap of end times or of available resources (task scheduler, CPU)."],["Lazy deletion","Mark removed items; skip them when they surface (sliding window median)."]],
+  steps:["Ask: do I need the 'best' item repeatedly as the data changes?","Choose min-heap or max-heap (Comparator.reverseOrder()).","Decide what goes in: value, or an array [value, index].","Keep the heap bounded to K when possible.","Mention quickselect as the O(n) average alternative for one-off kth element."],
+  qs:[P("Last Stone Weight","last-stone-weight","E","AMZ"),P("Kth Largest Element in a Stream","kth-largest-element-in-a-stream","E","AMZ"),P("Kth Largest Element in an Array","kth-largest-element-in-an-array","M","META AMZ GOO"),P("Top K Frequent Elements","top-k-frequent-elements","M","AMZ META GOO"),P("K Closest Points to Origin","k-closest-points-to-origin","M","META AMZ"),P("Top K Frequent Words","top-k-frequent-words","M","AMZ UBER"),P("Task Scheduler","task-scheduler","M","META AMZ"),P("Reorganize String","reorganize-string","M","AMZ GOO META"),P("Find K Pairs with Smallest Sums","find-k-pairs-with-smallest-sums","M","GOO"),P("Kth Smallest Element in a Sorted Matrix","kth-smallest-element-in-a-sorted-matrix","M","GOO"),P("Merge k Sorted Lists","merge-k-sorted-lists","H","AMZ META GOO MSFT"),P("Find Median from Data Stream","find-median-from-data-stream","H","AMZ GOO MSFT"),P("IPO","ipo","H","AMZ"),P("Smallest Range Covering Elements from K Lists","smallest-range-covering-elements-from-k-lists","H","WMT")]},
+ treedfs:{what:"Tree DFS recursively visits a node's subtrees before (preorder), between (inorder) or after (postorder) the node itself. Most tree interview problems are postorder: each call returns a summary of its subtree (height, sum, whether it's valid) and the parent combines the two summaries.",
+  why:"A tree is defined recursively, so if you know the answer for both children you can compute it for the parent. Each node is visited once, giving O(n) time and O(h) stack space, where h is the height.",
+  variants:[["Return a value up","Height, diameter, max path sum, balanced check."],["Pass state down","Path sum to target, good nodes, valid BST bounds (min, max)."],["Inorder on BST","Gives sorted order: kth smallest, validate BST."],["LCA","Return the node if found in both subtrees."],["Build / serialize","Preorder + inorder reconstruction, string encoding with null markers."]],
+  steps:["Write the base case for null.","Say what the function returns for a subtree in one sentence.","Decide what flows down (parameters) vs up (return value).","Combine children; update a global answer if the best path passes through this node.","State complexity: O(n) time, O(h) space; skewed tree → O(n) stack."],
+  qs:[P("Maximum Depth of Binary Tree","maximum-depth-of-binary-tree","E","AMZ"),P("Invert Binary Tree","invert-binary-tree","E","GOO AMZ"),P("Same Tree","same-tree","E","AMZ"),P("Balanced Binary Tree","balanced-binary-tree","E","AMZ"),P("Diameter of Binary Tree","diameter-of-binary-tree","E","META GOO"),P("Path Sum","path-sum","E","AMZ MSFT"),P("Validate Binary Search Tree","validate-binary-search-tree","M","AMZ META MSFT BBG"),P("Kth Smallest Element in a BST","kth-smallest-element-in-a-bst","M","AMZ UBER"),P("Lowest Common Ancestor of a Binary Tree","lowest-common-ancestor-of-a-binary-tree","M","META AMZ MSFT"),P("Path Sum III","path-sum-iii","M","AMZ META"),P("Count Good Nodes in Binary Tree","count-good-nodes-in-binary-tree","M","MSFT"),P("Construct Binary Tree from Preorder and Inorder Traversal","construct-binary-tree-from-preorder-and-inorder-traversal","M","AMZ MSFT"),P("Binary Tree Maximum Path Sum","binary-tree-maximum-path-sum","H","META AMZ GOO"),P("Serialize and Deserialize Binary Tree","serialize-and-deserialize-binary-tree","H","AMZ GOO META MSFT")]},
+ bfs:{what:"Breadth-first search explores a graph or grid in rings: all nodes at distance 1, then distance 2, and so on, using a queue. Because it reaches nodes in order of distance, the first time BFS sees a node is along a shortest path in an unweighted graph.",
+  why:"The queue holds nodes in non-decreasing distance order, so no shorter path can be found later. Processing one level at a time (snapshot the queue size) gives you the level number for free.",
+  variants:[["Level order","Trees: process queue.size() nodes per level."],["Grid shortest path","4 or 8 directions, visited set, bounds check."],["Multi-source","Seed every source at distance 0 (rotting oranges, 01 matrix)."],["Implicit graph","States as nodes: word ladder, open the lock, sliding puzzle."],["0-1 BFS","Deque: weight 0 edges to the front, weight 1 to the back."],["Bidirectional","Search from both ends to cut the explored space."]],
+  steps:["Model nodes and edges (cells, words, states).","Seed the queue and mark sources visited.","Loop levels: for size = queue.size(), poll, expand neighbours.","Mark visited when enqueuing.","Return the level count when you reach the target, or −1."],
+  qs:[P("Binary Tree Level Order Traversal","binary-tree-level-order-traversal","M","AMZ META MSFT"),P("Binary Tree Right Side View","binary-tree-right-side-view","M","META AMZ"),P("Binary Tree Zigzag Level Order Traversal","binary-tree-zigzag-level-order-traversal","M","AMZ MSFT BBG"),P("Rotting Oranges","rotting-oranges","M","AMZ MSFT FK"),P("01 Matrix","01-matrix","M","GOO AMZ"),P("Shortest Path in Binary Matrix","shortest-path-in-binary-matrix","M","META AMZ"),P("Nearest Exit from Entrance in Maze","nearest-exit-from-entrance-in-maze","M","AMZ"),P("Open the Lock","open-the-lock","M","GOO"),P("Snakes and Ladders","snakes-and-ladders","M","AMZ"),P("Minimum Genetic Mutation","minimum-genetic-mutation","M","GOO"),P("Word Ladder","word-ladder","H","AMZ META GOO"),P("Sliding Puzzle","sliding-puzzle","H","AMZ"),P("Bus Routes","bus-routes","H","GOO AMZ UBER")]},
+ topo:{what:"Topological sort orders the nodes of a directed acyclic graph so every edge u → v puts u before v. It answers 'in what order can I do these tasks given dependencies?' and doubles as a cycle detector for directed graphs.",
+  why:"A node with in-degree 0 has no unmet dependencies, so it can go next. Removing it lowers its neighbours' in-degrees, possibly freeing them. If you run out of zero in-degree nodes before visiting all nodes, the remaining ones form a cycle.",
+  variants:[["Kahn's BFS","Queue of in-degree 0 nodes. Easiest to explain."],["DFS postorder","Push a node after visiting all its children; reverse at the end. Use 3 colours for cycle detection."],["Lexicographic order","Use a min-heap instead of a queue."],["Levels / parallel","Process the queue level by level to get minimum semesters."],["Derived graphs","Alien dictionary: build edges from the first differing character."]],
+  steps:["Build adjacency list and in-degree array; double-check edge direction.","Queue every node with in-degree 0.","Pop, append to order, decrement neighbours, enqueue new zeros.","If order.size() < n there is a cycle.","Mention O(V + E) time and space."],
+  qs:[P("Find the Town Judge","find-the-town-judge","E","WMT AMZ"),P("Course Schedule","course-schedule","M","AMZ META"),P("Course Schedule II","course-schedule-ii","M","AMZ META GOO"),P("Find Eventual Safe States","find-eventual-safe-states","M","GOO"),P("Minimum Height Trees","minimum-height-trees","M","GOO"),P("Course Schedule IV","course-schedule-iv","M","AMZ"),P("Find All Possible Recipes from Given Supplies","find-all-possible-recipes-from-given-supplies","M","GOO"),P("Parallel Courses","parallel-courses","M","GOO"),P("Sequence Reconstruction","sequence-reconstruction","M","GOO"),P("Alien Dictionary","alien-dictionary","H","AMZ META GOO"),P("Longest Increasing Path in a Matrix","longest-increasing-path-in-a-matrix","H","GOO AMZ")]},
+ uf:{what:"Union-Find (disjoint set union) tracks which elements belong to the same group. find(x) returns a group's representative; union(a, b) merges two groups. With path compression and union by rank, both run in near-constant time.",
+  why:"Each group is a tree whose root is the representative. Path compression flattens trees during find, and union by rank keeps them shallow, giving amortised O(α(n)), effectively constant.",
+  variants:[["Count components","Start with n; decrement on each successful union."],["Cycle detection (undirected)","union returns false when both ends are already connected."],["Kruskal's MST","Sort edges by weight; add if union succeeds."],["Grouping by key","Accounts merge, similar strings: union items sharing an attribute."],["Online connectivity","Number of Islands II: add land cells over time."]],
+  steps:["Map items to integer ids (HashMap if needed).","Initialise parent[i] = i and rank[i] = 0.","Write find with path compression and union by rank.","Union according to the problem's relation.","Read the answer: component count, sizes, or the failing edge."],
+  qs:[P("Find if Path Exists in Graph","find-if-path-exists-in-graph","E","AMZ"),P("Number of Provinces","number-of-provinces","M","AMZ GOO"),P("Redundant Connection","redundant-connection","M","GOO"),P("Accounts Merge","accounts-merge","M","META GOO"),P("Number of Operations to Make Network Connected","number-of-operations-to-make-network-connected","M","AMZ"),P("Most Stones Removed with Same Row or Column","most-stones-removed-with-same-row-or-column","M","GOO"),P("Satisfiability of Equality Equations","satisfiability-of-equality-equations","M","GOO"),P("Evaluate Division","evaluate-division","M","GOO AMZ UBER"),P("Graph Valid Tree","graph-valid-tree","M","GOO META"),P("Min Cost to Connect All Points","min-cost-to-connect-all-points","M","AMZ"),P("Swim in Rising Water","swim-in-rising-water","H","GOO"),P("Making A Large Island","making-a-large-island","H","META GOO")]},
+ dijkstra:{what:"Dijkstra's algorithm finds the cheapest path from one source to every node in a graph with non-negative edge weights. It repeatedly takes the closest unsettled node from a min-heap and relaxes its outgoing edges.",
+  why:"With non-negative weights, the closest unsettled node can't get any cheaper later, since any other route would pass through a node that is already farther. So once popped, its distance is final.",
+  variants:[["Classic","dist[] + min-heap of (node, dist); skip stale entries."],["State-expanded","Add stops, fuel or keys to the state: (node, stops)."],["Minimax path","Minimise the maximum edge on the path (min effort, swim in water)."],["Max probability","Max-heap on probability (multiply instead of add)."],["Bellman-Ford","Negative weights or at most K edges; O(V·E)."],["Floyd–Warshall","All pairs on small graphs; O(V³)."]],
+  steps:["Confirm weights are non-negative.","Build adjacency list of (neighbour, weight).","dist[src] = 0; push (src, 0).","Pop; skip if stale; relax edges and push improved distances.","Answer: dist[target] or max(dist) for 'time for all nodes'."],
+  qs:[P("Network Delay Time","network-delay-time","M","GOO AMZ"),P("Path With Minimum Effort","path-with-minimum-effort","M","GOO"),P("Path with Maximum Probability","path-with-maximum-probability","M","GOO"),P("Cheapest Flights Within K Stops","cheapest-flights-within-k-stops","M","AMZ GOO META"),P("Find the City With the Smallest Number of Neighbors at a Threshold Distance","find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance","M","AMZ"),P("Number of Ways to Arrive at Destination","number-of-ways-to-arrive-at-destination","M","GOO"),P("Minimum Cost to Make at Least One Valid Path in a Grid","minimum-cost-to-make-at-least-one-valid-path-in-a-grid","H","GOO"),P("Swim in Rising Water","swim-in-rising-water","H","GOO"),P("Minimum Obstacle Removal to Reach Corner","minimum-obstacle-removal-to-reach-corner","H","GOO"),P("Trapping Rain Water II","trapping-rain-water-ii","H","GOO")]},
+ backtrack:{what:"Backtracking builds candidate solutions one choice at a time and abandons a partial candidate as soon as it can't lead to a valid answer. It's a DFS over the tree of decisions: choose, explore, un-choose.",
+  why:"The full search space is exponential, but pruning cuts whole subtrees early. Sorting the input and skipping equal neighbours removes duplicate branches, and constraint checks (row/column/diagonal sets) stop invalid paths immediately.",
+  variants:[["Subsets","Each element in or out; start index moves forward."],["Combinations","Choose k or reach a target sum; reuse allowed or not."],["Permutations","used[] array; every position tries every unused element."],["Partitioning","Split a string into valid pieces (palindromes, IPs)."],["Grid search","Word search: mark visited, recurse 4 ways, unmark."],["Constraint placement","N-Queens, Sudoku: sets for rows, columns, boxes."]],
+  steps:["Draw the decision tree for a tiny input.","Define the recursive function's parameters (start, path, remaining).","Add the result when the path is complete (copy it!).","Loop choices; prune before recursing.","Undo the choice after the recursive call returns."],
+  qs:[P("Subsets","subsets","M","META AMZ"),P("Subsets II","subsets-ii","M","AMZ"),P("Permutations","permutations","M","MSFT META"),P("Permutations II","permutations-ii","M","MSFT"),P("Combinations","combinations","M","AMZ"),P("Combination Sum","combination-sum","M","AMZ UBER"),P("Combination Sum II","combination-sum-ii","M","AMZ"),P("Letter Combinations of a Phone Number","letter-combinations-of-a-phone-number","M","AMZ META UBER"),P("Generate Parentheses","generate-parentheses","M","GOO AMZ META"),P("Word Search","word-search","M","AMZ MSFT META"),P("Palindrome Partitioning","palindrome-partitioning","M","AMZ GOO"),P("Restore IP Addresses","restore-ip-addresses","M","AMZ"),P("N-Queens","n-queens","H","AMZ APL"),P("Sudoku Solver","sudoku-solver","H","UBER"),P("Word Search II","word-search-ii","H","AMZ MSFT UBER")]},
+ dp:{what:"Dynamic programming solves a problem by combining answers to overlapping smaller subproblems and storing each answer so it is computed once. You define a state (what a subproblem looks like), a transition (how states depend on smaller ones) and base cases.",
+  why:"When the same subproblem appears in many branches (Fibonacci-style overlap) and the best answer is built from best sub-answers (optimal substructure), memoising turns exponential recursion into polynomial time.",
+  variants:[["1D linear","Climbing stairs, house robber: dp[i] from dp[i−1], dp[i−2]."],["Knapsack","0/1 (iterate capacity backwards) vs unbounded (forwards): coin change, partition sum."],["Two strings (2D)","LCS, edit distance: dp[i][j] over prefixes."],["Grid","Unique paths, min path sum."],["LIS family","dp[i] = best ending at i; O(n log n) with patience sorting."],["Intervals","Burst balloons, palindromes: dp[l][r] by length."],["State machine","Stock buy/sell with cooldown: hold vs not-hold states."]],
+  steps:["Write a brute-force recursion first.","Name the state in words: 'dp[i] = min coins to make i'.","Write the transition and base cases.","Memoise (top-down), then convert to bottom-up if asked.","Shrink space when each row only needs the previous one."],
+  qs:[P("Climbing Stairs","climbing-stairs","E","AMZ"),P("Min Cost Climbing Stairs","min-cost-climbing-stairs","E","AMZ"),P("House Robber","house-robber","M","AMZ GOO"),P("House Robber II","house-robber-ii","M","AMZ MSFT"),P("Decode Ways","decode-ways","M","META GOO"),P("Coin Change","coin-change","M","AMZ GOO GS"),P("Coin Change II","coin-change-ii","M","AMZ"),P("Word Break","word-break","M","AMZ GOO META"),P("Longest Increasing Subsequence","longest-increasing-subsequence","M","AMZ GOO MSFT"),P("Partition Equal Subset Sum","partition-equal-subset-sum","M","AMZ META"),P("Unique Paths","unique-paths","M","AMZ GOO"),P("Longest Common Subsequence","longest-common-subsequence","M","AMZ GOO"),P("Edit Distance","edit-distance","M","AMZ GOO MSFT"),P("Best Time to Buy and Sell Stock with Cooldown","best-time-to-buy-and-sell-stock-with-cooldown","M","AMZ"),P("Burst Balloons","burst-balloons","H","GOO"),P("Regular Expression Matching","regular-expression-matching","H","GOO META AMZ")]},
+ trie:{what:"A trie (prefix tree) stores strings character by character along paths from the root, with an end-of-word flag on nodes that finish a word. All words sharing a prefix share the same path, so prefix lookups cost O(length of the prefix), independent of how many words are stored.",
+  why:"Searching many words against one text (or a grid) with a hash set means re-checking every prefix. A trie lets you walk the text and the trie together and stop the moment no word continues with that prefix.",
+  variants:[["Insert / search / startsWith","The core API."],["Wildcards","'.' matches any child: DFS over children."],["Grid + trie","Word Search II: walk the board and trie together; prune found words."],["Autocomplete","Store top suggestions per node or DFS from the prefix node."],["Bitwise trie","Maximum XOR: 0/1 children over the bits of numbers."]],
+  steps:["Define Node { Node[] next = new Node[26]; boolean end; }.","Insert each word.","Walk the trie for queries; return early on null.","For grids, DFS from each cell carrying the current trie node.","Discuss memory: 26 pointers per node; HashMap children for large alphabets."],
+  qs:[P("Longest Common Prefix","longest-common-prefix","E","GS AMZ"),P("Implement Trie (Prefix Tree)","implement-trie-prefix-tree","M","AMZ GOO MSFT"),P("Design Add and Search Words Data Structure","design-add-and-search-words-data-structure","M","META AMZ"),P("Replace Words","replace-words","M","UBER"),P("Search Suggestions System","search-suggestions-system","M","AMZ"),P("Maximum XOR of Two Numbers in an Array","maximum-xor-of-two-numbers-in-an-array","M","GOO"),P("Map Sum Pairs","map-sum-pairs","M","AMZ"),P("Longest Word in Dictionary","longest-word-in-dictionary","M","GOO"),P("Word Search II","word-search-ii","H","AMZ MSFT UBER"),P("Concatenated Words","concatenated-words","H","AMZ"),P("Palindrome Pairs","palindrome-pairs","H","GOO AMZ")]}
+};
+const DSA_NEW=[
+ {id:"llrev",n:"In-place linked list reversal",sig:["Reverse all or part of a list","Swap nodes in pairs / k-groups","O(1) extra space on lists"],idea:"Re-point next pointers as you walk, using prev / curr / next.",cx:"O(n) time · O(1) space",trap:"Use a dummy head when the head itself may change.",
+  code:`ListNode prev = null, cur = head;
+while (cur != null) {
+  ListNode nxt = cur.next;
+  cur.next = prev;
+  prev = cur; cur = nxt;
+}
+return prev;`,
+  what:"In-place reversal walks a linked list once and flips each node's next pointer to point backwards, keeping track of the previous node and the next node so nothing is lost. Reversing a sublist or groups of k is the same loop applied between two boundary nodes.",
+  why:"A singly linked list can only be walked forward, so you must save cur.next before overwriting it. Three pointers are enough to flip the list without extra memory.",
+  variants:[["Whole list","prev/cur/next loop."],["Sublist m..n","Walk to node m−1, reverse n−m+1 nodes, reconnect both ends."],["k-group","Check k nodes exist, reverse them, recurse or loop."],["Pairwise swap","k-group with k = 2."],["Rotate","Connect tail to head, break at n − k."]],
+  steps:["Add a dummy node before head.","Find the node just before the section to reverse.","Reverse with prev/cur/next for the required count.","Reconnect the reversed section to the rest.","Return dummy.next."],
+  qs:[P("Reverse Linked List","reverse-linked-list","E","AMZ MSFT APL"),P("Merge Two Sorted Lists","merge-two-sorted-lists","E","AMZ"),P("Remove Linked List Elements","remove-linked-list-elements","E","AMZ"),P("Reverse Linked List II","reverse-linked-list-ii","M","AMZ META"),P("Swap Nodes in Pairs","swap-nodes-in-pairs","M","AMZ MSFT"),P("Rotate List","rotate-list","M","AMZ"),P("Odd Even Linked List","odd-even-linked-list","M","AMZ META"),P("Add Two Numbers","add-two-numbers","M","AMZ MSFT BBG"),P("Add Two Numbers II","add-two-numbers-ii","M","AMZ MSFT"),P("Partition List","partition-list","M","AMZ"),P("Reverse Nodes in k-Group","reverse-nodes-in-k-group","H","MSFT AMZ META")]},
+ {id:"cyclic",n:"Cyclic sort",sig:["Numbers in range 1..n or 0..n","Find missing / duplicate numbers","O(1) extra space"],idea:"Swap each number into its own index; then scan for mismatches.",cx:"O(n) time · O(1) space",trap:"Use a while loop per index, and guard against infinite swaps with duplicates.",
+  code:`int i = 0;
+while (i < n) {
+  int j = nums[i] - 1;                 // correct index
+  if (nums[i] > 0 && nums[i] <= n && nums[i] != nums[j]) {
+    int t = nums[i]; nums[i] = nums[j]; nums[j] = t;
+  } else i++;
+}
+for (i = 0; i < n; i++) if (nums[i] != i + 1) return i + 1;`,
+  what:"Cyclic sort exploits inputs whose values lie in a known small range (1..n). Each value has exactly one 'home' index, so you can keep swapping the current value to its home until the right value sits at the current index. After one pass, any index holding the wrong value reveals a missing or duplicate number.",
+  why:"Every swap puts at least one number in its final place, so there are at most n swaps in total, which is O(n) time without extra memory.",
+  variants:[["Missing number(s)","Index with wrong value → that index + 1 is missing."],["Duplicate number(s)","The value sitting at a wrong index is duplicated."],["First missing positive","Ignore values ≤ 0 or > n."],["XOR / sum alternatives","Missing number via XOR of indices and values."]],
+  steps:["Confirm the value range maps onto indices.","While loop: swap nums[i] to index nums[i]−1 if not already there.","Skip out-of-range values and duplicates.","Scan for index i where nums[i] != i + 1.","Restore the array if the interviewer cares about mutation."],
+  qs:[P("Missing Number","missing-number","E","APL AMZ"),P("Find All Numbers Disappeared in an Array","find-all-numbers-disappeared-in-an-array","E","GOO"),P("Set Mismatch","set-mismatch","E","AMZ"),P("Find All Duplicates in an Array","find-all-duplicates-in-an-array","M","AMZ"),P("Find the Duplicate Number","find-the-duplicate-number","M","AMZ MSFT GOO"),P("Couples Holding Hands","couples-holding-hands","H","GOO"),P("First Missing Positive","first-missing-positive","H","AMZ MSFT")]},
+ {id:"greedy",n:"Greedy",sig:["'Minimum number of …' / 'maximum you can …'","Local best choice seems safe","Sorting then one pass"],idea:"Make the locally best choice at each step and prove (exchange argument) it never hurts.",cx:"Usually O(n log n) for the sort",trap:"Greedy is often wrong; test a counterexample before committing, or fall back to DP.",
+  code:`// Jump Game: can we reach the end?
+int far = 0;
+for (int i = 0; i < nums.length; i++) {
+  if (i > far) return false;
+  far = Math.max(far, i + nums[i]);
+}
+return true;`,
+  what:"A greedy algorithm builds the answer step by step, always taking the option that looks best right now and never revisiting it. It works when you can show that some optimal solution starts with the greedy choice (the exchange argument), so taking it never closes off the best answer.",
+  why:"If swapping any optimal solution's first choice for the greedy choice keeps it optimal, then committing greedily is safe at every step. That's why sorting by end time works for interval scheduling but sorting by length doesn't.",
+  variants:[["Reach / jump","Track the farthest reachable index."],["Interval scheduling","Sort by end, keep the earliest finishing."],["Two-pass","Candy: left-to-right then right-to-left constraints."],["Running balance","Gas station: reset start when the tank goes negative."],["Heap-assisted greedy","Task scheduler, IPO, refuelling stops."]],
+  steps:["Guess the greedy rule.","Try to break it with a small counterexample.","Argue why it's safe (exchange argument) in one or two sentences.","Sort if needed, then one pass.","If you can't justify it, switch to DP."],
+  qs:[P("Assign Cookies","assign-cookies","E","AMZ"),P("Lemonade Change","lemonade-change","E","AMZ"),P("Jump Game","jump-game","M","AMZ META FK"),P("Jump Game II","jump-game-ii","M","AMZ GOO"),P("Gas Station","gas-station","M","AMZ GOO ADBE"),P("Partition Labels","partition-labels","M","AMZ"),P("Hand of Straights","hand-of-straights","M","GOO"),P("Merge Triplets to Form Target Triplet","merge-triplets-to-form-target-triplet","M","GOO"),P("Valid Parenthesis String","valid-parenthesis-string","M","AMZ META"),P("Minimum Number of Arrows to Burst Balloons","minimum-number-of-arrows-to-burst-balloons","M","FK"),P("Candy","candy","H","AMZ GOO"),P("Minimum Number of Refueling Stops","minimum-number-of-refueling-stops","H","GOO")]},
+ {id:"bits",n:"Bit manipulation",sig:["'Without extra space' on numbers","Every element appears twice except one","Subsets of small n","Powers of two"],idea:"Use XOR, AND, shifts and masks to read or flip individual bits in O(1).",cx:"O(n) or O(bits)",trap:"Java ints are signed; use >>> for logical right shift.",
+  code:`int single = 0;
+for (int x : nums) single ^= x;          // pairs cancel
+boolean pow2 = n > 0 && (n & (n - 1)) == 0;
+int lowest = n & -n;                     // lowest set bit
+int count = Integer.bitCount(n);`,
+  what:"Bit manipulation treats integers as arrays of 32 bits and uses operators to inspect or change them directly. XOR cancels equal values, n & (n − 1) clears the lowest set bit, and masks over 0..2ⁿ−1 enumerate every subset of a small set.",
+  why:"XOR is its own inverse (a ^ a = 0) and order doesn't matter, so XOR-ing a list where everything pairs up leaves only the odd one out. Bit tricks replace hash sets or loops with constant-time operations.",
+  variants:[["XOR cancellation","Single number, missing number."],["Counting bits","n & (n−1) loop, or dp[i] = dp[i >> 1] + (i & 1)."],["Bitmask subsets","Loop mask from 0 to 2ⁿ − 1."],["Bit-by-bit build","Single Number II: count each bit mod 3."],["Addition without +","Sum of Two Integers using XOR and carry."]],
+  steps:["Write the numbers in binary for a tiny example.","Pick the operator that does what you need (XOR cancel, AND test, shift move).","Watch sign: >>> vs >>, and overflow.","For subsets, check n ≤ 20.","State the complexity in terms of bits (32) where relevant."],
+  qs:[P("Single Number","single-number","E","AMZ"),P("Number of 1 Bits","number-of-1-bits","E","APL MSFT"),P("Counting Bits","counting-bits","E","AMZ"),P("Reverse Bits","reverse-bits","E","APL"),P("Missing Number","missing-number","E","APL"),P("Power of Two","power-of-two","E","GOO"),P("Sum of Two Integers","sum-of-two-integers","M","META"),P("Single Number II","single-number-ii","M","GOO"),P("Single Number III","single-number-iii","M","GOO"),P("Bitwise AND of Numbers Range","bitwise-and-of-numbers-range","M","AMZ"),P("Subsets","subsets","M","META AMZ"),P("Maximum XOR of Two Numbers in an Array","maximum-xor-of-two-numbers-in-an-array","M","GOO")]},
+ {id:"griddfs",n:"Matrix / grid DFS",sig:["Islands, regions, flood fill","Connected cells in a 2D grid","Mark and count areas"],idea:"Treat each cell as a node with 4 neighbours; DFS from each unvisited land cell and mark it.",cx:"O(rows × cols)",trap:"Deep recursion can overflow the stack on 10⁶ cells; use an explicit stack or BFS.",
+  code:`int islands = 0;
+for (int r = 0; r < R; r++)
+  for (int c = 0; c < C; c++)
+    if (g[r][c] == '1') { islands++; sink(g, r, c); }
+
+void sink(char[][] g, int r, int c) {
+  if (r < 0 || c < 0 || r >= g.length || c >= g[0].length || g[r][c] != '1') return;
+  g[r][c] = '0';
+  sink(g, r+1, c); sink(g, r-1, c); sink(g, r, c+1); sink(g, r, c-1);
+}`,
+  what:"Grid DFS treats a 2D matrix as a graph where each cell connects to its up, down, left and right neighbours. Starting a DFS at an unvisited cell and marking everything it reaches explores one connected region. Counting how many times you start a DFS counts regions.",
+  why:"Each cell is visited once and checks four neighbours, so the whole grid costs O(R × C). Marking cells in place (or with a visited array) prevents revisiting.",
+  variants:[["Count regions","Number of islands, provinces."],["Region size","Max area of island: return the count from DFS."],["Border-connected","Surrounded regions, enclaves: DFS from the edges first."],["Two oceans","Pacific Atlantic: reverse DFS from each ocean, intersect."],["Shape signature","Distinct islands: record the DFS path string."]],
+  steps:["Write the bounds + 'is valid' check first.","Choose marking: mutate the grid or a boolean[][].","DFS 4 directions (8 if diagonals count).","Decide where to start: every cell, or only the borders.","Mention BFS as the stack-safe alternative."],
+  qs:[P("Flood Fill","flood-fill","E","AMZ"),P("Island Perimeter","island-perimeter","E","GOO META"),P("Number of Islands","number-of-islands","M","AMZ GOO META MSFT"),P("Max Area of Island","max-area-of-island","M","AMZ META"),P("Surrounded Regions","surrounded-regions","M","GOO"),P("Number of Enclaves","number-of-enclaves","M","AMZ"),P("Pacific Atlantic Water Flow","pacific-atlantic-water-flow","M","GOO"),P("Number of Closed Islands","number-of-closed-islands","M","AMZ"),P("Count Sub Islands","count-sub-islands","M","GOO"),P("Spiral Matrix","spiral-matrix","M","AMZ MSFT ADBE"),P("Rotate Image","rotate-image","M","AMZ MSFT APL"),P("Making A Large Island","making-a-large-island","H","META GOO")]}
+];
+PATS.dsa.items.forEach(i=>Object.assign(i,DSA_EXT[i.id]||{}));
+PATS.dsa.items.splice(PATS.dsa.items.findIndex(i=>i.id==="monostack")+1,0,DSA_NEW[0]);
+PATS.dsa.items.splice(PATS.dsa.items.findIndex(i=>i.id==="prefix")+1,0,DSA_NEW[1]);
+PATS.dsa.items.splice(PATS.dsa.items.findIndex(i=>i.id==="dp"),0,DSA_NEW[2]);
+PATS.dsa.items.push(DSA_NEW[3]);
+PATS.dsa.items.splice(PATS.dsa.items.findIndex(i=>i.id==="bfs"),0,DSA_NEW[4]);
+PATS.dsa.items.forEach(i=>{if(i.qs)i.ex=i.qs.map(q=>({t:q.t,u:"https://leetcode.com/problems/"+q.s+"/"}));});
+PATS.dsa.blurb="Twenty-one patterns cover almost every medium. Each card explains what the pattern is, why it works, its variants and a step-by-step approach, then gives 7–16 LeetCode questions from easy to hard, tagged by company.";
+
+const PREMIUM=new Set(["meeting-rooms","meeting-rooms-ii","employee-free-time","alien-dictionary","graph-valid-tree","parallel-courses","sequence-reconstruction"]);
+
 const TOPICS = [
   {t:"DSA patterns",n:"~380 problems",hi:["Sliding window","Graphs BFS/DFS","DP","Trees"],o:["Two pointers","Binary search on answer","Heaps / Top-K","Monotonic stack","Union-Find","Tries","Backtracking","Intervals","Topological sort","Dijkstra","Bit tricks"]},
   {t:"Core Java",n:"backend depth",hi:["HashMap internals","Concurrency","CompletableFuture"],o:["JVM memory & GC","Streams","Generics","Immutability","equals / hashCode","Java 17–21 features: records, sealed, virtual threads","Exceptions"]},
@@ -762,11 +1254,11 @@ const BANK=[];(()=>{const by={};const merge=(pr,c)=>{c.forEach(t=>{if(!pr.c.incl
 function taskRow(w,j,loc){const k=tKey(w,j),t=W[w-1].tasks[j],on=done.has(k),ck=/^CHECKPOINT/.test(t);
   return `<label class="row task${on?" done":""}" for="${loc}-${k}"><input type="checkbox" id="${loc}-${k}" data-k="${k}" ${on?"checked":""}><span class="tx">${ck?'<span class="tag">checkpoint</span>':""}${esc(t.replace(/^CHECKPOINT:\s*/,""))}</span></label>`;}
 function probRow(pr,w,loc,showWeek){const k="s:"+pr.s,on=done.has(k),id=`${loc}-${w}-${pr.s}`;
-  return `<div class="row prob${on?" done":""}"><input type="checkbox" id="${id}" data-k="${k}" aria-label="Solved ${esc(pr.t)}" ${on?"checked":""}><span class="pt"><a href="${lc(pr.s)}" target="_blank" rel="noopener">${esc(pr.t)}</a><span class="diff ${pr.d}">${{E:"Easy",M:"Medium",H:"Hard"}[pr.d]}</span>${showWeek?`<span class="wk-l">${w?"W"+w:"company set"}</span>`:""}</span><span class="cos">${pr.c.map(c=>`<span class="co" style="--c:${CV[c]}">${CO[c]}</span>`).join("")}</span></div>`;}
+  return `<div class="row prob${on?" done":""}"><input type="checkbox" id="${id}" data-k="${k}" aria-label="Solved ${esc(pr.t)}" ${on?"checked":""}><span class="pt"><a href="${lc(pr.s)}" target="_blank" rel="noopener">${esc(pr.t)}</a><span class="diff ${pr.d}">${{E:"Easy",M:"Medium",H:"Hard"}[pr.d]}</span>${PREMIUM.has(pr.s)?'<span class="prem">Premium</span>':""}${showWeek?`<span class="wk-l">${w?"W"+w:"company set"}</span>`:""}</span><span class="cos">${pr.c.map(c=>`<span class="co" style="--c:${CV[c]}">${CO[c]}</span>`).join("")}</span></div>`;}
 const readsList=x=>`<ul class="reads">${x.reads.map(r=>`<li><a href="${r[1]}" target="_blank" rel="noopener">${esc(r[0])}</a></li>`).join("")}</ul>`;
 
 /* ---------- tabs ---------- */
-const TABS=[["dashboard","Dashboard"],["daily","Daily to-do"],["plan","Plan"],["calendar","Calendar"],["problems","Problems"],["prep","Interview prep"],["resources","Resources"]];
+const TABS=[["dashboard","Dashboard"],["daily","Daily to-do"],["plan","Plan"],["calendar","Calendar"],["problems","Problems"],["patterns","Patterns"],["prep","Interview prep"],["resources","Resources"]];
 let tab="dashboard";
 function showTab(t,scroll){tab=t;TABS.forEach(([k])=>{$("tab-"+k).hidden=k!==t;const b=$("tb-"+k);if(b)b.setAttribute("aria-selected",k===t);});
   try{localStorage.setItem(LS+"-tab",t)}catch(e){}
@@ -918,13 +1410,15 @@ function updateStats(){
 function syncKey(k,on){document.querySelectorAll(`input[data-k="${CSS.escape(k)}"]`).forEach(i=>{i.checked=on;i.closest(".row").classList.toggle("done",on);});}
 document.addEventListener("change",ev=>{const t=ev.target;if(!t.dataset||!t.dataset.k)return;const k=t.dataset.k;t.checked?done.add(k):done.delete(k);syncKey(k,t.checked);updateStats();
   if(k.startsWith("s:")&&t.closest("#bankList")===null)renderBank();else if(k.startsWith("s:")){const keep=window.scrollY;renderBank();window.scrollTo(0,keep);}
+  if(k.startsWith("s:")&&tab==="patterns"){document.querySelectorAll("details.pat").forEach(d=>{const qc=d.querySelector(".pqc");if(!qc)return;const ins=[...d.querySelectorAll(".rows input[data-k]")];qc.textContent=`${ins.length} questions · ${ins.filter(x=>x.checked).length} solved`;});}
+  if(k.startsWith("pat:")){const d=t.closest("details.pat");if(d){d.classList.toggle("mastered",t.checked);t.nextElementSibling.textContent=t.checked?"Mastered":"Mark";}renderPatHead();if(patOnly!=="all")renderPatterns();}
   if(filter==="open")applyFilter();queueSave();});
 function setSave(t){$("saveState").textContent=t;}
 function queueSave(){try{localStorage.setItem(LS,JSON.stringify([...done]))}catch(e){}
   if(!docRef){setSave("Saved in this browser");return;}
   setSave("Saving…");clearTimeout(saveTimer);
   saveTimer=setTimeout(async()=>{try{await docRef.set({done:[...done],updated:new Date().toISOString()});setSave("Saved to your account");}catch(e){setSave("Saved in this browser (account save failed)");}},700);}
-function refreshAll(){document.querySelectorAll("input[data-k]").forEach(i=>{const on=done.has(i.dataset.k);i.checked=on;i.closest(".row").classList.toggle("done",on);});renderBank();updateStats();applyFilter();}
+function refreshAll(){try{renderPatterns();}catch(e){}document.querySelectorAll("input[data-k]").forEach(i=>{const on=done.has(i.dataset.k);i.checked=on;i.closest(".row").classList.toggle("done",on);});renderBank();updateStats();applyFilter();}
 
 
 /* ---------- daily log ---------- */
@@ -1031,10 +1525,49 @@ async function loadDays(d,id){
   renderDaily();
 }
 
+
+/* ---------- patterns UI ---------- */
+let patCat="dsa",patQ="",patOnly="all";
+const pKey=(c,id)=>`pat:${c}:${id}`;
+function hl(code){return esc(code).split("\n").map(l=>l.replace(/(\/\/.*)$/,'<span class="cm">$1</span>')).join("\n");}
+function renderPatHead(){
+  $("patCats").innerHTML=Object.entries(PATS).map(([k,c])=>{const n=c.items.length,m=c.items.filter(i=>done.has(pKey(k,i.id))).length;
+    return `<button class="card patcat" data-c="${k}" aria-pressed="${k===patCat}" style="--pc:var(--${c.c});--pcs:var(--${c.c}-soft)"><span class="pcn">${c.name}</span><b class="num">${m}<small>/${n}</small></b><span class="pcl">mastered</span><span class="bar"><i style="width:${100*m/n}%"></i></span></button>`;}).join("");
+  $("patCats").querySelectorAll("button").forEach(b=>b.onclick=()=>{patCat=b.dataset.c;renderPatterns();});
+}
+function renderPatterns(){
+  renderPatHead();
+  const c=PATS[patCat],q=patQ.trim().toLowerCase();
+  $("patBlurb").textContent=c.blurb;$("patGrid").classList.toggle("wide",patCat==="dsa");
+  $("patOnly").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.o===patOnly));
+  const list=c.items.filter(i=>{const m=done.has(pKey(patCat,i.id));if(patOnly==="todo"&&m)return false;if(patOnly==="done"&&!m)return false;
+    if(!q)return true;return (i.n+" "+i.sig.join(" ")+" "+i.idea+" "+(i.how||"")+" "+i.ex.map(e=>e.t).join(" ")).toLowerCase().includes(q);});
+  const st=`--pc:var(--${c.c});--pcs:var(--${c.c}-soft)`;
+  $("patGrid").innerHTML=list.length?list.map((i,ix)=>{const k=pKey(patCat,i.id),m=done.has(k);
+    return `<details class="card pat${m?" mastered":""}" style="${st}" id="pat-${patCat}-${i.id}">
+      <summary><span class="pno num">${String(c.items.indexOf(i)+1).padStart(2,"0")}</span><span class="pttl"><b>${esc(i.n)}</b><span class="psig">${i.sig.map(s=>`<span>${esc(s)}</span>`).join("")}</span>${i.qs?`<span class="pqc num">${i.qs.length} questions · ${i.qs.filter(q=>done.has("s:"+q.s)).length} solved</span>`:""}</span>
+        <label class="row patm" for="pm-${k}" title="Mark as mastered"><input type="checkbox" id="pm-${k}" data-k="${k}" ${m?"checked":""}><span>${m?"Mastered":"Mark"}</span></label></summary>
+      <div class="pbody">
+        ${i.what?`<div class="pdef"><div><div class="lbl-s">What it is</div><p>${esc(i.what)}</p></div><div><div class="lbl-s">Why it works</div><p>${esc(i.why)}</p></div></div>`:`<p class="pidea">${esc(i.idea)}</p>`}
+        ${i.variants?`<div><div class="lbl-s">Variants</div><div class="pvar">${i.variants.map(v=>`<div><b>${esc(v[0])}</b><span>${esc(v[1])}</span></div>`).join("")}</div></div>`:""}
+        ${i.steps?`<div><div class="lbl-s">How to approach it</div><ol class="psteps">${i.steps.map(x=>`<li>${esc(x)}</li>`).join("")}</ol></div>`:""}
+        ${i.code?`<div class="pcode"><div class="pcode-h"><span>Java template</span>${i.cx?`<span class="cx">${esc(i.cx)}</span>`:""}</div><pre><code>${hl(i.code)}</code></pre></div>`:""}
+        ${i.how?`<div class="pinfo"><div class="lbl-s">In practice</div>${esc(i.how)}</div>`:""}
+        <div class="ptrap"><b>Watch out</b> ${esc(i.trap)}</div>
+        ${i.qs?`<div><div class="lbl-s">Practice questions <span>easy → hard · tick when solved</span></div><div class="rows">${i.qs.map(q=>probRow(q,0,"pq"+i.id)).join("")}</div></div>`:`<div><div class="lbl-s">${patCat==="dsa"?"Practise":"Practise & read"}</div><ul class="reads">${i.ex.map(e=>`<li><a href="${e.u}" target="_blank" rel="noopener">${esc(e.t)}</a></li>`).join("")}${i.link?`<li><a href="${i.link}" target="_blank" rel="noopener">Reference: ${esc(new URL(i.link).hostname.replace("www.",""))}</a></li>`:""}</ul></div>`}
+      </div></details>`;}).join(""):`<p class="pnote">No patterns match. Clear the search or switch filters.</p>`;
+  $("patGrid").querySelectorAll(".patm").forEach(l=>l.addEventListener("click",e=>e.stopPropagation()));
+}
+function wirePatterns(){
+  $("patSearch").addEventListener("input",e=>{patQ=e.target.value;renderPatterns();});
+  $("patOnly").querySelectorAll("button").forEach(b=>b.onclick=()=>{patOnly=b.dataset.o;renderPatterns();});
+  $("patExpand").onclick=()=>{const ds=[...$("patGrid").querySelectorAll("details")],open=!ds.every(d=>d.open);ds.forEach(d=>d.open=open);$("patExpand").textContent=open?"Collapse all":"Expand all";};
+}
+
 /* ---------- boot ---------- */
 try{const t=localStorage.getItem(LS+"-tab");if(t&&TABS.some(x=>x[0]===t))tab=t;}catch(e){}
 const h=(location.hash||"").slice(1);if(TABS.some(x=>x[0]===h))tab=h;
-renderTabs();renderHero();renderDash();renderPhases();renderFilters();renderWeeks();renderCal();renderBank();renderPrep();updateStats();applyFilter();wireDaily();renderDaily();showTab(tab);
+renderTabs();renderHero();renderDash();renderPhases();renderFilters();renderWeeks();renderCal();renderBank();renderPrep();updateStats();applyFilter();wireDaily();renderDaily();wirePatterns();renderPatterns();showTab(tab);
 if(currentWeek()===0)setSave(`Week 1 starts ${fmtL(START)}`);
 (async()=>{
   if(!window.claude||!window.claude.use){setSave("Saved in this browser");return;}
