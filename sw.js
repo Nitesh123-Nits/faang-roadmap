@@ -1,11 +1,12 @@
 /* FAANG Run 2027 service worker: precache app shell, runtime-cache fonts, offline fallback. */
-const VERSION = "v1";
+const VERSION = "v2";
 const SHELL = `faang-shell-${VERSION}`;
 const RUNTIME = "faang-runtime";
 const PRECACHE = [
   "./", "index.html", "pwa.js", "manifest.webmanifest",
   "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png",
-  "icons/icon-maskable-512.png", "icons/apple-touch-icon.png"
+  "icons/icon-maskable-512.png", "icons/apple-touch-icon.png",
+  "favicon.ico", "icons/favicon-32.png", "icons/favicon-16.png"
 ];
 
 self.addEventListener("install", e => {

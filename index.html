@@ -7,7 +7,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="FAANG Run">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="icons/favicon-16.png" type="image/png" sizes="16x16">
+<script>try{var t=localStorage.getItem("faang-run-2027-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
@@ -405,16 +409,31 @@ footer{padding-block:20px 50px;color:var(--muted);font-size:.8rem}
 .pwa-toast button{font:700 .8rem var(--body);background:var(--accent);color:#fff;border:0;border-radius:999px;padding:6px 12px;cursor:pointer}
 .pwa-off{display:none;position:fixed;top:env(safe-area-inset-top,0px);right:10px;z-index:40;background:var(--p3);color:#fff;font:700 .68rem var(--mono);letter-spacing:.08em;padding:3px 9px;border-radius:0 0 10px 10px}
 body.is-offline .pwa-off{display:block}
+
+.hero{position:relative}
+.theme-btn{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:14px;z-index:5;width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.08);color:var(--hero-fg);font-size:1.05rem;line-height:1;cursor:pointer;display:grid;place-items:center}
+.theme-btn:hover{background:rgba(255,255,255,.18)}
+.hero .eyebrow{padding-right:46px}
+.hero-link{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font:600 .78rem var(--body);color:var(--hero-fg);text-decoration:none;border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:5px 12px;background:rgba(255,255,255,.06)}
+.hero-link:hover{background:rgba(255,255,255,.16)}
+.pwa-btn.danger{color:var(--accent);border-color:var(--accent)}
+.pwa-date{font:600 .78rem var(--body);border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:5px 10px;margin:0 6px 6px 0}
+.manual{background:linear-gradient(135deg,var(--p1-soft),var(--p2-soft));border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:14px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.manual b{font:700 1rem var(--display)}
+.manual span{color:var(--muted);font-size:.86rem;display:block;margin-top:2px}
+.manual a{font:700 .82rem var(--body);background:var(--ink);color:#fff;border-radius:999px;padding:8px 14px;text-decoration:none}
 </style>
 <div class="pwa-off" role="status">OFFLINE</div>
 <header class="hero">
+  <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle light or dark theme" title="Toggle theme">◐</button>
   <div class="wrap">
     <div class="hero-top">
       <div>
         <div class="eyebrow">Nitesh Kumar Sah · Backend Engineer · 3 YOE → SDE-2 / L4–L5</div>
         <h1>FAANG Run <em>2027</em></h1>
-        <p class="sub">26 weeks · Mon 19 Oct 2026 → Sun 18 Apr 2027 · ~20 h a week around a full-time job. DSA every day, design on weekends, loops in March and April.</p>
+        <p class="sub"><span id="planSpan">26 weeks · Mon 19 Oct 2026 → Sun 18 Apr 2027</span> · ~20 h a week around a full-time job. DSA every day, design on weekends, loops in March and April.</p>
         <div class="badges" id="badges"></div>
+        <a class="hero-link" href="https://nitesh123-nits.github.io/Java-Field-Manual-Backend/" target="_blank" rel="noopener">☕ Java Backend Field Manual →</a>
       </div>
       <div class="ringbox" aria-live="polite">
         <svg viewBox="0 0 120 120" aria-hidden="true">
@@ -507,7 +526,7 @@ body.is-offline .pwa-off{display:block}
 
   <!-- CALENDAR -->
   <section class="panel" id="tab-calendar" role="tabpanel" hidden>
-    <div class="phead"><div class="eyebrow">Oct 2026 – Apr 2027</div><h2>Calendar</h2><p>Every day of the plan, coloured by phase. Small numbers mark the start of each week; solid days are checkpoint Sundays. Tap any day to open that week.</p></div>
+    <div class="phead"><div class="eyebrow" id="calSpan">Oct 2026 – Apr 2027</div><h2>Calendar</h2><p>Every day of the plan, coloured by phase. Small numbers mark the start of each week; solid days are checkpoint Sundays. Tap any day to open that week.</p></div>
     <div class="legend" id="legend"></div>
     <div class="calwrap">
       <div class="months" id="months"></div>
@@ -586,6 +605,7 @@ body.is-offline .pwa-off{display:block}
   <!-- RESOURCES -->
   <section class="panel" id="tab-resources" role="tabpanel" hidden>
     <div class="phead"><div class="eyebrow">Links</div><h2>Resources</h2><p>Few and good. Finish one sheet before starting another. Each week in the Plan also has its own reading list.</p></div>
+    <div class="manual"><div><b>Java Backend Field Manual</b><span>Your own guides: Java concurrency, Spring Boot, microservices, distributed systems, Kafka, Redis.</span></div><a href="https://nitesh123-nits.github.io/Java-Field-Manual-Backend/" target="_blank" rel="noopener">Open manual →</a></div>
     <div class="rgrid" id="resGrid"></div>
   </section>
 </main>
@@ -599,7 +619,8 @@ const PHASES = [
   {id:4,name:"Company Mode",weeks:[19,22],c:"p4",goal:"Tailor, brand, apply",items:["Company-tagged problems","Story bank + resume rewrite","Referrals and first applications","~320 problems solved"]},
   {id:5,name:"Mocks & Loops",weeks:[23,26],c:"p5",goal:"Interview-ready and interviewing",items:["12+ mocks, weak spots fixed","Real loops, fast feedback","Offer comparison and negotiation","~380 problems solved"]}
 ];
-const START = new Date(2026,9,19); // Mon 19 Oct 2026
+const DEFAULT_START = new Date(2026,9,19); // Mon 19 Oct 2026
+const START = (()=>{try{const v=localStorage.getItem("faang-run-2027-start");if(/^\d{4}-\d{2}-\d{2}$/.test(v||"")){const[y,m,d]=v.split("-").map(Number);return new Date(y,m-1,d);}}catch(e){}return DEFAULT_START;})();
 
 // [focus, dsa pattern, theory track, tasks[], problems, milestone?]
 // Company codes → full names. Tags reflect how often each problem is commonly reported in those companies' interviews; not an official list.
@@ -1291,7 +1312,7 @@ function renderHero(){
   $("track").querySelectorAll("a").forEach(a=>a.onclick=e=>{e.preventDefault();openWeek(+a.dataset.w);});
   $("trackmeta").innerHTML=PHASES.map(p=>`<span style="--n:${p.weeks[1]-p.weeks[0]+1};${vars(p)}">${p.id}. ${p.name}</span>`).join("");
   let b;
-  if(cw===0){const d=Math.ceil((START-today())/DAY);b=[`Starts in <b>${d} day${d===1?"":"s"}</b>`,`Week 1 · Mon 19 Oct`];}
+  if(cw===0){const d=Math.ceil((START-today())/DAY);b=[`Starts in <b>${d} day${d===1?"":"s"}</b>`,`Week 1 · ${START.toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"})}`];}
   else if(cw>26)b=["Plan complete","Time to update the resume"];
   else b=[`Week <b>${cw}</b> of 26`,`${phaseOf(cw).name}`];
   b.push("Target: Amazon · Google · Microsoft");
@@ -1582,6 +1603,10 @@ function wirePatterns(){
 }
 
 /* ---------- boot ---------- */
+(function(){const e=new Date(START);e.setDate(e.getDate()+26*7-1);const f=(d,o)=>d.toLocaleDateString("en-GB",o);
+  const a={weekday:"short",day:"numeric",month:"short",year:"numeric"};
+  $("planSpan").textContent=`26 weeks · ${f(START,a)} → ${f(e,a)}`;
+  $("calSpan").textContent=`${f(START,{month:"short",year:"numeric"})} – ${f(e,{month:"short",year:"numeric"})}`;})();
 try{const t=localStorage.getItem(LS+"-tab");if(t&&TABS.some(x=>x[0]===t))tab=t;}catch(e){}
 const h=(location.hash||"").slice(1);if(TABS.some(x=>x[0]===h))tab=h;
 renderTabs();renderHero();renderDash();renderPhases();renderFilters();renderWeeks();renderCal();renderBank();renderPrep();updateStats();applyFilter();wireDaily();renderDaily();wirePatterns();renderPatterns();showTab(tab);

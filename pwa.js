@@ -2,7 +2,8 @@
 (function () {
   "use strict";
   const LS = "faang-run-2027";
-  const KEYS = [LS, LS + "-days", LS + "-tab"];
+  const KEYS = [LS, LS + "-days", LS + "-tab", LS + "-start", LS + "-theme"];
+  const PROGRESS_KEYS = [LS, LS + "-days", LS + "-tab"];
 
   /* offline badge */
   const syncOnline = () => document.body.classList.toggle("is-offline", !navigator.onLine);
@@ -37,6 +38,13 @@
     });
   }
 
+  /* theme toggle: light / dark, remembered; first state follows the OS */
+  const root = document.documentElement, tbtn = document.getElementById("themeBtn");
+  const effective = () => root.getAttribute("data-theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  const paint = () => { if (tbtn) { const d = effective() === "dark"; tbtn.textContent = d ? "☀" : "☾"; tbtn.title = d ? "Switch to light mode" : "Switch to dark mode"; tbtn.setAttribute("aria-label", tbtn.title); } };
+  if (tbtn) tbtn.onclick = () => { const n = effective() === "dark" ? "light" : "dark"; root.setAttribute("data-theme", n); try { localStorage.setItem(LS + "-theme", n); } catch (e) {} paint(); };
+  paint();
+
   /* footer tools */
   const host = document.getElementById("pwaTools");
   if (!host) return;
@@ -52,14 +60,15 @@
   const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) && !standalone;
   if (ios) btn("Install on iPhone", () => toast("Tap Share, then Add to Home Screen."));
 
-  btn("Export backup", () => {
+  const exportBackup = () => {
     const data = { app: "faang-run-2027", exported: new Date().toISOString(), data: {} };
     KEYS.forEach(k => { const v = localStorage.getItem(k); if (v !== null) data.data[k] = v; });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: "application/json" }));
     a.download = "faang-run-backup-" + new Date().toISOString().slice(0, 10) + ".json";
     document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-  });
+  };
+  btn("Export backup", exportBackup);
 
   const file = document.createElement("input"); file.type = "file"; file.accept = "application/json,.json"; file.hidden = true;
   file.onchange = async () => {
@@ -75,6 +84,29 @@
   };
   host.appendChild(file);
   btn("Import backup", () => file.click());
+
+
+  /* reset progress (keeps theme and start date) */
+  btn("Reset progress", () => {
+    if (!confirm("Reset ALL progress on this device?\n\nThis clears completed tasks, problems and the daily log. A backup file will be downloaded first so you can undo it with Import backup.")) return;
+    exportBackup();
+    setTimeout(() => { PROGRESS_KEYS.forEach(k => { try { localStorage.removeItem(k); } catch (e) {} }); location.reload(); }, 600);
+  }).classList.add("danger");
+
+  /* change plan start date (restarts the week counter and calendar) */
+  const dateIn = document.createElement("input"); dateIn.type = "date"; dateIn.className = "pwa-date"; dateIn.setAttribute("aria-label", "Plan start date");
+  const startKey = LS + "-start";
+  dateIn.value = localStorage.getItem(startKey) || "2026-10-19";
+  const setStart = btn("Set start date", () => {
+    const v = dateIn.value; if (!v) return toast("Pick a date first.");
+    const [y, m, d] = v.split("-").map(Number), dt = new Date(y, m - 1, d);
+    dt.setDate(dt.getDate() - ((dt.getDay() + 6) % 7));           // snap to Monday: weeks run Mon–Sun
+    const iso = dt.getFullYear() + "-" + String(dt.getMonth() + 1).padStart(2, "0") + "-" + String(dt.getDate()).padStart(2, "0");
+    if (!confirm("Restart the 26-week plan on Monday " + dt.toDateString() + "?\nYour completed tasks are kept; only the dates and current week change.")) return;
+    try { localStorage.setItem(startKey, iso); } catch (e) {}
+    location.reload();
+  });
+  host.insertBefore(dateIn, setStart);
 
   /* ask the browser not to evict our localStorage */
   if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
