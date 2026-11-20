@@ -1,0 +1,20 @@
+<div class="pg" id="p131" data-n="131"></div><div class="kk"><b>TRANSACTION PROPAGATION</b></div><h3><code>NESTED</code> relies on JDBC savepoints and does not work with every JPA provider or</h3><h3>database/driver combination.</h3><pre class="code"><code>@Service
+public class OrderService {
+
+    @Transactional                                   // REQUIRED
+    public void placeOrder(Order o) {
+        orderRepo.save(o);
+        auditService.log(o);                         // runs independently, see
+below
+    }
+}
+
+@Service
+public class AuditService {
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void log(Order o) {
+        auditRepo.save(new Audit(o));                // commits even if
+placeOrder() rolls back
+    }
+}</code></pre><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>IMPORTANT NOTES</b></span></p><div class="ls"><div class="li" data-m="•"></span>Propagation does not start or commit transactions by itself. It only defines how</div></div><h3>a method participates.</h3><div class="ls"><div class="li" data-m="•"></span>Rollback rules (<code> @Transactional(rollbackFor = //.)</code> ) still apply. By default, un-</div></div><h3><b>checked exceptions trigger rollback</b>; checked exceptions do not.</h3><div class="ls"><div class="li" data-m="•"></span><code>REQUIRES_NEW</code> and <code>NOT_SUPPORTED</code> suspend the outer transaction, so ensure the</div></div><h3>connection pool is big enough (a suspended transaction still holds its connec‐ tion while a new one is acquired).</h3><div class="ls"><div class="li" data-m="•"></span>Like all Spring proxy features, <code>@Transactional</code> is <b>not applied on self-invocation:</b></div></div><h3>calling another method on <code>this</code> bypasses the proxy.</h3><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>BEST PRACTICES</b></span></p><div class="ls"><div class="li" data-m="•"></span>Use <code>REQUIRED</code> for business operations.</div><div class="li" data-m="•"></span>Use <code>REQUIRES_NEW</code> for audit logs, notifications and outbox events.</div><div class="li" data-m="•"></span>Avoid <code>REQUIRES_NEW</code> inside loops (it can exhaust connections).</div><div class="li" data-m="•"></span>Keep transactions short and focused.</div><div class="li" data-m="•"></span>Handle exceptions properly: unchecked exceptions trigger rollback by default.</div></div><div class="bx" style="--bx:#b4532a"><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>R E M E M B E R .</b></span> Choose the right propagation to ensure data consistency, perform-</p><h3>ance and proper resource usage. Default = REQUIRED.</h3></div>

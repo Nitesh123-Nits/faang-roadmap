@@ -1,0 +1,26 @@
+<div class="pg" id="p25" data-n="25"></div><div class="kk"><b>JAVA — GLOBAL ERROR HANDLING WITH RFC 9457 PROBLEMDETAIL</b></div><pre class="code"><code>@RestControllerAdvice
+class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(OrderNotFoundException.class)
+    ProblemDetail notFound(OrderNotFoundException ex) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+        pd.setType(URI.create(&quot;https://errors.example.com/order-not-found&quot;));
+        pd.setProperty(&quot;code&quot;, &quot;ORDER_NOT_FOUND&quot;);
+        return pd;
+    }
+
+    @ExceptionHandler(DomainException.class)
+    ProblemDetail domain(DomainException ex) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
+        pd.setProperty(&quot;code&quot;, ex.code());
+        return pd;
+    }
+
+    @ExceptionHandler(Exception.class)
+    ProblemDetail unexpected(Exception ex) {
+        log.error(&quot;Unhandled error&quot;, ex);
+        return ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, &quot;Unexpected error&quot;);
+    }
+}
+// handles Spring MVC exceptions
+// full stack trace in logs only</code></pre><div class="cols c2" style="--gt:255fr 255fr"><div class="col"><div class="bx" style="--bx:#faf8f3"><div class="cols c2 tab" style="--gt:32fr 34fr"><div class="col"><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">COMMON</span></div></div><div class="col"><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">MISTAKES</span></div></div></div><div class="ls"><div class="li" data-m="•">Returning JPA entities from controllers →lazy‐loading</div></div><p>exceptions, accidental field exposure, API tied to schema. Map to DTOs.</p><div class="ls"><div class="li" data-m="•">Leaking stack traces / SQL in error bodies. •</div></div><pre class="code"><code>@Valid</code></pre><p>missing on nested objects or collection elements.</p><div class="ls"><div class="li" data-m="•"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>200</code></span><code> </code><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>OK</code></span>with<span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>{&quot;error&quot;:</code></span><code> </code><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>...}</code></span>body — use real status codes.</div></div></div></div><div class="col"><div class="bx" style="--bx:#faf8f3"><div class="cols c2 tab" style="--gt:45fr 60fr"><div class="col"><div class="kk">PRODUCTION</div></div><div class="col"><div class="kk">CONSIDERATIONS</div></div></div><div class="ls"><div class="li" data-m="•">Validation failures →400 with field errors</div></div><p>(</p><pre class="code"><code>MethodArgumentNotValidException</code></pre><p>).</p><div class="ls"><div class="li" data-m="•">Add a correlation/trace id to every error response.</div><div class="li" data-m="•">Cap page size; validate sort fields against an allow‐list.</div><div class="li" data-m="•">Set</div></div><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>server.error.include-stacktrace=never</code></span>(default) and</p><p>keep it.</p></div></div></div><div class="bx" style="--bx:#b4532a"><h2><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">3.5</span>Request Lifecycle: Filters vs Interceptors vs AOP</h2></div><div class="bx" style="--bx:#faf8f3"><h3>Spring MVC request lifecycle (servlet stack)</h3><figure class="fig"><img loading="lazy" src="lib/jcheat/img/p25_9.webp" width="634" height="422" alt="Diagram" style="max-width:407px"></figure><figure class="fig"><img loading="lazy" src="lib/jcheat/img/p25_10.webp" width="206" height="97" alt="Diagram" style="max-width:132px"></figure><figure class="fig"><img loading="lazy" src="lib/jcheat/img/p25_11.webp" width="192" height="102" alt="Diagram" style="max-width:123px"></figure><figure class="fig"><img loading="lazy" src="lib/jcheat/img/p25_12.webp" width="206" height="83" alt="Diagram" style="max-width:132px"></figure><div class="bx" style="--bx:#dedad3"><p>Repository</p><div class="kk">JPA / JDBC</div></div><p class="sm"><b>Filters see every request (even 404s / static). Interceptors only see mapped handlers. AOP w</b></p></div><p>The servlet request path. Security runs as a filter chain before DispatcherServlet; interceptors wrap handler execution; AOP proxies wrap individual bean method calls.</p><div class="tw"><table class="tb"><tbody><tr><td></td><td><b>Servlet</b><code> Filter</code></td><td><code>HandlerInterceptor</code></td><td>AOP<code> @Aspect</code></td></tr><tr><td>Layer</td><td>servlet container, before Spring MVC</td><td>Spring MVC, around handler</td><td>any Spring bean method</td></tr><tr><td>Sees</td><td>raw request/response (all URLs)</td><td>handler method + <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>ModelAndView</code></span></td><td>method args, return value, exceptions</td></tr></tbody></table></div>

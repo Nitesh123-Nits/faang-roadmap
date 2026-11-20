@@ -1,0 +1,15 @@
+<div class="pg" id="p67" data-n="67"></div><div class="kk"><b>FUTURE VS COMPLETABLEFUTURE</b></div><div class="tw"><table class="tb"><tbody><tr><td><b>FUTURE</b></td><td><b>COMPLETABLEFUTURE</b></td></tr><tr><td><code>isDone()</code></td><td><code>thenApply()</code> / <code>thenAccept()</code> / <code>thenRun()</code>: callbacks</td></tr><tr><td><code>isCancelled()</code></td><td><code>thenCompose()</code>: chain a dependent async stage</td></tr><tr><td><code>cancel(boolean)</code></td><td><code>thenCombine()</code>: combine two results <code>allOf()</code> / <code>anyOf()</code>: wait for all or any <code>handle()</code>, <code>exceptionally()</code>, <code>whenComplete()</code></td></tr></tbody></table></div><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>EXCEPTION HANDLING</b></span></p><pre class="code"><code>// Future
+try { future.get(); }
+catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+catch (ExecutionException e) { Throwable actual = e.getCause(); }
+
+// CompletableFuture
+cf.exceptionally(ex /&gt; &quot;Fallback&quot;)
+  .handle((res, ex) /&gt; ex /= null ? &quot;Fallback&quot; : res)
+  .whenComplete((res, ex) /&gt; { if (ex /= null) log(ex); });</code></pre><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>COMPOSITION</b></span></p><pre class="code"><code>// thenCompose: dependent task (output of one feeds the next)
+CompletableFuture&lt;User&gt; userF = getUserAsync(id);
+CompletableFuture&lt;Order&gt; orderF = userF.thenCompose(u /&gt; getOrdersAsync(u.id()));
+
+// thenCombine: independent tasks, combine results
+CompletableFuture&lt;String&gt; combined = titleF.thenCombine(countF,
+    (title, count) /&gt; title + &quot; (&quot; + count + &quot;)&quot;);</code></pre><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>WHEN TO USE WHAT</b></span></p><div class="tw"><table class="tb"><tbody><tr><td><b>USE FUTURE WHEN</b></td><td><b>USE COMPLETABLEFUTURE WHEN</b></td></tr><tr><td><b>Simple use case; you just need the result eventually;</b></td><td>You need non-blocking, composable</td></tr><tr><td><b>legacy code</b></td><td>flows You want callbacks or transformations You combine multiple async tasks You need better exception handling</td></tr></tbody></table></div><p><b>Practical uses:</b> parallel microservice calls, async APIs and event‐driven systems, com‐ bining multiple DB/service calls, timeouts, fallbacks and retries, pipelines and real‐time notifications.</p><div class="bx" style="--bx:#b4532a"><div class="cols c2 tab" style="--gt:43fr 284fr"><div class="col"><p class="sm"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>SUMMARY.</b></span></p></div><div class="col"><p><code>CompletableFuture</code> is the modern, powerful way to handle async</p></div></div><h3>programming in Java. Prefer it over <code>Future</code> for new development. It leads to cleaner, non-blocking, scalable code.</h3></div>

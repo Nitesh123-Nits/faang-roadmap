@@ -1,0 +1,17 @@
+<div class="pg" id="p62" data-n="62"></div><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>BLOCKINGQUEUE TYPES (WORK QUEUE)</b></span></p><div class="tw"><table class="tb"><tbody><tr><td><b>QUEUE</b></td><td><b>NOTES</b></td></tr><tr><td><code>ArrayBlockingQueue</code></td><td>Bounded, FIFO</td></tr><tr><td><code>LinkedBlockingQueue</code></td><td>Bounded or <b>unbounded</b>, FIFO</td></tr><tr><td><code>SynchronousQueue</code></td><td>No storage: direct hand-off</td></tr><tr><td><code>PriorityBlockingQueue</code></td><td>Priority-ordered</td></tr><tr><td><code>DelayQueue</code></td><td>Elements become available after a delay</td></tr></tbody></table></div><div class="bx" style="--bx:#b4532a"><div class="cols c2 tab" style="--gt:36fr 303fr"><div class="col"><p class="sm"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>GOTCHA.</b></span></p></div><div class="col"><h3><code>newFixedThreadPool</code> and <code>newSingleThreadExecutor</code> use an <b>unbounded</b></h3></div></div><p>queue, and <code>newCachedThreadPool</code> can create an unbounded number of threads. For production, build a <code>ThreadPoolExecutor</code> with a bounded queue and an explicit rejection policy.</p></div><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>SCHEDULED EXECUTORS</b></span></p><pre class="code"><code>ScheduledExecutorService s = Executors.newScheduledThreadPool(2);
+s.schedule(task, 5, TimeUnit.SECONDS);                    // run once after delay
+s.scheduleAtFixedRate(task, 0, 2, TimeUnit.SECONDS);      // fixed rate
+s.scheduleWithFixedDelay(task, 0, 2, TimeUnit.SECONDS);   // fixed delay between runs</code></pre><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>FORKJOINPOOL</b></span></p><p>Work‐stealing pool for divide‐and‐conquer tasks (<code> RecursiveTask&lt;V&gt;</code> returns a value, <code>RecursiveAction</code> does not).</p><pre class="code"><code>class SumTask extends RecursiveTask&lt;Long&gt; {
+    protected Long compute() {
+        // split into subtasks, fork(), join(), combine
+        return 1L;
+    }
+}
+long result = new ForkJoinPool().invoke(new SumTask());</code></pre><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>PRODUCTION-GRADE CONFIGURATION</b></span></p><pre class="code"><code>int cores = Runtime.getRuntime().availableProcessors();
+ThreadPoolExecutor executor = new ThreadPoolExecutor(
+    cores, cores * 2,
+    60L, TimeUnit.SECONDS,
+    new LinkedBlockingQueue/&gt;(1000),
+    new ThreadFactoryBuilder().setNameFormat(&quot;app-pool-%d&quot;).build(),   // Guava
+    new ThreadPoolExecutor.CallerRunsPolicy());
+executor.allowCoreThreadTimeOut(true);</code></pre>

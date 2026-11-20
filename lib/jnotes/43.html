@@ -1,0 +1,16 @@
+<div class="pg" id="p55" data-n="55"></div><div class="kk"><b>COUNTDOWNLATCH VS CYCLICBARRIER</b></div><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>CHAPTER 28</b></span></p><h1>CountDownLatch vs CyclicBarrier</h1><p class="lead"><i>Both coordinate threads; they answer different questions.</i></p><div class="ls"><div class="li" data-m="•"></b></span><b>CountDownLatch:</b> &quot;wait until a set of operations completes.&quot; Think of a count‐</div></div><h3>down timer.</h3><div class="ls"><div class="li" data-m="•"></b></span><b>CyclicBarrier:</b> &quot;everyone wait for each other at a point, then proceed together.&quot;</div></div><h3>The barrier can be <b>reused.</b></h3><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>COUNTDOWNLATCH</b></span></p><pre class="code"><code>CountDownLatch latch = new CountDownLatch(3);
+
+Runnable worker = () /&gt; {
+    try { doWork(); }
+    finally { latch.countDown(); }     // always in finally
+};
+new Thread(worker).start(); /* x3 //
+
+latch.await();                         // main waits until count reaches 0</code></pre><h3>Key methods: <code>CountDownLatch(int count)</code> , <code>await()</code> , <code>countDown()</code> , <code>getCount()</code> .</h3><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>CYCLICBARRIER</b></span></p><pre class="code"><code>CyclicBarrier barrier = new CyclicBarrier(3,
+    () /&gt; System.out.println(&quot;All workers reached barrier&quot;));
+
+Runnable worker = () /&gt; {
+    phaseOne();
+    barrier.await();                   // wait for all 3 parties
+    phaseTwo();
+};</code></pre><h3>Key methods: <code>CyclicBarrier(int parties)</code> , <code>CyclicBarrier(int parties, Runnable</code> <code>action)</code> , <code>await()</code> .</h3>

@@ -1,0 +1,7 @@
+<div class="pg" id="p27" data-n="27"></div><p class="sm"><b>Recording a non-obvious business rule</b> It narrates an obvious statement</p><p class="sm"><b>Documenting a complex algorithm or invariant</b> It is commented-out code (version control remembers)</p><p class="sm"><b>Javadoc on public APIs and shared modules</b> It is outdated: delete or fix it</p><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>TODO</code></span><b> / </b><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>FIXME</code></span><b> with a ticket and owner</b></div><p class="sm">Excessive inline commentary; rename or extract instead</p><h3><b>Magic numbers and hardcoded values</b></h3><p>Bad:</p><pre class="code"><code>if (retryCount &gt; 3) {
+  // retry
+}</code></pre><p>Better:</p><pre class="code"><code>private static final int MAX_RETRY_COUNT = 3;
+
+if (retryCount &gt; MAX_RETRY_COUNT) {
+  // retry
+}</code></pre><p><b>Fixed, code-owned</b> A named constant</p><pre class="code"><code>MAX_RETRY_COUNT = 3</code></pre>

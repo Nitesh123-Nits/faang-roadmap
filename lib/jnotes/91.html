@@ -1,0 +1,24 @@
+<div class="pg" id="p107" data-n="107"></div><div class="kk"><b>@ASYNC</b></div><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>CHAPTER 54</b></span></p><h1>@Async</h1><p class="lead"><i>Runs a method <b>asynchronously in a separate thread</b> so the caller is not blocked.</i></p><h3><b>Why:</b> improve responsiveness, run time‐consuming work in the background, use resources better, fire‐and‐forget operations.</h3><div class="bx dk" style="--bx:#1e2227"><p>Caller thread</p></div><div class="bx dk" style="--bx:#1e2227"><p>calls @Async method</p></div><div class="bx dk" style="--bx:#1e2227"><p>runs on TaskExecutor thread pool</p></div><h4><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>→</b></span></h4><h4><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>→</b></span></h4><div class="bx dk" style="--bx:#1e2227"><p>caller returns immediately</p></div><h4><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>→</b></span></h4><div class="ls"><div class="li" data-m="1.">ENABLE ASYNC SUPPORT</b></span></div></div><pre class="code"><code>@SpringBootApplication
+@EnableAsync
+public class DemoApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
+}</code></pre><div class="ls"><div class="li" data-m="2.">ANNOTATE METHODS</b></span></div></div><pre class="code"><code>@Service
+public class NotificationService {
+
+    @Async                                          // fire-and-forget
+    public void sendEmail(String to, String message) {
+        // slow work
+    }
+}
+
+@Service
+public class ReportService {
+
+    @Async                                          // returns a result
+    public CompletableFuture&lt;String&gt; generateReport(Long id) {
+        return CompletableFuture.supplyAsync(() /&gt; &quot;Report generated for id: &quot; +
+id);
+    }
+}</code></pre>

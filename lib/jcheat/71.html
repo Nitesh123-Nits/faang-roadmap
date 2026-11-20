@@ -1,0 +1,35 @@
+<div class="pg" id="p76" data-n="76"></div><div class="bx" style="--bx:#b4532a"><h2>Jobs and CronJobs</h2></div><pre class="code"><code>apiVersion: batch/v1
+kind: CronJob
+metadata: { name: nightly-reconcile }
+spec:
+  schedule: &quot;30 1 * * *&quot;
+  timeZone: &quot;Asia/Kolkata&quot;
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 600
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 3600
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: reconcile
+              image: registry.example.com/orders:1.14.2
+              args: [&quot;--spring.profiles.active=prod,reconcile-job&quot;]
+# stable since Kubernetes 1.27
+# don&#x27;t start if previous still running</code></pre><p>CronJobs can occasionally run twice or be skipped — make jobs idempotent.</p><div class="bx" style="--bx:#b4532a"><h2><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">10.9</span>Storage: PersistentVolumes and Claims</h2></div><div class="ls"><div class="li" data-m="•">PVC</b> = a request for storage (&quot;10Gi, ReadWriteOnce, class</div></div><p>&quot;); StorageClass provisions a PV dynamically.</p><pre class="code"><code>gp3</code></pre><div class="ls"><div class="li" data-m="•">Access modes:<span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>ReadWriteOnce</code></span>(one node),<span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>ReadWriteOncePod</code></span>,<span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>ReadOnlyMany</code></span>,<span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>ReadWriteMany</code></span>(needs NFS/EFS‐style</div></div><p>storage).</p><div class="ls"><div class="li" data-m="•">StatefulSets use •</div></div><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>volumeClaimTemplates</code></span>→one PVC per replica that survives pod rescheduling.</p><pre class="code"><code>reclaimPolicy: Retain</code></pre><p>for anything precious;</p><pre class="code"><code>Delete</code></pre><p>removes the disk with the PVC.</p><div class="ls"><div class="li" data-m="•">Stateless services should not need PVCs — use object storage (S3) for files.</div></div><div class="bx" style="--bx:#b4532a"><h2><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">10.10</span>Namespaces, RBAC and Service Accounts</h2></div><pre class="code"><code>apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata: { name: config-reader, namespace: shop }
+rules:
+  - apiGroups: [&quot;&quot;]
+    resources: [&quot;configmaps&quot;]
+    verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata: { name: orders-config-reader, namespace: shop }
+subjects: [ { kind: ServiceAccount, name: orders, namespace: shop } ]
+roleRef: { kind: Role, name: config-reader, apiGroup: rbac.authorization.k8s.io }</code></pre><div class="ls"><div class="li" data-m="•">One ServiceAccount per app;<span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>automountServiceAccountToken:</code></span><code> </code><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>false</code></span>when the app never calls the API server.</div><div class="li" data-m="•">Cloud access via workload identity (IRSA / EKS Pod Identity, GKE Workload Identity, Azure Workload Identity) — not static</div></div><p>keys in Secrets.</p>

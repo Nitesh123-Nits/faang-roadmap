@@ -1,0 +1,82 @@
+<div class="pg" id="p11" data-n="11"></div><div class="cols c3 tab" style="--gt:339fr 84fr 28fr"><div class="col"><p><b>Java 15</b> for SQL/JSON in code;</p><p>Text blocks</p><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>formatted()</code></span>,<span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>strip()</code></span>(Unicode‐aware),</p></div><div class="col"><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>isBlank()</code></span>,<span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>repeat()</code></span></p></div><div class="col"><p><b>Java 11</b> .</p></div></div><div class="bx" style="--bx:#faf8f3"><div class="cols c2" style="--gt:8fr 298fr"><div class="col"><p>• •</p></div><div class="col"><div class="ls"><div class="li" data-m="•">argument is a regex; use</div></div><p>or</p><p>.</p><pre class="code"><code>str.split(&quot;.&quot;)
+                                                         I</code></pre><pre class="code"><code>split(&quot;\\.&quot;)
+                     ı</code></pre><pre class="code"><code>Pattern.quote</code></pre><p class="sm"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>toLowerCase()</code></span>without<span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>Locale.ROOT</code></span></p><p>breaks in Turkish locale (</p><div class="ls"><div class="li" data-m="•">→</div><div class="li" data-m="•">).</div></div></div></div><div class="ls"><div class="li" data-m="•">Building SQL with<span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>+</code></span>→injection. Always bind parameters.</div></div></div><div class="bx" style="--bx:#b4532a"><h2><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">1.10</span>Exception Handling</h2></div><pre class="code"><code>Throwable
+ ├──Error
+ └──Exception
+      ├──checked
+      └──RuntimeException  (IllegalArgumentException, IllegalStateException, NPE) — programming/contract errors
+(OutOfMemoryError, StackOverflowError) — don&#x27;t catch, let process die/restart
+(IOException, SQLException) — caller must handle/declare</code></pre><div class="cols c2 tab" style="--gt:108fr 147fr"><div class="col"><div class="kk"><b>JAVA — IDIOMATIC HANDLING</b></div></div><div class="col"><div class="kk"><b>JAVA — DOMAIN EXCEPTION HIERARCHY</b></div></div></div><pre class="code"><code>public abstract class DomainException extends
+protected DomainException(String code, String msg) {
+&quot;Insufficient funds for &quot; + acct);
+    // mapped to HTTP 422 in @RestControllerAdvice</code></pre><pre class="code"><code>try (var in = Files.newInputStream(path);
+in reverse order,
+     var out = Files.newOutputStream(target))
+{
+    in.transferTo(out);
+} catch (IOException e) {
+    throw new StorageException(&quot;copy failed: &quot; + path,
+e); // keep the cause!
+}
+                                                                nException {
+try { queue.take(); }
+catch (InterruptedException e) {
+    Thread.currentThread().interrupt();
+flag
+    throw new CancellationException(&quot;interrupted&quot;);
+}</code></pre><pre class="code"><code>                                             // closed
+                                                             RuntimeException {
+                                                                 private final String code;
+// even on exception
+                                                                     super(msg); this.code = code;
+                                                                 }
+                                                                 public String code() { return code; }
+                                                             }
+                                                             public final class InsufficientFundsException extends Domai
+
+                                                                 public InsufficientFundsException(String acct) {
+                                                                     super(&quot;FUNDS_INSUFFICIENT&quot;,
+                                       // restore the
+                                                                 }
+                                                             }</code></pre><div class="bx" style="--bx:#faf8f3"><div class="cols c2 tab" style="--gt:32fr 34fr"><div class="col"><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">COMMON</span></div></div><div class="col"><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">MISTAKES</span></div></div></div><div class="ls"><div class="li" data-m="•"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>catch</code></span><code> </code><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>(Exception</code></span><code> </code><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>e)</code></span><code> </code><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>{</code></span><code> </code><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>log.error(e.getMessage());</code></span><code> </code><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>}</code></span>— loses stack trace and swallows the failure. Log the exception object:</div></div><p>.</p><pre class="code"><code>log.error(&quot;msg&quot;, e)</code></pre><div class="ls"><div class="li" data-m="•">Log‐and‐rethrow at every layer →the same stack trace 5 times. Log once, at the boundary that handles it.</div><div class="li" data-m="•">Using exceptions for control flow in hot loops (stack trace capture is expensive).</div></div><div class="cols c2" style="--gt:365fr 30fr"><div class="col"><div class="ls"><div class="li" data-m="•">Exceptions inside<span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>finally</code></span>mask the original — try‐with‐resources records them as<i> suppressed</i></div></div></div><div class="col"><p>instead.</p></div></div></div><div class="bx" style="--bx:#b4532a"><h2><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">1.11</span>Streams, Collectors, Optional and Lambdas</h2></div><div class="cols c2 tab" style="--gt:162fr 184fr"><div class="col"><div class="kk"><b>JAVA — COLLECTORS YOU&#x27;LL ACTUALLY USE</b></div></div><div class="col"><div class="kk"><b>JAVA — FUNCTIONAL INTERFACES &amp; METHOD REFS</b></div></div></div><pre class="code"><code>Function&lt;A,B&gt;
+Consumer&lt;T&gt;
+                         UnaryOperator&lt;T&gt; /
+BinaryOperator&lt;T&gt;
+// primitive specializations avoid boxing:
+IntStream, ToIntFunction, IntPredicate ...
+apply
+accept
+Supplier&lt;T&gt;
+Predicate&lt;T&gt; test
+get
+// unbound instance
+// bound instance
+// constructor</code></pre><pre class="code"><code>Map&lt;Status, List&lt;Order&gt;&gt; byStatus = orders.stream()
+    .collect(Collectors.groupingBy(Order::status));
+                                                                BiFunction&lt;A,B,R&gt;
+Map&lt;String, BigDecimal&gt; revenueByCity = orders.stream()
+    .collect(Collectors.groupingBy(Order::city,
+        Collectors.reducing(BigDecimal.ZERO, Order::total,
+BigDecimal::add)));
+                                                                // method references
+Map&lt;Long, User&gt; byId = users.stream()
+    .collect(Collectors.toMap(User::id, Function.identity()
+,
+             (a, b) -&gt; a));
+avoid IllegalStateException
+
+                                                                return repo.findById(id)
+    .collect(Collectors.partitioningBy(o -&gt; o.total().signu
+                                                                    .map(UserDto::from)
+                                       Collectors.counting(
+                                                                // orElse(x) evaluates x eagerly; orElseGet(() -&gt; x) lazily</code></pre><pre class="code"><code>                      String::length
+                      user::isActive
+                      Order::new
+// merge fn:</code></pre><div class="kk"><b>JAVA — OPTIONAL DONE RIGHT</b></div><pre class="code"><code>Map&lt;Boolean, Long&gt; split = orders.stream()
+                                                                    .filter(User::isActive)
+m() &gt; 0,
+                                                                    .orElseThrow(() -&gt; new NotFound(id));
+)));
+
+String csv =
+names.stream().collect(Collectors.joining(&quot;,&quot;, &quot;[&quot;, &quot;]&quot;));</code></pre>

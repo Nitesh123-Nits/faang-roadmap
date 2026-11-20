@@ -1,0 +1,63 @@
+<div class="pg" id="p24" data-n="24"></div><div class="bx" style="--bx:#b4532a"><h2>Configuration: application.yml, Profiles, @ConfigurationProperties</h2></div><div class="cols c2 tab" style="--gt:66fr 128fr"><div class="col"><div class="kk"><b>APPLICATION.YML</b></div></div><div class="col"><div class="kk"><b>JAVA — TYPED, VALIDATED CONFIG</b></div></div></div><pre class="code"><code>spring:
+  application.name: order-service
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/orders
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+store
+    hikari:
+      maximum-pool-size: 20
+      connection-timeout: 3s
+  jpa.open-in-view: false
+payment:
+  gateway:
+    base-url: https://pay.example.com
+    timeout: 2s</code></pre><pre class="code"><code>                                // &quot;2s&quot; binds
+@Min 0
+( ) @Max 5
+( ) int maxRetries) {}</code></pre><pre class="code"><code>                          @Validated
+                          @ConfigurationProperties(&quot;payment.gateway&quot;)
+                          public record GatewayProps(
+                              @NotNull URI baseUrl,
+                              @NotNull Duration timeout,
+# from env/secret
+
+                          @SpringBootApplication
+                          @ConfigurationPropertiesScan
+                          public class App { }</code></pre><p>Precedence (high →low, simplified): command‐line args → <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>SPRING_APPLICATION_JSON</code></span>→OS env vars →profile‐specific files (</p><p>) →</p><p>→</p><pre class="code"><code>                                                                                               application.yml
+                                                               @PropertySource
+---
+spring.config.activate.on-profile: local
+payment.gateway.base-url: http://localhost:9090</code></pre><pre class="code"><code>                                                             application-prod.yml
+max-retries: 3</code></pre><p>→defaults.</p><div class="tw"><table class="tb"><thead class="dk"><tr><th></th><th><code>@ConfigurationProperties</code></th><th><code>@Value(&quot;${x}&quot;)</code></th></tr></thead><tbody><tr><td>Binding</td><td>hierarchical, relaxed ( → ) <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>MAX_RETRIES</code></span> <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>maxRetries</code></span></td><td>single key</td></tr><tr><td>Types</td><td>records, <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>Duration</code></span> , <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>DataSize</code></span> , lists, maps</td><td>simple conversion</td></tr><tr><td>Validation</td><td><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>@Validated</code></span> + JSR‐380 at startup</td><td>no</td></tr><tr><td>IDE metadata</td><td>yes (with processor)</td><td>no</td></tr><tr><td>Use</td><td>any group of related settings</td><td>one‐off value, SpEL</td></tr></tbody></table></div><div class="bx" style="--bx:#b4532a"><h2><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">3.4</span>REST Controllers, DTOs, Validation and ProblemDetail Errors</h2></div><div class="kk"><b>JAVA — CONTROLLER + DTOS + VALIDATION</b></div><pre class="code"><code>@RestController
+@RequestMapping(&quot;/api/v1/orders&quot;)
+class OrderController {
+    private final OrderService service;
+    OrderController(OrderService service) { this.service = service; }
+
+    @PostMapping
+    ResponseEntity&lt;OrderResponse&gt; create(@Valid @RequestBody CreateOrderRequest req,
+                                         @RequestHeader(&quot;Idempotency-Key&quot;) String key) {
+        OrderResponse created = service.create(req, key);
+        return ResponseEntity.created(URI.create(&quot;/api/v1/orders/&quot; + created.id())).body(created);
+    }
+
+    @GetMapping(&quot;/{id}&quot;)
+    OrderResponse get(@PathVariable UUID id) { return service.get(id); }
+
+    @GetMapping
+    Page&lt;OrderResponse&gt; list(@RequestParam(defaultValue = &quot;0&quot;) @Min 0
+                             @RequestParam(defaultValue = &quot;20&quot;) @Max 100
+        return service.list(PageRequest.of(page, size, Sort.by(&quot;createdAt&quot;).descending()));
+    }
+}
+
+public record CreateOrderRequest(
+    @NotNull UUID customerId,
+    @NotEmpty List&lt;@Valid LineItem&gt; items,
+    @Size(max = 500) String note) {}
+public record LineItem(@NotBlank String sku, @Positive int quantity) {}
+public record OrderResponse(UUID id, String status, BigDecimal total, Instant createdAt) {}
+( ) int page,
+ (
+) int size) {</code></pre>

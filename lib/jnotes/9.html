@@ -1,0 +1,14 @@
+<div class="pg" id="p17" data-n="17"></div><div class="kk"><b>INTERFACE VS ABSTRACT CLASS</b></div><pre class="code"><code>interface Payment {
+    void pay(double amount);                       // abstract
+    default void info() { System.out.println(&quot;Payment Info&quot;); }
+    static String getType() { return &quot;Online Payment&quot;; }
+}
+
+abstract class Employee {
+    protected String name;
+    protected double salary;
+    Employee(String name, double salary) { this.name = name; this.salary =
+salary; }
+    void display() { System.out.println(name); }   // concrete
+    abstract double calculateSalary();             // abstract
+}</code></pre><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>CAN INTERFACES REPLACE ABSTRACT CLASSES?</b></span></p><p>Not fully. Interfaces can provide abstract, default, static and private methods. They cannot provide constructors, instance variables, mutable state, protected members or initialisation logic.</p><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>DECISION TREE</b></span></p><div class="ls"><div class="li" data-m="1.">Do you need shared state (fields) or constructors? Yes → abstract class.</div><div class="li" data-m="2.">No. Do you only need a contract or capability? Yes → interface.</div><div class="li" data-m="3.">Neither fits cleanly? Reconsider the design.</div></div><div class="bx" style="--bx:#b4532a"><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>B E S T P R AC T I C E .</b></span> Prefer interfaces for flexibility and loose coupling. Use ab-</p><p>stract classes only when classes genuinely share code and state. Combining both is common: an interface defines the contract, an abstract class supplies</p><p>the skeleton (<code> List</code> and <code>AbstractList</code> ).</p></div>

@@ -1,0 +1,30 @@
+<div class="pg" id="p59" data-n="59"></div><p><b>CH 8 · DATABASES AND SQL</b></p><div class="bx" style="--bx:#b4532a"><h2>Relational vs NoSQL</h2></div><div class="tw"><table class="tb"><tbody><tr><td></td><td><b>Relational (PostgreSQL,</b> <b>MySQL)</b></td><td><b>Document (MongoDB)</b></td><td><b>Wide-column</b> <b>(Cassandra)</b></td><td><b>Key-value (Redis,</b> <b>DynamoDB)</b></td></tr><tr><td>Model</td><td>tables, joins, constraints</td><td>JSON‐like documents</td><td>partitions of rows by partition key</td><td>key →value</td></tr><tr><td>Transactions</td><td>multi‐row ACID</td><td>multi‐document ACID (since 4.0), best within one document</td><td>per‐partition lightweight TX</td><td>single key (DynamoDB: limited multi‐item TX)</td></tr><tr><td>Query flexibility</td><td>ad‐hoc SQL, joins</td><td>rich queries on one collection, aggregation pipeline</td><td>query‐first design ; must know access patterns</td><td>by key (+ secondary indexes)</td></tr><tr><td>Scale‐out writes</td><td>vertical + replicas; sharding is extra work (Citus, Vitess)</td><td>built‐in sharding</td><td>linear, multi‐DC</td><td>built‐in</td></tr><tr><td>Pick when</td><td>default for business data, money, relationships</td><td>aggregate‐shaped data, evolving schema</td><td>massive write volume, time‐series, multi‐region AP</td><td>caching, sessions, simple high‐scale lookups</td></tr></tbody></table></div><div class="bx" style="--bx:#f0ede7"><div class="cols c2 tab" style="--gt:32fr 18fr"><div class="col"><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">DECISION</span></div></div><div class="col"><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">RULE</span></div></div></div><p>Default to PostgreSQL. Choose NoSQL for a specific access pattern or scale need you can name — not to avoid schema design. &quot;Schemaless&quot; means the schema lives in your code instead.</p></div><div class="bx" style="--bx:#b4532a"><h2><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">8.2</span>Keys, Constraints and Indexes</h2></div><pre class="code"><code>CREATE TABLE customers (
+  id
+  email
+  created_at
+);
+CREATE TABLE orders (
+  id
+  customer_id
+  status
+  total
+  version
+  created_at
+);
+CREATE INDEX orders_customer_created ON orders (customer_id, created_at DESC);
+CREATE UNIQUE INDEX one_open_cart ON orders (customer_id) WHERE status = &#x27;PENDING&#x27;; -- partial unique index
+BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+CITEXT NOT NULL UNIQUE,
+TIMESTAMPTZ NOT NULL DEFAULT now()
+-- case-insensitive unique (citext extension)
+UUID PRIMARY KEY,
+BIGINT NOT NULL REFERENCES customers(id),
+VARCHAR(20) NOT NULL CHECK (status IN (&#x27;PENDING&#x27;,&#x27;PAID&#x27;,&#x27;SHIPPED&#x27;,&#x27;CANCELLED&#x27;)),
+NUMERIC(19 4
+INT NOT NULL DEFAULT 0,
+TIMESTAMPTZ NOT NULL DEFAULT now()
+
+                                                                 -- FKs are NOT auto-indexed in PG
+-- prefer time-ordered UUIDv7 for index locality
+, ) NOT NULL CHECK (total &gt;= 0),
+                             -- optimistic locking</code></pre><div class="cols c2" style="--gt:255fr 255fr"><div class="col"><div class="bx" style="--bx:#faf8f3"><div class="cols c2 tab" style="--gt:40fr 54fr"><div class="col"><div class="kk">CLUSTERED</div></div><div class="col"><div class="kk">VS SECONDARY</div></div></div><div class="ls"><div class="li" data-m="•">MySQL InnoDB: the table is a B‐tree ordered by primary key</div></div><p>(clustered). Secondary index leaves store the PK →lookup = 2 tree walks. Random PKs (UUIDv4) cause page splits; keep PKs short and increasing.</p><div class="ls"><div class="li" data-m="•">PostgreSQL: rows live in an unordered heap; every index</div></div><p>(incl. PK) points to a tuple id.<span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>CLUSTER</code></span>reorders once, not maintained.</p></div></div><div class="col"><div class="bx" style="--bx:#faf8f3"><div class="cols c2 tab" style="--gt:32fr 34fr"><div class="col"><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">COMMON</span></div></div><div class="col"><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">MISTAKES</span></div></div></div><div class="ls"><div class="li" data-m="•">Missing index on foreign‐key columns →slow joins and slow</div></div><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>DELETE</code></span>on the parent (PostgreSQL doesn&#x27;t create them automatically; MySQL InnoDB does).</p><div class="ls"><div class="li" data-m="•">Enforcing uniqueness only in application code (check‐then‐</div></div><p>insert race). Use a violation.</p><p>constraint and handle the</p><pre class="code"><code>UNIQUE</code></pre><div class="ls"><div class="li" data-m="•">Over‐indexing: every index slows writes and costs memory/</div></div><p>vacuum.</p></div></div></div>

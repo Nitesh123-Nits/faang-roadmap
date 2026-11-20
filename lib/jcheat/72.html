@@ -1,0 +1,34 @@
+<div class="pg" id="p77" data-n="77"></div><div class="bx" style="--bx:#b4532a"><h2>Network Policies</h2></div><pre class="code"><code>apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: { name: orders-ingress, namespace: shop }
+spec:
+  podSelector: { matchLabels: { app: orders } }
+  policyTypes: [&quot;Ingress&quot;]
+  ingress:
+    - from:
+        - namespaceSelector: { matchLabels: { kubernetes.io/metadata.name: ingress-nginx } }
+        - podSelector: { matchLabels: { app: checkout } }
+      ports: [ { protocol: TCP, port: 8080 } ]</code></pre><p>Default: all pods can talk to all pods. Start with default‐deny per namespace, then allow explicitly. Requires a CNI that enforces policies (Calico, Cilium, cloud CNIs with policy enabled).</p><div class="bx" style="--bx:#b4532a"><h2><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">10.12</span>Pod Disruption Budgets, Affinity and Topology Spread</h2></div><pre class="code"><code>apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata: { name: orders }
+spec:
+  minAvailable: 2
+  selector: { matchLabels: { app: orders } }
+# or maxUnavailable: 1</code></pre><div class="tw"><table class="tb"><thead class="dk"><tr><th><b>Mechanism</b></th><th><b>Purpose</b></th></tr></thead><tbody><tr><td><b>PDB</b></td><td>limits voluntary disruptions (node drains, upgrades) — not crashes. Too strict (minAvailable = replicas) blocks node maintenance</td></tr><tr><td><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>nodeSelector</code></span> / node affinity</td><td>run on certain node types (arm64, GPU, spot)</td></tr><tr><td>pod anti‐affinity</td><td>keep replicas off the same node ( can leave pods Pending) <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>required…</code></span></td></tr><tr><td>topologySpreadConstraints</td><td>spread evenly across zones/nodes with tolerance ( <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>maxSkew</code></span> ) — preferred over anti‐affinity</td></tr><tr><td>taints &amp; tolerations</td><td>reserve nodes; pods must tolerate the taint to land there</td></tr></tbody></table></div><div class="bx" style="--bx:#b4532a"><h2><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">10.13</span>Graceful Shutdown and Termination</h2></div><pre class="code"><code>Pod deleted ─┬─►endpoints  controller removes pod from Service (asynchronous, takes a moment)
+             └─►kubelet:  run preStop hook →send  SIGTERM →wait  terminationGracePeriodSeconds →SIGKILL
+     preStop</code></pre><div class="ls"><div class="li" data-m="•">The</div></div><p>sleep (5–15 s) covers the race where load balancers still send traffic after SIGTERM. Kubernetes 1.30+ also</p><p>supports a native<span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>preStop:</code></span><code> </code><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>{</code></span><code> </code><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>sleep:</code></span><code> </code><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>{</code></span><code> </code><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>seconds:</code></span><code> </code><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>10</code></span><code> </code><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>}</code></span><code> </code><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>}</code></span>action (no shell needed).</p><div class="cols c2 tab" style="--gt:8fr 374fr"><div class="col"><p>•</p></div><div class="col"><p>&gt; preStop + Spring</p><p>+ margin.</p><pre class="code"><code>terminationGracePeriodSeconds</code></pre><pre class="code"><code>timeout-per-shutdown-phase</code></pre></div></div><div class="ls"><div class="li" data-m="•">Kafka consumers: let Spring stop containers cleanly (commits offsets, leaves group); consider static membership to avoid</div></div><p>rebalances on rolling restarts.</p><div class="bx" style="--bx:#b4532a"><h2><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">10.14</span>Resource Quotas and Limit Ranges</h2></div><pre class="code"><code>apiVersion: v1
+kind: LimitRange
+metadata: { name: defaults, namespace: shop }
+spec:
+  limits:
+    - type: Container
+      defaultRequest: { cpu: 250m, memory: 512Mi }
+      default:
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata: { name: shop-quota, namespace: shop }
+spec:
+  hard: { requests.cpu: &quot;20&quot;, requests.memory: 40Gi, limits.memory: 40Gi, pods: &quot;100&quot; }
+{
+memory: 512Mi }</code></pre>

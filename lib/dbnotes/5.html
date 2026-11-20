@@ -1,0 +1,22 @@
+<div class="pg" id="p11" data-n="11"></div><div class="kk"><b>DATA MODELING</b></div><div class="ls"><div class="li" data-m="•"></b></span><b>Cardinality:</b> how many instances take part in a relationship.</div></div><div class="tw"><table class="tb"><tbody><tr><td><b>CARDINALIT Y</b></td><td><b>MEANING</b></td><td><b>EXAMPLE</b></td></tr><tr><td><b>1:1</b></td><td>One to one</td><td>User and profile</td></tr><tr><td><b>1:N</b></td><td>One to many</td><td>Customer and orders</td></tr><tr><td><b>N:1</b></td><td>Many to one</td><td>Orders and customer</td></tr><tr><td><b>M:N</b></td><td>Many to many</td><td>Students and courses (needs a join table)</td></tr><tr><td><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>K E Y S</b></span></td><td></td><td></td><td></td></tr><tr><td><b>KEY</b></td><td><b>MEANING</b></td><td></td></tr><tr><td><b>Primary key</b></td><td>Uniquely identifies a record</td></tr><tr><td><b>Candidate key</b></td><td>A minimal set of attributes that could be the primary key</td></tr><tr><td><b>Foreign key</b></td><td>References the primary key in another table</td></tr><tr><td><b>Composite key</b></td><td>A primary key made of several attributes</td></tr></tbody></table></div><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>EXAMPLE: E-COMMERCE MODEL</b></span></div><pre class="code"><code>CUSTOMER 1---N ORDER
+ORDER    1---N ORDER_ITEM
+PRODUCT  1---N ORDER_ITEM
+ORDER    1---1 PAYMENT
+CUSTOMER 1---N ADDRESS
+CATEGORY 1---N PRODUCT   (self-reference via parent_category_id)</code></pre><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>LOGICAL SCHEMA</b></span></div><pre class="code"><code>CREATE TABLE customers (
+  customer_id BIGINT PRIMARY KEY,
+  name        VARCHAR(100) NOT NULL,
+  email       VARCHAR(255) UNIQUE NOT NULL,
+  phone       VARCHAR(20),
+  created_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE orders (
+  order_id     BIGINT PRIMARY KEY,
+  customer_id  BIGINT NOT NULL,
+  order_date   DATETIME NOT NULL,
+  status       VARCHAR(20) NOT NULL,
+  total_amount DECIMAL(12,2) NOT NULL,
+  CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id)
+    REFERENCES customers(customer_id)
+);</code></pre>

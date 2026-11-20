@@ -1,0 +1,240 @@
+<div class="pg" id="p1037" data-n="1037"></div><div class="kk"><b>PART XII · ADVANCED ALGORITHMS</b></div><h1><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">107</span></h1><h1><b>Number Theory, Math and Geometry</b> <b>Tricks</b></h1><p class="lead"><i>gcd, modular arithmetic, sieves, factorisation and the integer geometry</i> <i>that interviews actually ask</i></p><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>A.</b></span><b> Pattern Overview</b></h3><p>A small toolkit of number-theoretic routines solves a surprising share of &quot;math&quot; interview problems: <b>Euclid&#x27;s gcd, fast exponentiation, modular inverses</b> (for division under a modulus), the <b>sieve of Eratosthenes</b> with smallest-prime-factor tables, <b>factorisation</b>, and counting formulas such as trailing zeros of <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>n!</code></span>. Geometry questions in interviews are almost always <b>integer</b>: rectangle overlap and area, cross products for orientation and convexity, squared distances for squares. All of it is code you can write in a few lines once the idea is clear.</p><div class="tw"><table class="tb"><tbody><tr><td><b>Tool</b></td><td><b>Idea</b></td><td><b>Cost</b></td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>gcd(a, b)</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>gcd(a, b) = gcd(b, a mod b)</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(log min(a, b))</code></span></td></tr><tr><td>Extended Euclid</td><td>Find <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>x, y</code></span> with <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>a x + b y = gcd</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(log)</code></span></td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>modPow(b, e, m)</code></span></td><td>Square-and-multiply on the bits of <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>e</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(log e)</code></span></td></tr><tr><td>Modular inverse</td><td>Fermat: <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>a^(p-2)</code></span> for prime <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>p</code></span>; or extended Euclid for any coprime <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>m</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(log m)</code></span></td></tr><tr><td>Sieve of Eratosthenes</td><td>Cross out multiples of each prime from <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>p^2</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n log log n)</code></span></td></tr><tr><td>Smallest-prime-factor sieve</td><td>Store the smallest prime divisor of each number</td><td>Factorise in <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(log</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>n)</code></span></td></tr><tr><td>Binomials mod prime</td><td>Factorials and inverse factorials</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n)</code></span> setup, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(1)</code></span> per query</td></tr><tr><td>Cross product</td><td>Sign gives orientation of three points</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(1)</code></span>, integers only</td></tr></tbody></table></div><div class="pg" id="p1038" data-n="1038"></div><div class="bx" style="--bx:#f2efe8"><div class="kk"><b>KEY IDEA</b></div><p class="sm">Under a modulus, <b>never divide</b>: multiply by the modular inverse. And keep every intermediate product inside <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>long</code></span> (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>m &lt; 2^31</code></span> means <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>m * m &lt; 2^62</code></span>).</p></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>B.</b></span><b> When to Recognize This Pattern</b></h3><p><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Pattern Recognition Signals</b></span></p><div class="ls"><div class="li" data-m="•"><b>&quot;Return the answer modulo 1e9 + 7&quot;</b>: modular arithmetic, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>modPow</code></span>, inverses for division and combinations.</div><div class="li" data-m="•"></b></span><b>Huge exponent</b> (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>x^n</code></span> with <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>n</code></span> up to <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>10^18</code></span>, or an exponent given as an array of digits).</div><div class="li" data-m="•"><b>Primes, divisors, factors, totient, ugly numbers.</b></div><div class="li" data-m="•"></b></span><b>Trailing zeros of a factorial, digits of a power:</b> count prime factors, do not compute the</div></div><p>number.</p><div class="ls"><div class="li" data-m="•"><b>Rectangles, squares, polygons with integer coordinates:</b> overlap, area, cross product.</div><div class="li" data-m="•"></b></span><b>gcd/lcm reasoning:</b> repeating schedules, water jugs, &quot;good arrays&quot;.</div></div><div class="bx" style="--bx:#f2efe8"><div class="kk"><b>ONE-LINE TEST</b></div><p class="sm">Large numbers, a modulus, or divisibility: reduce to primes, gcd and modular arithmetic.</p></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>C.</b></span><b> Core Intuition with Illustrations</b></h3><div class="ls"><div class="li" data-m="1.">Extended Euclid</b></span></div></div><p>Run the Euclidean algorithm while tracking coefficients so that every remainder is written as <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>a s + b t</code></span>. For <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>a = 240</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>b = 46</code></span>:</p><div class="tw"><table class="tb"><tbody><tr><td><b>Remainder</b></td><td><b>Quotient</b></td><td><b>s</b></td><td><b>t</b></td></tr><tr><td>240</td><td>-</td><td>1</td><td>0</td></tr><tr><td>46</td><td>-</td><td>0</td><td>1</td></tr><tr><td>10</td><td>5</td><td>1</td><td>-5</td></tr><tr><td>6</td><td>4</td><td>-4</td><td>21</td></tr><tr><td>4</td><td>1</td><td>5</td><td>-26</td></tr><tr><td>2</td><td>1</td><td>-9</td><td>47</td></tr><tr><td>0</td><td>2</td><td>23</td><td>-120</td></tr></tbody></table></div><div class="pg" id="p1039" data-n="1039"></div><p>Result: <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>gcd = 2</code></span> and <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>240 x (-9) + 46 x 47 = 2</code></span>. If <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>gcd(a, m) = 1</code></span>, the coefficient <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>s</code></span> is the modular inverse of <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>a</code></span> modulo <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>m</code></span> (taken <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>mod m</code></span>).</p><div class="ls"><div class="li" data-m="2.">Fast exponentiation</b></span></div></div><p>Read the exponent bit by bit. When the low bit is 1 multiply the result by the current power; always square the power and shift. <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>3^13 mod 1000</code></span>:</p><div class="tw"><table class="tb"><tbody><tr><td><b>Exponent left</b></td><td><b>Low bit</b></td><td><b>Base power</b></td><td><b>Result</b></td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>1101</code></span></td><td>1</td><td>3</td><td>3</td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>110</code></span></td><td>0</td><td>9</td><td>3</td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>11</code></span></td><td>1</td><td>81</td><td>243</td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>1</code></span></td><td>1</td><td>561</td><td>323</td></tr></tbody></table></div><p><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>13 = 1101</code></span> in binary, so the result multiplies the powers <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>3^1</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>3^4</code></span> and <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>3^8</code></span>: <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>3^13 = 1594323</code></span>, which is <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>323 mod</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>1000</code></span>.</p><div class="ls"><div class="li" data-m="3.">Sieve of Eratosthenes</b></span></div></div><p>Start crossing out at <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>p x p</code></span>; smaller multiples were removed by smaller primes. Stop at <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>p x p</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>&gt; n</code></span>.</p><div class="tw"><table class="tb"><tbody><tr><td><b>Prime p</b></td><td><b>Marked from p x p</b></td></tr><tr><td>2</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>[4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30]</code></span></td></tr><tr><td>3</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>[9, 12, 15, 18, 21, 24, 27, 30]</code></span></td></tr><tr><td>5</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>[25, 30]</code></span></td></tr></tbody></table></div><p>Primes up to 30: <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>[2, 3, 5, 7, 11, 13, 17, 19, 23, 29]</code></span>. Keeping <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>spf[i]</code></span> (the prime that first marked <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>i</code></span>) lets you factorise any <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>i &lt;= n</code></span> in <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(log i)</code></span> by repeatedly dividing by <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>spf</code></span>.</p><div class="ls"><div class="li" data-m="4.">Combinatorics mod a prime</b></span></div></div><p>Precompute <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>fact[i]</code></span> and <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>invFact[i]</code></span> once (one <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>modPow</code></span> for <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>invFact[n]</code></span>, then <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>invFact[i-1] =</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>invFact[i] x</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>i</code></span>). Then <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>C(n, r) = fact[n] x invFact[r] x invFact[n-r]</code></span> in <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(1)</code></span>. This is the standard replacement for Pascal&#x27;s triangle when <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>n</code></span> reaches <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>10^6</code></span>.</p><div class="ls"><div class="li" data-m="5.">Counting without computing</b></span></div></div><div class="tw"><table class="tb"><tbody><tr><td><b>Question</b></td><td><b>Insight</b></td><td><b>Formula</b></td></tr><tr><td>Trailing zeros of <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>n!</code></span></td><td>Each 10 = one 2 and one 5; 5s are the bottleneck</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>n/5 + n/25 + n/125 + ...</code></span></td></tr><tr><td>Count Good Numbers (even digits at</td><td>Independent positions: <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>5^(ceil(n/2)) x</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>modPow</code></span></td></tr><tr><td>even positions, primes at odd)</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>4^(floor(n/2))</code></span></td><td></td></tr></tbody></table></div><div class="pg" id="p1040" data-n="1040"></div><div class="tw"><table class="tb"><tbody><tr><td><b>Question</b></td><td><b>Insight</b></td><td><b>Formula</b></td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>a^(b)</code></span> with <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>b</code></span> as a digit array (Super</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>a^(10 q + d) = (a^q)^10 x a^d</code></span></td><td>Process digits left to right,</td></tr><tr><td>Pow)</td><td></td><td>mod 1337</td></tr><tr><td>Nth ugly number</td><td>Every ugly number is <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>2</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>3</code></span> or <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>5</code></span> times a smaller one</td><td>Three pointers merge, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n)</code></span></td></tr><tr><td>Numbers with <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>gcd(k, n) = 1</code></span></td><td>Euler totient</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>n x prod (1 - 1/p)</code></span></td></tr></tbody></table></div><div class="ls"><div class="li" data-m="6.">Integer geometry: orientation and overlap</b></span></div></div><p>Two axis-aligned rectangles overlap with positive area iff their projections overlap on <b>both</b> axes with a positive length: <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>min(x2, X2) &gt; max(x1, X1)</code></span> and the same in <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>y</code></span>. Union area = <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>area1 + area2 - overlap</code></span>. The cross product <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>(b - a) x (c - a)</code></span> is positive for a left (counter-clockwise) turn, negative for a right turn, zero when collinear; a polygon is convex iff all turns have the same sign.</p><figure class="fig"><img loading="lazy" src="lib/dsa/img/p1040_150.webp" width="544" height="353" alt="Diagram" style="max-width:349px"></figure><p class="lead"><i><b>Figure 150.</b> Union area = sum of the areas minus the overlap rectangle.</i></p><div class="bx" style="--bx:#f6ebda"><div class="kk"><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>TRAP</b></span></div><p class="sm">Use <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>long</code></span> for products of coordinates and <b>squared</b> distances (never <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>sqrt</code></span> in equality checks). A valid square has four equal sides and two equal diagonals, and the six pairwise squared distances take exactly two distinct values, the smaller occurring four times.</p></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>D.</b></span><b> Brute Force to Optimal Solution</b></h3><div class="tw"><table class="tb"><tbody><tr><td><b>Problem</b></td><td><b>Brute force</b></td><td><b>Better</b></td><td><b>Idea</b></td></tr><tr><td>Primes below <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>n</code></span></td><td>Trial division, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n sqrt n)</code></span></td><td>Sieve, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n log log n)</code></span></td><td>Cross out multiples</td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>x^n</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>n</code></span> multiplications</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(log n)</code></span></td><td>Square and multiply</td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>C(n, r) mod p</code></span> many queries</td><td>Pascal&#x27;s triangle <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n^2)</code></span></td><td>Factorials + inverses, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(1)</code></span> each</td><td>Division becomes multiplication by inverse</td></tr></tbody></table></div><div class="pg" id="p1041" data-n="1041"></div><div class="tw"><table class="tb"><tbody><tr><td><b>Problem</b></td><td><b>Brute force</b></td><td><b>Better</b></td><td><b>Idea</b></td></tr><tr><td>Trailing zeros of <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>n!</code></span></td><td>Compute <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>n!</code></span> (huge)</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(log_5 n)</code></span></td><td>Count factors of 5</td></tr><tr><td>Rectangle union area</td><td>Grid fill</td><td>Closed form</td><td>Subtract the overlap</td></tr></tbody></table></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>E.</b></span><b> Java Implementation</b></h3><p><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Number theory: gcd, modular arithmetic, sieves, factorisation, combinatorics and counting</b></span> <span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>formulas</b></span></p><div class="bx" style="--bx:#f2efe8"><div class="cols c2" style="--gt:383fr 28fr"><div class="col"><div class="kk"><b>NumberTheory.java: the number-theory toolkit</b></div><pre class="code"><code>import java.util.*;
+
+/** Ch 107: number theory toolkit; LeetCode 204, 172, 1922, 372, 264, 50 helpers. */
+public class NumberTheory {
+    public static final long MOD = 1_000_000_007L;
+
+    public static long gcd(long a, long b) {
+        while (b != 0) {
+            long t = a % b;
+            a = b;
+            b = t;
+        }
+        return Math.abs(a);
+    }
+
+    public static long lcm(long a, long b) {
+        return a / gcd(a, b) * b;
+    }
+
+    /** Extended Euclid: returns {g, x, y} with a x + b y = g. */
+    public static long[] extGcd(long a, long b) {
+        if (b == 0) return new long[]{a, 1, 0};
+        long[] r = extGcd(b, a % b);
+        return new long[]{r[0], r[2], r[1] - (a / b) * r[2]};
+    }
+
+    /** base^exp mod m by repeated squaring, O(log exp). */
+    public static long modPow(long base, long exp, long m) {
+        long result = 1 % m;
+        base %= m;
+        if (base &lt; 0) base += m;
+        while (exp &gt; 0) {
+            if ((exp &amp; 1) == 1) result = result * base % m;
+            base = base * base % m;
+            exp &gt;&gt;= 1;
+        }
+        return result;
+    }
+
+    /** Inverse of a mod prime p (Fermat). */
+    public static long modInversePrime(long a, long p) {
+        return modPow(a, p - 2, p);
+    }
+
+    /** Inverse of a mod any m with gcd(a, m) = 1 (extended Euclid), or -1. */
+    public static long modInverse(long a, long m) {</code></pre></div><div class="col"><p class="xs">Java 17+</p></div></div></div><div class="pg" id="p1042" data-n="1042"></div><pre class="code"><code>        long[] r = extGcd(((a % m) + m) % m, m);
+        if (r[0] != 1) return -1;
+        return ((r[1] % m) + m) % m;
+    }
+
+    /** LeetCode 204: primes below n with a sieve of Eratosthenes. */
+    public static int countPrimes(int n) {
+        if (n &lt; 3) return 0;
+        boolean[] composite = new boolean[n];
+        int count = 0;
+        for (int i = 2; i &lt; n; i++) {
+            if (composite[i]) continue;
+            count++;
+            for (long j = (long) i * i; j &lt; n; j += i) composite[(int) j] = true;
+        }
+        return count;
+    }
+
+    /**
+     * Smallest prime factor for every number up to n (linear-time lookups later).
+     */
+    public static int[] smallestPrimeFactors(int n) {
+        int[] spf = new int[n + 1];
+        for (int i = 2; i &lt;= n; i++) {
+            if (spf[i] != 0) continue;
+            for (int j = i; j &lt;= n; j += i) if (spf[j] == 0) spf[j] = i;
+        }
+        return spf;
+    }
+
+    /** Prime factorisation of x using spf, as sorted (prime, exponent) pairs. */
+    public static List&lt;int[]&gt; factorize(int x, int[] spf) {
+        List&lt;int[]&gt; out = new ArrayList&lt;&gt;();
+        while (x &gt; 1) {
+            int p = spf[x], e = 0;
+            while (x % p == 0) {
+                x /= p;
+                e++;
+            }
+            out.add(new int[]{p, e});
+        }
+        return out;
+    }
+
+    /** Trial-division factorisation, O(sqrt x). */
+    public static List&lt;long[]&gt; factorizeTrial(long x) {
+        List&lt;long[]&gt; out = new ArrayList&lt;&gt;();
+        for (long p = 2; p * p &lt;= x; p++) {
+            if (x % p != 0) continue;
+            long e = 0;
+            while (x % p == 0) {
+                x /= p;
+                e++;
+            }
+            out.add(new long[]{p, e});
+        }
+        if (x &gt; 1) out.add(new long[]{x, 1});
+        return out;
+    }
+
+    /** nCr mod p with precomputed factorials. */
+    public static final class Binomial {
+        private final long[] fact, inv;</code></pre><div class="pg" id="p1043" data-n="1043"></div><pre class="code"><code>        public Binomial(int n) {
+            fact = new long[n + 1];
+            inv = new long[n + 1];
+            fact[0] = 1;
+            for (int i = 1; i &lt;= n; i++) fact[i] = fact[i - 1] * i % MOD;
+            inv[n] = modPow(fact[n], MOD - 2, MOD);
+            for (int i = n; i &gt; 0; i--) inv[i - 1] = inv[i] * i % MOD;
+        }
+
+        public long c(int n, int r) {
+            if (r &lt; 0 || r &gt; n) return 0;
+            return fact[n] * inv[r] % MOD * inv[n - r] % MOD;
+        }
+    }
+
+    /** LeetCode 172: trailing zeros of n! = number of factors of 5. */
+    public static int trailingZeroes(int n) {
+        int z = 0;
+        while (n &gt; 0) {
+            n /= 5;
+            z += n;
+        }
+        return z;
+    }
+
+    /**
+     * LeetCode 1922: good digit strings of length n (even index even digits, odd
+     * index primes).
+     */
+    public static int countGoodNumbers(long n) {
+        long even = (n + 1) / 2, odd = n / 2;
+        return (int) (modPow(5, even, MOD) * modPow(4, odd, MOD) % MOD);
+    }
+
+    /** LeetCode 372: a^b mod 1337 with b given as a digit array. */
+    public static int superPow(int a, int[] b) {
+        final int m = 1337;
+        long result = 1;
+        a %= m;
+        for (int digit : b)
+            result = modPow(result, 10, m) * modPow(a, digit, m) % m;
+        return (int) result;
+    }
+
+    /** LeetCode 264: n-th number whose only prime factors are 2, 3, 5. */
+    public static int nthUglyNumber(int n) {
+        int[] u = new int[n];
+        u[0] = 1;
+        int i2 = 0, i3 = 0, i5 = 0;
+        for (int i = 1; i &lt; n; i++) {
+            int next = Math.min(u[i2] * 2, Math.min(u[i3] * 3, u[i5] * 5));
+            u[i] = next;
+            if (next == u[i2] * 2) i2++;
+            if (next == u[i3] * 3) i3++;
+            if (next == u[i5] * 5) i5++;
+        }
+        return u[n - 1];
+    }
+
+    /** Euler&#x27;s totient of n by trial division. */
+    public static long totient(long n) {
+        long result = n;
+        for (long p = 2; p * p &lt;= n; p++) {
+            if (n % p != 0) continue;</code></pre><div class="pg" id="p1044" data-n="1044"></div><pre class="code"><code>            while (n % p == 0) n /= p;
+            result -= result / p;
+        }
+        if (n &gt; 1) result -= result / n;
+        return result;
+    }
+
+    /** Number of divisors of n by trial division. */
+    public static int divisorCount(int n) {
+        int count = 0;
+        for (int d = 1; (long) d * d &lt;= n; d++)
+            if (n % d == 0) count += d * d == n ? 1 : 2;
+        return count;
+    }
+}</code></pre><p><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Integer geometry: cross product, overlap, area, convexity, valid square</b></span></p><div class="bx" style="--bx:#f2efe8"><div class="cols c2" style="--gt:379fr 28fr"><div class="col"><p class="xs"><b>Geometry.java: rectangle and polygon predicates with integer arithmetic</b></p><pre class="code"><code>/** Ch 107: small geometry helpers; LeetCode 836, 223, 469, 593. */
+public class Geometry {
+    /**
+     * Cross product (b - a) x (c - a): &gt; 0 left turn, &lt; 0 right turn, 0 collinear.
+     */
+    public static long cross(int[] a, int[] b, int[] c) {
+        long abx = b[0] - a[0], aby = b[1] - a[1];
+        long acx = c[0] - a[0], acy = c[1] - a[1];
+        return abx * acy - aby * acx;
+    }
+
+    /** LeetCode 836: do two axis-aligned rectangles overlap with positive area? */
+    public static boolean isRectangleOverlap(int[] r1, int[] r2) {
+        return Math.min(r1[2], r2[2]) &gt; Math.max(r1[0], r2[0])
+                &amp;&amp; Math.min(r1[3], r2[3]) &gt; Math.max(r1[1], r2[1]);
+    }
+
+    /** LeetCode 223: total area covered by two rectangles. */
+    public static int computeArea(int ax1, int ay1, int ax2, int ay2,
+                                  int bx1, int by1, int bx2, int by2) {
+        int areaA = (ax2 - ax1) * (ay2 - ay1), areaB = (bx2 - bx1) * (by2 - by1);
+        int w = Math.min(ax2, bx2) - Math.max(ax1, bx1);
+        int h = Math.min(ay2, by2) - Math.max(ay1, by1);
+intoverlap=w&gt;0&amp;&amp;h&gt;0?w*h:0;
+        return areaA + areaB - overlap;
+    }
+
+    /** LeetCode 469: are the polygon&#x27;s vertices (in order) a convex polygon? */
+    public static boolean isConvex(int[][] pts) {
+        int n = pts.length;
+        int sign = 0;
+        for (int i = 0; i &lt; n; i++) {
+            long c = cross(pts[i], pts[(i + 1) % n], pts[(i + 2) % n]);
+            if (c == 0) continue;
+ints=c&gt;0?1:-1;
+            if (sign == 0) sign = s;
+            else if (sign != s) return false;
+        }
+        return true;
+    }
+
+    private static long dist2(int[] a, int[] b) {</code></pre></div><div class="col"><p class="xs">Java 17+</p></div></div></div><div class="pg" id="p1045" data-n="1045"></div><pre class="code"><code>        long dx = a[0] - b[0], dy = a[1] - b[1];
+        return dx * dx + dy * dy;
+    }
+
+    /**
+     * LeetCode 593: do four points form a square? Six distances: 4 equal + 2 equal.
+     */
+    public static boolean validSquare(int[] p1, int[] p2, int[] p3, int[] p4) {
+        long[] d = {dist2(p1, p2), dist2(p1, p3), dist2(p1, p4),
+                dist2(p2, p3), dist2(p2, p4), dist2(p3, p4)};
+        java.util.Arrays.sort(d);
+        return d[0] &gt; 0 &amp;&amp; d[0] == d[1] &amp;&amp; d[1] == d[2] &amp;&amp; d[2] == d[3]
+                &amp;&amp; d[4] == d[5] &amp;&amp; d[4] == 2 * d[0];
+    }
+}</code></pre><div class="cols c2" style="--gt:281fr 156fr"><div class="col"><div class="bx" style="--bx:#e3efec"><p class="xs"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>TIME</b></span><code> O(log n) to O(n log log n)</code></p></div><div class="bx" style="--bx:#f6ebda"><p class="xs"><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>SPACE</b></span><code> O(1) to O(n)</code></p></div></div><div class="col"><p class="xs"><i>gcd and </i><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>modPow</code></span><i> are logarithmic. The sieve</i> <i>and factorial tables use linear memory.</i> <i>Geometry predicates are constant time on</i> <i>a fixed number of points.</i></p></div></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>F.</b></span><b> Detailed Dry Run</b></h3><p><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>trailingZeroes(125)</code></span>: <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>125/5 = 25</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>125/25 = 5</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>125/125 = 1</code></span>, then 0. Total <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>31</code></span> factors of 5, so 31 trailing zeros.</p><p><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>superPow(2, [1, 0])</code></span> (that is <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>2^10 mod 1337</code></span>): start <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>r = 1</code></span>. Digit 1: <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>r = r^10 x 2^1 = 2</code></span>. Digit 0: <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>r = 2^10 x</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>2^0 = 1024</code></span>. <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>1024 mod 1337 = 1024</code></span>. For <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>a = 2</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>b = [1, 0]</code></span> the answer is <b>1024.</b></p><p><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>isConvex([(0,0), (0,5), (5,5), (5,0)])</code></span>: the cross products of consecutive edges are all of the same sign (all right turns, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>-25</code></span>), so the polygon is convex. Adding the point <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>(5,5)</code></span> as a dent, as in <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>[(0,0),</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>(0,10), (10,10), (10,0), (5,5)]</code></span>, produces a turn with the opposite sign, so it is not convex.</p><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>G.</b></span><b> Variations of the Pattern</b></h3><div class="ls"><div class="li" data-m="1.">Primality tests</b></span></div></div><p>Trial division up to <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>sqrt(n)</code></span> for a single number; the sieve for many; Miller-Rabin for 64-bit values (deterministic bases <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37}</code></span>).</p><div class="ls"><div class="li" data-m="2.">Chinese remainder and linear congruences</b></span></div></div><p>Solve <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>a x = b (mod m)</code></span> with extended Euclid: solutions exist iff <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>gcd(a, m) | b</code></span>.</p><div class="pg" id="p1046" data-n="1046"></div><div class="ls"><div class="li" data-m="3.">Matrix exponentiation</b></span></div></div><p>Same square-and-multiply idea on matrices for linear recurrences (Fibonacci mod <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>p</code></span> in <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(log n)</code></span>); see Chapter 78 for the recurrence viewpoint.</p><div class="ls"><div class="li" data-m="4.">Lucas, Catalan and counting identities</b></span></div></div><p>Catalan numbers <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>C(2n, n) / (n + 1)</code></span>, derangements, stars and bars, inclusion-exclusion with gcd/lcm.</p><div class="ls"><div class="li" data-m="5.">Convex hull and line sweeps</b></span></div></div><p>Monotone chain convex hull uses the cross product and a sort in <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n log n)</code></span>; segment intersection tests use orientation; sweep lines were covered in Chapters 74-76.</p><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>H.</b></span><b> Common Mistakes and Edge Cases</b></h3><div class="tw"><table class="tb"><tbody><tr><td><b>Mistake</b></td><td><b>Why it bites</b></td><td><b>Fix</b></td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>int</code></span> overflow in <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>a * b % m</code></span></td><td>Silent wrong answers</td><td>Use <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>long</code></span>; for <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>m &gt; 2^31</code></span> use <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Math.multiplyHigh</code></span> or <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>BigInteger</code></span></td></tr><tr><td>Dividing under a modulus</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>(a/b)%m!=a%m/b%m</code></span></td><td>Multiply by the modular inverse</td></tr><tr><td>Fermat inverse with a composite</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>a^(m-2)</code></span> is not the inverse</td><td>Extended Euclid</td></tr><tr><td>modulus</td><td></td><td></td></tr><tr><td>Negative remainders</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>-3 % 5 == -3</code></span> in Java</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>((x % m) + m) % m</code></span></td></tr><tr><td>Sieve with <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>i * i</code></span> in <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>int</code></span></td><td>Overflow for <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>n &gt; 46340</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>long j = (long) i * i</code></span></td></tr><tr><td>Computing <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>n!</code></span> for trailing zeros</td><td>Overflow, time</td><td>Count factors of 5</td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Math.sqrt</code></span> for perfect-square tests</td><td>Float error for large values</td><td>Integer square root with a correction step</td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>gcd(0, 0)</code></span></td><td>Returns 0; callers may divide by it</td><td>Guard</td></tr><tr><td>Comparing <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>double</code></span> slopes</td><td>Precision</td><td>Cross products on integers</td></tr></tbody></table></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>I.</b></span><b> Pattern Comparison</b></h3><div class="tw"><table class="tb"><tbody><tr><td><b>Closed-form / number theory</b></td><td><b>DP</b></td><td><b>Simulation / brute force</b></td></tr><tr><td>Yes Scales to <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>n = 10^18</code></span></td><td>No</td><td>No</td></tr><tr><td>Code length Short once known</td><td>Medium</td><td>Short</td></tr><tr><td>Insight needed <b>High</b></td><td>Medium</td><td>Low</td></tr><tr><td>Typical failure Overflow, modulus bugs</td><td>Wrong state</td><td>Time limit</td></tr></tbody></table></div><div class="pg" id="p1047" data-n="1047"></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>J.</b></span><b> Interview Tips</b></h3><div class="bx" style="--bx:#f6ebda"><div class="kk"><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>INTERVIEW</b></span></div><p class="sm"><b>Write </b><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>modPow</code></span> and <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>gcd</code></span><b> from memory;</b> they appear inside half of the other solutions in this chapter.</p><p class="sm"><b>State the overflow plan up front:</b> which operations use <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>long</code></span>, and where reductions happen.</p><p class="sm"><b>For geometry,</b> say &quot;integers only, cross products, no square roots&quot; before drawing anything.</p></div><div class="ls"><div class="li" data-m="•"><b>Follow-ups:</b> the inverse without a prime modulus; factor a 64-bit number (Pollard rho); segmented sieve for a range <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>[L, R]</code></span> with <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>R</code></span> up to <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>10^12</code></span>.</div><div class="li" data-m="•"><b>Edge cases:</b> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>n = 0, 1</code></span>, negative inputs for <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>gcd</code></span>/mod, exponent zero, coordinates at the type limits, degenerate rectangles with zero area.</div></div><h3><b>Practice Problems</b></h3><div class="tw"><table class="tb"><tbody><tr><td><b>Order</b></td><td><b>Problem</b></td><td><b>Level</b></td><td><b>Primary / secondary</b> <b>pattern</b></td><td><b>Main concept tested</b></td></tr><tr><td><b>1</b></td><td><a href="https://leetcode.com/problems/rectangle-overlap/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">836. Rectangle Overlap</span></a></td><td><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Easy</b></span></td><td>Interval Overlap / Geometry</td><td>Positive length on both axes</td></tr><tr><td><b>2</b></td><td><a href="https://leetcode.com/problems/find-greatest-common-divisor-of-array/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">1979. Find Greatest Common Divisor</span></a> <a href="https://leetcode.com/problems/find-greatest-common-divisor-of-array/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">of Array</span></a></td><td><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Easy</b></span></td><td>gcd of min and max / gcd</td><td>Euclid</td></tr><tr><td><b>3</b></td><td><a href="https://leetcode.com/problems/factorial-trailing-zeroes/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">172. Factorial Trailing Zeroes</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Count Factors of 5 / Counting Formula</td><td>n/5 + n/25 + ...</td></tr><tr><td><b>4</b></td><td><a href="https://leetcode.com/problems/powx-n/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">50. Pow(x, n)</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Fast Exponentiation / Square and Multiply</td><td>Negative <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>n</code></span></td></tr><tr><td><b>5</b></td><td><a href="https://leetcode.com/problems/count-primes/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">204. Count Primes</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Sieve / Primes</td><td>Start at i*i</td></tr><tr><td><b>6</b></td><td><a href="https://leetcode.com/problems/rectangle-area/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">223. Rectangle Area</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Union Area / Geometry</td><td>Subtract overlap</td></tr><tr><td><b>7</b></td><td><a href="https://leetcode.com/problems/valid-square/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">593. Valid Square</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Squared Distances / Geometry</td><td>Two distinct values</td></tr><tr><td><b>8</b></td><td><a href="https://leetcode.com/problems/count-good-numbers/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">1922. Count Good Numbers</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Fast Exponentiation / Combinatorial Count</td><td>5^a x 4^b</td></tr><tr><td><b>9</b></td><td><a href="https://leetcode.com/problems/super-pow/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">372. Super Pow</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Digit-wise Exponentiation / Modular Arithmetic</td><td>Mod 1337</td></tr><tr><td><b>10</b></td><td><a href="https://leetcode.com/problems/check-if-it-is-a-good-array/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">1250. Check If It Is a Good Array</span></a></td><td><b>Hard</b></td><td>gcd of All / Bezout</td><td>gcd == 1</td></tr></tbody></table></div><p class="xs">Links point to the official LeetCode problem pages. Problem numbers and levels reflect LeetCode at the time of writing; pages marked <i>premium</i> need a LeetCode subscription. Solve in the <b>Order</b> column, not by level alone.</p><div class="pg" id="p1048" data-n="1048"></div><div class="bx" style="--bx:#f2efe8"><div class="kk"><b>CHAPTER SUMMARY</b></div><p class="sm"><b>Euclid&#x27;s gcd and extended Euclid</b> are <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(log)</code></span> and give modular inverses for any coprime modulus.</p><p class="sm"><b>Square-and-multiply makes huge exponents cheap;</b> under a prime modulus, divide with <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>a^(p-2)</code></span>.</p><p class="sm"><b>The sieve lists primes in </b><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n log log n)</code></span>; an <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>spf</code></span> table factorises each number in <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(log n)</code></span>.</p><p class="sm"><b>Count prime factors instead of building huge numbers</b> (factorial zeros, divisors, totient).</p><p class="sm"><b>Geometry in interviews is integer geometry:</b> projections for rectangles, cross products for orientation, squared distances for squares.</p></div>

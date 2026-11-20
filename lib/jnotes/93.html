@@ -1,0 +1,18 @@
+<div class="pg" id="p109" data-n="109"></div><div class="kk"><b>@RETRYABLE</b></div><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>CHAPTER 55</b></span></p><h1>@Retryable</h1><p class="lead"><i>Resilient microservices need to retry transient failures <b>smartly</b>: add backoff, use</i> <i>jitter.</i></p><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>SETUP</b></span></p><pre class="code"><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.retry//groupId&gt;
+    &lt;artifactId&gt;spring-retry//artifactId&gt;
+//dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot//groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-aop//artifactId&gt;
+//dependency&gt;</code></pre><h3><code>spring-retry</code> provides <code>@Retryable</code> ; AOP is required for the proxies.</h3><pre class="code"><code>@SpringBootApplication
+@EnableRetry                      // enables the retry proxies
+public class Application {}</code></pre><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>BASIC EXAMPLE</b></span></p><pre class="code"><code>@Service
+public class PaymentService {
+
+    @Retryable(retryFor = RuntimeException.class, maxAttempts = 3)
+    public String processPayment() {
+        System.out.println(&quot;Calling payment gateway&quot;);
+        throw new RuntimeException(&quot;Gateway unavailable&quot;);
+    }
+}</code></pre><h3>If <code>processPayment()</code> throws, it is retried up to 3 times in total (1 initial try + 2 re‐ tries).</h3>

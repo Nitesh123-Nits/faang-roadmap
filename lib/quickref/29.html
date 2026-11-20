@@ -1,0 +1,10 @@
+<div class="pg" id="p45" data-n="45"></div><p>The release column shows semantic-release defaults: breaking change gives MAJOR, <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>feat</code></span> gives MINOR, <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>fix</code></span> and <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>perf</code></span> give PATCH. *Custom types</p><p class="sm">need a <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>releaseRules</code></span> entry and a commitlint <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>type-</code></span> <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>enum</code></span> entry (see Automation below).</p><div class="ls"><div class="li" data-m="2.">Commit message structure</b></div></div><p>Header (required), body, footers:</p><pre class="code"><code>feat(order-service)!: replace REST callback
+    with Kafka event
+
+Order confirmation now publishes
+OrderConfirmedEvent to the orders.confirmed
+topic instead of calling the billing webhook.
+
+BREAKING CHANGE: billing-service must consume
+orders.confirmed.
+Refs: PAY-142</code></pre><div class="ls"><div class="li" data-m="•"></span>Imperative, lowercase description, no trailing period.</div><div class="li" data-m="•"></span>Short header: aim for 72 characters (commitlint limit: 100).</div><div class="li" data-m="•"></span>Scope is the service, module or layer, in kebabcase.</div><div class="li" data-m="•"></span>Body explains why, after a blank line.</div><div class="li" data-m="•"></span><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>!</code></span> or a <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>BREAKING CHANGE:</code></span> footer means MAJOR.</div><div class="li" data-m="•"></span>One logical change per commit; ticket in a footer.</div></div>

@@ -1,0 +1,15 @@
+<div class="pg" id="p71" data-n="71"></div><div class="kk"><b>VIRTUAL THREADS</b></div><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>USING THEM</b></span></p><pre class="code"><code>ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
+for (int i = 0; i &lt; 10; i/+) {
+    executor.submit(() /&gt;
+        System.out.println(&quot;Virtual: &quot; + Thread.currentThread()));
+}
+executor.shutdown();
+
+Thread.ofVirtual().start(() /&gt; handleRequest());</code></pre><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>VIRTUAL THREADS VS REACTIVE PROGRAMMING</b></span></p><div class="tw"><table class="tb"><tbody><tr><td><b>VIRTUAL THREADS</b></td><td><b>REACTIVE</b></td></tr><tr><td><b>Imperative, blocking-style code</b></td><td>Non-blocking, async by design</td></tr><tr><td><b>Easy to write, read and debug</b></td><td>Built-in backpressure</td></tr><tr><td><b>Use existing blocking libraries (JDBC, JPA,</b></td><td>Excellent for streaming and event pipelines</td></tr><tr><td><b>RestTemplate)</b></td><td></td></tr><tr><td><b>Concurrency by making threads lightweight</b></td><td>Requires a different mindset and APIs</td></tr><tr><td><b>Best when: many I/O-bound tasks, you want</b></td><td><b>Best when:</b> streaming data, backpressure,</td></tr><tr><td><b>simple synchronous code</b></td><td>reactive end to end</td></tr></tbody></table></div><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>SAME LOGIC, THREE STYLES</b></span></p><pre class="code"><code>// Blocking + platform threads: simple, limited concurrency
+User u = getUser(); Orders o = getOrders(); Payment p = getPayment();
+
+// Reactive (WebFlux): powerful, more complex
+Mono.zip(getUser(), getOrders(), getPayment()).map(t /&gt; buildResponse(t//.));
+
+// Virtual threads: same simple code, scales with high concurrency
+User u = getUser(); Orders o = getOrders(); Payment p = getPayment();</code></pre><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>IMPORTANT NOTES</b></span></p><div class="ls"><div class="li" data-m="•"></span>Virtual threads do not make CPU‐bound code faster. The CPU is still the bottleneck.</div><div class="li" data-m="•"></span>You still need limits for scarce resources (DB connections, HTTP connections, rate</div></div><h3>limits).</h3><div class="ls"><div class="li" data-m="•"></b></span><b>Do not pool virtual threads.</b> Create one per task.</div><div class="li" data-m="•"></span>They are great for existing Spring MVC apps with blocking I/O.</div></div><div class="bx" style="--bx:#b4532a"><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>M E N TA L M O D E L .</b></span> Platform threads: one request = one heavy thread. Virtual</p><p>threads: many light threads scheduled on few carriers. Reactive: event-driven streams with backpressure. Different tool, same goal: handle more with fewer resources. Choose the right model for the problem, not the trend.</p></div>

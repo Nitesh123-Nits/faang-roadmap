@@ -1,0 +1,15 @@
+<div class="pg" id="p52" data-n="52"></div><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>THE CAS RETRY LOOP</b></span></p><pre class="code"><code>while (true) {
+    int oldValue = read();                 // 1. read current value
+    int newValue = calculate(oldValue);    // 2. compute the new value
+    if (CAS(oldValue, newValue)) break;    // 3. try to swap
+    // 4. failed: another thread changed it, so retry
+}</code></pre><h3>This is <b>optimistic concurrency</b>: assume no conflict, detect it, retry.</h3><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>JAVA EXAMPLE</b></span></p><pre class="code"><code>class LockFreeCounter {
+    private final AtomicInteger counter = new AtomicInteger(0);
+
+    public void increment() {
+        int current;
+        do {
+            current = counter.get();
+        } while (!counter.compareAndSet(current, current + 1));
+    }
+}</code></pre><h3>In practice <code>counter.incrementAndGet()</code> does this for you.</h3><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>THE ABA PROBLEM</b></span></p><h3>Thread A reads value A. Thread B changes it to B and back to A. Thread A&#x27;s CAS suc‐ ceeds even though the state changed in between.</h3><h3><b>Solution:</b><code> AtomicStampedReference</code> attaches a version stamp: <code>(A,1) → (B,2) → (A,3)</code> ,</h3><h3>so the CAS detects the change.</h3><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>WHERE CAS IS USED</b></span></p><h3><code>AtomicInteger</code> , <code>AtomicStampedReference</code> , <code>LongAdder</code> , <code>DoubleAdder</code> , and lock‐free stacks, queues and</h3><h3><code>AtomicLong</code> ,</h3><h3><code>AtomicBoolean</code> ,</h3><h3><code>AtomicReference</code> ,</h3><h3>non‐blocking algorithms.</h3><div class="bx" style="--bx:#b4532a"><p class="sm"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>ONE-LINE ANSWER. CAS is a lock-free optimistic mechanism where a thread</b></span></p><p>atomically compares the current value with an expected value and updates it only if they match; otherwise the operation fails and the thread retries. Best when contention is low; beware ABA and CPU spinning.</p></div>

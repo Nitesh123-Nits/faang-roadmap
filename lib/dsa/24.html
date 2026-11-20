@@ -1,0 +1,235 @@
+<div class="pg" id="p188" data-n="188"></div><div class="kk"><b>PART III · HASHING &amp; FREQUENCY PATTERNS</b></div><h1><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">18</span></h1><h1><b>HashMap and HashSet Patterns</b></h1><p class="lead"><i>Trade O(n) memory for O(1) lookups: complements, groups, and</i> <i>membership.</i></p><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>A.</b></span><b> Pattern Overview</b></h3><p><b>A hash table</b> maps a key to a bucket in <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(1)</code></span> expected time. Three jobs cover most interview use:</p><div class="tw"><table class="tb"><tbody><tr><td><b>Job</b></td><td><b>Question it answers</b></td><td><b>Structure</b></td><td><b>Classic problems</b></td></tr><tr><td><b>Complement lookup</b></td><td>&quot;Have I already seen the partner of this element?&quot;</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>HashMap&lt;value,</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>index&gt;</code></span></td><td>Two Sum (1), 4Sum II (454), Subarray Sum Equals K (Chapter 3)</td></tr><tr><td><b>Membership /</b></td><td>&quot;Is this value present? Have I seen</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>HashSet</code></span></td><td>Longest Consecutive Sequence</td></tr><tr><td><b>deduplication</b></td><td>it?&quot;</td><td></td><td>(128), Contains Duplicate II (219)</td></tr><tr><td><b>Grouping by canonical</b></td><td>&quot;Which items are equivalent?&quot;</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>HashMap&lt;key,</code></span></td><td>Group Anagrams (49),</td></tr><tr><td><b>key</b></td><td></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>List&lt;item&gt;&gt;</code></span></td><td>Isomorphic Strings (205)</td></tr><tr><td><b>Counting</b></td><td>&quot;How many of each?&quot;</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>HashMap&lt;item,</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>count&gt;</code></span> or an array</td><td>Valid Anagram (242), Ransom Note (383); more in Chapter 19</td></tr></tbody></table></div><div class="bx" style="--bx:#f2efe8"><div class="kk"><b>KEY IDEA</b></div><p class="sm"><b>The hashing bargain.</b> A nested loop asks <i>&quot;is there a </i><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>j</code></span><i> such that …?&quot;</i> in <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n)</code></span> per element. If the condition can be rewritten as &quot;<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>key(j)</code></span><b> equals something I can</b> <b>compute from </b><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>i</code></span><b>&quot;</b>, a hash lookup answers it in <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(1)</code></span>. Every pattern in this chapter is that rewrite: find the key.</p></div><div class="tw"><table class="tb"><tbody><tr><td><b>Collection</b></td><td><b>add / get / remove</b></td><td><b>Ordered?</b></td><td><b>Use when</b></td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>HashMap</code></span> / <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>HashSet</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(1)</code></span> expected</td><td>No</td><td>Default choice</td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>LinkedHashMap</code></span> / <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>LinkedHashSet</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(1)</code></span></td><td>Insertion order</td><td>Deterministic output, LRU (Part V)</td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>TreeMap</code></span> / <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>TreeSet</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(log n)</code></span></td><td>Sorted by key</td><td>Floor / ceiling, range queries</td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>int[]</code></span> / <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>boolean[]</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(1)</code></span> worst</td><td>By index</td><td>Small, dense key domain (letters, digits, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>0..n</code></span>)</td></tr></tbody></table></div><div class="pg" id="p189" data-n="189"></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>B.</b></span><b> When to Recognize This Pattern</b></h3><p><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Pattern Recognition Signals</b></span></p><div class="ls"><div class="li" data-m="•"><b>&quot;Find two (or four) elements that add to / differ by a target&quot; on unsorted</b> data, and indices matter or sorting is unwanted: complement lookup.</div><div class="li" data-m="•"></b></span><b>&quot;Have we seen this before?&quot;</b>, <i>duplicate, first repeated, within distance k</i>: a set (a <i>window</i> of a</div></div><p>set for the distance variant).</p><div class="ls"><div class="li" data-m="•"><b>&quot;Group / categorise / bucket the items&quot;</b> where equivalent items differ only in arrangement: canonical key.</div><div class="li" data-m="•"></b></span><b>&quot;Longest sequence of consecutive integers&quot;</b>, order-independent: a set plus <i>only start</i></div></div><p><i>counting at sequence starts.</i></p><div class="ls"><div class="li" data-m="•">A nested loop whose inner test is an <b>equality</b> after algebra (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>a + b == t</code></span> → <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>b == t − a</code></span>).</div><div class="li" data-m="•"></span>Constraints around <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>n </code></span><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>≤</code></span><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code> 10</code></span><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>⁵</code></span> and the brute force is <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n²)</code></span>; memory is not tight.</div></div><div class="bx" style="--bx:#f2efe8"><div class="kk"><b>CHOOSING THE TOOL</b></div><p class="sm">Sorted input and no indices needed → <b>two pointers</b> (Chapter 1) beats a map (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(1)</code></span> space). Unsorted input or indices required → <b>hash map</b>. Range or nearest-neighbour queries → <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>TreeMap</code></span>/binary search (Part II).</p></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>C.</b></span><b> Core Intuition with Illustrations</b></h3><p><b>Complement lookup.</b> For <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>nums = [2, 7, 11, 15]</code></span> and <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>target = 9</code></span>: at each element ask the <i>map &quot;is</i> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>target − x</code></span><i> already stored?&quot;</i> If yes, the pair is complete; otherwise store <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>x </code></span><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>→</code></span><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code> i</code></span>. Looking up <b>before</b> inserting guarantees an element is never paired with itself.</p><div class="pg" id="p190" data-n="190"></div><figure class="fig"><img loading="lazy" src="lib/dsa/img/p190_33.webp" width="901" height="514" alt="Diagram" style="max-width:579px"></figure><p class="xs"><i><b>Figure 33.</b> The map stores what has been seen; each element asks a single </i><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(1)</code></span><i> question.</i></p><p><b>Longest consecutive sequence.</b> Put all numbers in a set. A number <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>x</code></span> starts a run <b>only if </b><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>x −</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>1</code></span><b> is absent</b>; walk upward from starts only. Each element is visited a constant number of times, so the loop is <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n)</code></span> even though it contains a <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>while</code></span>.</p><figure class="fig"><img loading="lazy" src="lib/dsa/img/p190_34.webp" width="901" height="229" alt="Diagram" style="max-width:579px"></figure><p class="lead"><i><b>Figure 34.</b> Elements such as 2, 3, 4 are skipped immediately because their predecessor exists.</i></p><div class="bx" style="--bx:#e3efec"><div class="kk"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>INTUITION</b></span></div><p class="sm"><b>Why the &quot;is it a start?&quot; test matters.</b> Without it, every element starts a walk and <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>[1,</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>2, 3, …, n]</code></span> costs <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n²)</code></span>. With it, each run is walked exactly once from its first element: total <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n)</code></span>.</p></div><p><b>Under the hood.</b> A bucket index is <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>hash(key) &amp; (capacity − 1)</code></span>. Keys that collide share a bucket, chained as a linked list (Java 8+ converts a long chain into a balanced tree). Good hashing and a load factor around 0.75 keep chains short, giving <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(1)</code></span> expected time.</p><div class="tw"><table class="tb"><tbody><tr><td><b>Key</b></td><td><b>Bucket (key &amp; 3)</b></td><td><b>Chain after insert (head first)</b></td></tr><tr><td>5</td><td>1</td><td>5</td></tr><tr><td>9</td><td>1</td><td>9 → 5</td></tr><tr><td>1</td><td>1</td><td>1→9→5</td></tr></tbody></table></div><div class="pg" id="p191" data-n="191"></div><div class="tw"><table class="tb"><tbody><tr><td><b>Key</b></td><td><b>Bucket (key &amp; 3)</b></td><td><b>Chain after insert (head first)</b></td></tr><tr><td>13</td><td>1</td><td>13→1→9→5</td></tr><tr><td>6</td><td>2</td><td>6</td></tr></tbody></table></div><p class="xs">Capacity 4: keys 5, 9, 1, 13 all land in bucket 1 (a collision chain); 6 lands in bucket 2. Resizing at load factor 0.75 spreads them out.</p><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>D.</b></span><b> Brute Force to Optimal Solution</b></h3><p><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Example: Group Anagrams (LeetCode 49)</b></span></p><div class="ls"><div class="li" data-m="1."><b>Brute force:</b> compare every pair of words for anagram-ness (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n² · L)</code></span>), then merge groups.</div><div class="li" data-m="2."><b>Sorted-letters key:</b> sort each word&#x27;s characters and use it as the map key: <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n · L log</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>L)</code></span>.</div><div class="li" data-m="3."><b>Count-signature key:</b> for lowercase letters, a <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>26</code></span>-slot count array rendered as a string (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>1#0#0#…</code></span>) is the key: <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n · L)</code></span>.</div><div class="li" data-m="4."><b>Optimal in practice:</b> the count signature; mind the separator so <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>[1, 11]</code></span> and <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>[11, 1]</code></span> do not collide.</div></div><p>The same <i>&quot;find the canonical key&quot;</i> step applies to <b>Isomorphic Strings</b> (key = pattern of first occurrences, or two-way maps), <b>Find Duplicate File</b> (key = content), <b>Group Shifted Strings</b> (key = difference sequence).</p><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>E.</b></span><b> Java Implementation</b></h3><p><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Two Sum: complement lookup</b></span></p><div class="bx" style="--bx:#f2efe8"><div class="cols c2 tab" style="--gt:116fr 28fr"><div class="col"><div class="kk"><b>TwoSumHash.java — LeetCode 1</b></div></div><div class="col"><p class="xs">Java 17+</p></div></div><pre class="code"><code>import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * LeetCode 1 - Two Sum. One pass: look up the complement BEFORE inserting the current value.
+ */
+public class TwoSumHash {
+
+    public static int[] twoSum(int[] nums, int target) {
+        // value -&gt; index of its latest occurrence
+        Map&lt;Integer, Integer&gt; indexOf = new HashMap&lt;&gt;();
+        for (int i = 0; i &lt; nums.length; i++) {
+            Integer j = indexOf.get(target - nums[i]);
+            if (j != null) {
+                // j &lt; i, and j != i by construction
+                return new int[]{j, i};
+            }</code></pre></div><div class="pg" id="p192" data-n="192"></div><pre class="code"><code>            // insert after the lookup: no self-pairing
+            indexOf.put(nums[i], i);
+        }
+        // the problem guarantees an answer
+        return new int[0];
+    }
+}</code></pre><div class="cols c2" style="--gt:196fr 233fr"><div class="col"><div class="bx" style="--bx:#e3efec"><p class="xs"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>TIME</b></span><code> O(n)</code></p></div><div class="bx" style="--bx:#f6ebda"><p class="xs"><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>SPACE</b></span><code> O(n)</code></p></div></div><div class="col"><p class="xs"><i>Lookup first, insert second. With duplicates (</i><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>[3, 3]</code></span><i>, target </i><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>6</code></span><i>)</i> <i>the later occurrence overwrites the index, which is still correct.</i></p></div></div><p><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Group Anagrams: canonical key</b></span></p><div class="bx" style="--bx:#f2efe8"><div class="cols c2 tab" style="--gt:131fr 28fr"><div class="col"><div class="kk"><b>GroupAnagrams.java — LeetCode 49</b></div></div><div class="col"><p class="xs">Java 17+</p></div></div><pre class="code"><code>import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/** LeetCode 49 - Group Anagrams. The canonical key of a word is its letter-count signature. */
+public class GroupAnagrams {
+
+    /**
+     * Lowercase a-z words. Key = 26 counts; O(L) per word instead of O(L log L) for sorting.
+     */
+    public static List&lt;List&lt;String&gt;&gt; groupAnagrams(String[] words) {
+        Map&lt;String, List&lt;String&gt;&gt; groups = new HashMap&lt;&gt;();
+        for (String w : words) {
+            groups.computeIfAbsent(signature(w), k -&gt; new ArrayList&lt;&gt;()).add(w);
+        }
+        return new ArrayList&lt;&gt;(groups.values());
+    }
+
+    static String signature(String word) {
+        int[] counts = new int[26];
+        for (int i = 0; i &lt; word.length(); i++) counts[word.charAt(i) - &#x27;a&#x27;]++;
+        StringBuilder key = new StringBuilder(52);
+        // &#x27;#&#x27; keeps &quot;1,11&quot; distinct from &quot;11,1&quot;
+        for (int c : counts) key.append(c).append(&#x27;#&#x27;);
+        return key.toString();
+    }
+}</code></pre></div><div class="cols c2" style="--gt:196fr 236fr"><div class="col"><div class="bx" style="--bx:#e3efec"><p class="xs"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>TIME</b></span><code> O(n · L)</code></p></div><div class="bx" style="--bx:#f6ebda"><p class="xs"><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>SPACE</b></span><code> O(n · L)</code></p></div></div><div class="col"><p class="xs"><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>computeIfAbsent</code></span><i> creates the bucket once. Keep the separator in</i> <i>the signature.</i></p></div></div><p><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Longest Consecutive Sequence: set + starts only</b></span></p><div class="bx" style="--bx:#f2efe8"><div class="cols c2" style="--gt:396fr 28fr"><div class="col"><div class="kk"><b>LongestConsecutive.java — LeetCode 128</b></div><pre class="code"><code>import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * LeetCode 128 - Longest Consecutive Sequence in O(n): only start counting at sequence
+ * starts.
+ */</code></pre></div><div class="col"><p class="xs">Java 17+</p></div></div></div><div class="pg" id="p193" data-n="193"></div><pre class="code"><code>public class LongestConsecutive {
+
+    public static int longestConsecutive(int[] nums) {
+        Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+        for (int x : nums) set.add(x);
+
+        int best = 0;
+        for (int x : set) {
+            if (set.contains(x - 1)) continue;        // x is not the start of a run: skip it
+            int end = x;
+            // each element is walked at most once overall
+            while (set.contains(end + 1)) end++;
+            best = Math.max(best, end - x + 1);
+        }
+        return best;
+    }
+}</code></pre><div class="cols c2" style="--gt:196fr 226fr"><div class="col"><div class="bx" style="--bx:#e3efec"><p class="xs"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>TIME</b></span><code> O(n)</code></p></div><div class="bx" style="--bx:#f6ebda"><p class="xs"><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>SPACE</b></span><code> O(n)</code></p></div></div><div class="col"><p class="lead"><i>Iterate over the set, not the array, so duplicates do not repeat</i> <i>work.</i></p></div></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>F.</b></span><b> Detailed Dry Run</b></h3><p><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Two Sum: nums = [3, 2, 4, 6], target = 6 (shows the lookup-before-insert rule)</b></span></p><div class="tw"><table class="tb"><tbody><tr><td><b>i</b></td><td><b>x</b></td><td><b>need = target − x</b></td><td><b>map before insert</b></td><td><b>Decision</b></td></tr><tr><td>0</td><td>3</td><td>3</td><td>{}</td><td>not found → insert 3→0</td></tr><tr><td>1</td><td>2</td><td>4</td><td>{3→0}</td><td>not found → insert 2→1</td></tr><tr><td>2</td><td>4</td><td>2</td><td>{3→0, 2→1}</td><td>found at index 1 → <b>return [1, 2]</b></td></tr></tbody></table></div><p class="xs">Index 0 (value 3) is not paired with itself even though <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>3 + 3 = 6</code></span>: its own entry is inserted after the lookup. Answer [1, 2].</p><p><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Group Anagrams: [eat, tea, tan, ate, nat, bat]</b></span></p><div class="tw"><table class="tb"><tbody><tr><td><b>Word</b></td><td><b>Key (sorted letters)</b></td><td><b>Group</b></td></tr><tr><td>eat</td><td>aet</td><td>group 1</td></tr><tr><td>tea</td><td>aet</td><td>group 1</td></tr><tr><td>tan</td><td>ant</td><td>group 2</td></tr><tr><td>ate</td><td>aet</td><td>group 1</td></tr><tr><td>nat</td><td>ant</td><td>group 2</td></tr><tr><td>bat</td><td>abt</td><td>group 3</td></tr></tbody></table></div><p class="xs">Groups: [eat, tea, ate]; [tan, nat]; [bat].</p><div class="pg" id="p194" data-n="194"></div><p><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Longest Consecutive: [100, 4, 200, 1, 3, 2]</b></span></p><div class="tw"><table class="tb"><tbody><tr><td><b>x</b></td><td><b>x − 1 in set?</b></td><td><b>Role</b></td><td><b>Run walked</b></td></tr><tr><td>1</td><td>no</td><td>start</td><td>1..4 (length 4)</td></tr><tr><td>2</td><td>yes (1 exists)</td><td>skip</td><td>—</td></tr><tr><td>3</td><td>yes (2 exists)</td><td>skip</td><td>—</td></tr><tr><td>4</td><td>yes (3 exists)</td><td>skip</td><td>—</td></tr><tr><td>100</td><td>no</td><td>start</td><td>100..100 (length 1)</td></tr><tr><td>200</td><td>no</td><td>start</td><td>200..200 (length 1)</td></tr></tbody></table></div><p class="xs">Longest run = 4 (1, 2, 3, 4).</p><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>G.</b></span><b> Variations of the Pattern</b></h3><div class="ls"><div class="li" data-m="1.">Contains Duplicate II: a sliding window of a set</b></span></div></div><p>Duplicates within distance <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>k</code></span> means the set only needs the <b>last </b><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>k</code></span><b> values</b>: add the new one, evict <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>nums[i</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>− k]</code></span> when the size exceeds <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>k</code></span>.</p><div class="ls"><div class="li" data-m="2.">Valid Anagram, Ransom Note, Isomorphic Strings</b></span></div></div><p>Counting with a <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>26</code></span>-slot array is faster than a <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>HashMap&lt;Character, Integer&gt;</code></span>. <b>Isomorphic</b> needs a mapping that is one-to-one in <i>both</i> directions, hence two maps (or two arrays of last-seen positions).</p><div class="bx" style="--bx:#f2efe8"><div class="cols c2 tab" style="--gt:172fr 28fr"><div class="col"><div class="kk"><b>HashBasics.java — LeetCode 219, 242, 383, 205</b></div></div><div class="col"><p class="xs">Java 17+</p></div></div><pre class="code"><code>import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+/** Everyday hash-based checks: LeetCode 217/219, 242, 383, 205, 290-style bijection. */
+public class HashBasics {
+
+    /**
+     * LeetCode 219 - Contains Duplicate II: duplicates within distance k. Window = a set of
+     * the last k values.
+     */
+    public static boolean containsNearbyDuplicate(int[] nums, int k) {
+        Set&lt;Integer&gt; window = new HashSet&lt;&gt;();
+        for (int i = 0; i &lt; nums.length; i++) {
+            if (!window.add(nums[i])) return true;            // already inside the window
+            if (window.size() &gt; k) window.remove(nums[i - k]);
+        }
+        return false;
+    }
+
+    /** LeetCode 242 - Valid Anagram. Lowercase letters: a 26-slot counting array. */
+    public static boolean isAnagram(String s, String t) {
+        if (s.length() != t.length()) return false;</code></pre></div><div class="pg" id="p195" data-n="195"></div><pre class="code"><code>        int[] counts = new int[26];
+        for (int i = 0; i &lt; s.length(); i++) {
+            counts[s.charAt(i) - &#x27;a&#x27;]++;
+            counts[t.charAt(i) - &#x27;a&#x27;]--;
+        }
+        for (int c : counts) if (c != 0) return false;
+        return true;
+    }
+
+    /**
+     * LeetCode 383 - Ransom Note: the magazine must supply at least as many of each letter.
+     */
+    public static boolean canConstruct(String ransomNote, String magazine) {
+        int[] available = new int[26];
+        for (char c : magazine.toCharArray()) available[c - &#x27;a&#x27;]++;
+        for (char c : ransomNote.toCharArray()) {
+            if (--available[c - &#x27;a&#x27;] &lt; 0) return false;
+        }
+        return true;
+    }
+
+    /**
+     * LeetCode 205 - Isomorphic Strings: a character mapping that must be one-to-one in BOTH
+     * directions.
+     */
+    public static boolean isIsomorphic(String s, String t) {
+        if (s.length() != t.length()) return false;
+        Map&lt;Character, Character&gt; forward = new HashMap&lt;&gt;();
+        Map&lt;Character, Character&gt; backward = new HashMap&lt;&gt;();
+        for (int i = 0; i &lt; s.length(); i++) {
+            char a = s.charAt(i);
+            char b = t.charAt(i);
+            Character mappedA = forward.putIfAbsent(a, b);
+            Character mappedB = backward.putIfAbsent(b, a);
+            // a was already mapped elsewhere
+            boolean forwardClash = mappedA != null &amp;&amp; mappedA != b;
+            // b was already claimed by another a
+            boolean backwardClash = mappedB != null &amp;&amp; mappedB != a;
+            if (forwardClash || backwardClash) return false;
+        }
+        return true;
+    }
+}</code></pre><div class="cols c2" style="--gt:296fr 126fr"><div class="col"><div class="bx" style="--bx:#e3efec"><p class="xs"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>TIME</b></span><code> O(n)</code></p></div><div class="bx" style="--bx:#f6ebda"><p class="xs"><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>SPACE</b></span><code> O(1) for fixed alphabets; O(k) for</code></p><pre class="code"><code>the window</code></pre></div></div><div class="col"><p class="xs"><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>putIfAbsent</code></span><i> returns the previous</i> <i>mapping: the cleanest way to test</i> <i>consistency.</i></p></div></div><div class="ls"><div class="li" data-m="3.">4Sum II: meet in the middle</b></span></div></div><p>Four arrays, count tuples summing to zero. Store all <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>a + b</code></span> sums with counts, then for every</p><p class="sm"><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>c + d</code></span> look up <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>−(c + d)</code></span>: <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n²)</code></span> instead of <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n</code></span><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>⁴</code></span><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>)</code></span>.</p><div class="bx" style="--bx:#f2efe8"><div class="cols c2 tab" style="--gt:114fr 28fr"><div class="col"><div class="kk"><b>FourSumII.java — LeetCode 454</b></div></div><div class="col"><p class="xs">Java 17+</p></div></div><pre class="code"><code>import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * LeetCode 454 - 4Sum II. Meet in the middle with a map of pair sums: O(n^2) instead of</code></pre></div><div class="pg" id="p196" data-n="196"></div><pre class="code"><code> * O(n^4).
+ */
+public class FourSumII {
+
+    public static int fourSumCount(int[] a, int[] b, int[] c, int[] d) {
+        Map&lt;Integer, Integer&gt; pairSums = new HashMap&lt;&gt;();
+        for (int x : a) {
+            for (int y : b) {
+                pairSums.merge(x + y, 1, Integer::sum);       // how many (i, j) give this sum
+            }
+        }
+        int count = 0;
+        for (int x : c) {
+            for (int y : d) {
+                // complement from the other two arrays
+                count += pairSums.getOrDefault(-(x + y), 0);
+            }
+        }
+        return count;
+    }
+}</code></pre><div class="cols c2" style="--gt:196fr 187fr"><div class="col"><div class="bx" style="--bx:#e3efec"><p class="xs"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>TIME</b></span><code> O(n²)</code></p></div><div class="bx" style="--bx:#f6ebda"><p class="xs"><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>SPACE</b></span><code> O(n²)</code></p></div></div><div class="col"><p class="lead"><i>Counts, not lists: the answer is a number of tuples.</i></p></div></div><div class="ls"><div class="li" data-m="4.">Design HashMap: build the structure itself</b></span></div></div><p>A frequent interview follow-up. Use an array of buckets, <b>separate chaining</b>, a power-of-two capacity (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>&amp;</code></span> replaces <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>%</code></span>), bit-spreading of the hash, and <b>resize at load factor 0.75</b> by re-linking nodes.</p><div class="bx" style="--bx:#f2efe8"><div class="cols c2 tab" style="--gt:122fr 28fr"><div class="col"><div class="kk"><b>MyHashMap.java — LeetCode 706</b></div></div><div class="col"><p class="xs">Java 17+</p></div></div><pre class="code"><code>/**
+ * LeetCode 706 - Design HashMap: separate chaining, power-of-two table, resize at load factor
+ * 0.75.
+ */
+public class MyHashMap {
+
+    private static final class Node {
+        final int key;
+        int value;
+        Node next;
+
+        Node(int key, int value, Node next) {
+            this.key = key;
+            this.value = value;
+            this.next = next;
+        }
+    }
+
+    private Node[] table = new Node[16];
+    private int size;
+
+    private int indexFor(int key, int length) {
+        // spread high bits into the low bits (as java.util.HashMap does)
+        int h = key ^ (key &gt;&gt;&gt; 16);
+        return h &amp; (length - 1);                   // length is a power of two, so &amp; replaces %
+    }
+
+    public void put(int key, int value) {</code></pre></div><div class="pg" id="p197" data-n="197"></div><pre class="code"><code>        int i = indexFor(key, table.length);
+        for (Node n = table[i]; n != null; n = n.next) {
+            if (n.key == key) {
+                n.value = value;                   // overwrite
+                return;
+            }
+        }
+        table[i] = new Node(key, value, table[i]); // insert at the head of the chain
+        if (++size &gt; table.length * 3 / 4) resize();
+    }
+
+    public int get(int key) {
+        for (Node n = table[indexFor(key, table.length)]; n != null; n = n.next) {
+            if (n.key == key) return n.value;
+        }
+        return -1;
+    }
+
+    public void remove(int key) {
+        int i = indexFor(key, table.length);
+        Node prev = null;
+        for (Node n = table[i]; n != null; prev = n, n = n.next) {
+            if (n.key == key) {
+                if (prev == null) table[i] = n.next; else prev.next = n.next;
+                size--;
+                return;
+            }
+        }
+    }
+
+    private void resize() {
+        Node[] bigger = new Node[table.length * 2];
+        for (Node head : table) {
+            for (Node n = head; n != null; ) {
+                Node next = n.next;                // save before relinking
+                int i = indexFor(n.key, bigger.length);
+                n.next = bigger[i];
+                bigger[i] = n;
+                n = next;
+            }
+        }
+        table = bigger;
+    }
+
+    public int size() {
+        return size;
+    }
+}</code></pre><div class="cols c2" style="--gt:275fr 156fr"><div class="col"><div class="bx" style="--bx:#e3efec"><p class="xs"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>TIME</b></span><code> O(1) expected per operation</code></p></div><div class="bx" style="--bx:#f6ebda"><p class="xs"><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>SPACE</b></span><code> O(n)</code></p></div></div><div class="col"><p class="xs"><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>hash ^ (hash &gt;&gt;&gt; 16)</code></span><i> mixes high bits so</i> <i>that power-of-two masks still distribute</i> <i>well, as in </i><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>java.util.HashMap</code></span>.</p></div></div><div class="ls"><div class="li" data-m="5.">Subarray problems with maps (cross-reference)</b></span></div></div><p><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>prefix − k</code></span> lookups (Subarray Sum Equals K), remainder maps (divisible by K), and first-index maps (Contiguous Array) are hash patterns on prefix sums: see Chapter 3.</p><div class="pg" id="p198" data-n="198"></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>H.</b></span><b> Common Mistakes and Edge Cases</b></h3><div class="tw"><table class="tb"><tbody><tr><td><b>Mistake</b></td><td><b>Why it bites</b></td><td><b>Fix</b></td></tr><tr><td>Inserting before the lookup in Two</td><td>Pairs an element with itself (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>[3, 2,</code></span></td><td>Lookup first, then insert</td></tr><tr><td>Sum</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>4]</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>6</code></span>)</td><td></td></tr><tr><td>Mutable objects as keys</td><td>Hash changes after insertion: the entry is lost</td><td>Use immutable keys (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>String</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Integer</code></span>, records)</td></tr><tr><td>Arrays as keys (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>int[]</code></span>)</td><td>Identity hash: equal contents are different keys</td><td>Convert to <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>String</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>List&lt;Integer&gt;</code></span>, or encode into a <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>long</code></span></td></tr><tr><td>Anagram signature without a</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>1,11</code></span> and <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>11,1</code></span> produce the same</td><td>Join counts with a delimiter</td></tr><tr><td>separator</td><td>string</td><td></td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>HashMap&lt;Integer, Integer&gt;</code></span> boxed <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>==</code></span></td><td>Reference comparison for values above 127</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>.equals</code></span> or unbox with <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>intValue()</code></span></td></tr><tr><td>Iterating the array, not the set, in</td><td>Duplicates repeat walks; the start</td><td>Iterate <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>set</code></span></td></tr><tr><td>Longest Consecutive</td><td>check still prevents <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n²)</code></span> but wastes time</td><td></td></tr><tr><td>Relying on <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>HashMap</code></span> iteration order</td><td>Order is unspecified and can change</td><td>Sort, or use <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>LinkedHashMap</code></span> / <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>TreeMap</code></span></td></tr><tr><td>Anti-hash input</td><td>Crafted collisions degrade to <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n)</code></span> per operation (competitive programming)</td><td>Java 8+ treeifies chains, so worst case is <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(log n)</code></span>; still shuffle or use <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>TreeMap</code></span> if adversarial</td></tr><tr><td>Integer overflow in sum keys</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>a + b</code></span> wraps and creates false matches</td><td>Use <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>long</code></span> keys when sums can exceed <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>int</code></span></td></tr></tbody></table></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>I.</b></span><b> Pattern Comparison</b></h3><div class="tw"><table class="tb"><tbody><tr><td><b>Task</b></td><td><b>HashMap / HashSet</b></td><td><b>Two pointers</b></td><td><b>Sorting + binary search</b></td><td><b>TreeMap</b></td></tr><tr><td>Pair with target sum, unsorted, indices</td><td><b>Best</b>: O(n), O(n)</td><td>Needs sorted data</td><td>O(n log n)</td><td>O(n log n)</td></tr><tr><td>needed</td><td></td><td></td><td></td><td></td></tr><tr><td>Pair with target sum, sorted</td><td>O(n), O(n)</td><td><b>Best</b>: O(n), O(1)</td><td>O(n log n)</td><td>No</td></tr><tr><td>Duplicates / membership</td><td><b>Best</b>: O(n)</td><td>Needs sorting</td><td>O(n log n)</td><td>O(n log n)</td></tr><tr><td>Group equivalent items</td><td><b>Best</b> with a canonical key</td><td>No</td><td>Sort each item: O(L log L)</td><td>No</td></tr><tr><td>Nearest / floor / ceiling</td><td>No</td><td>No</td><td>Binary search</td><td><b>Best</b></td></tr></tbody></table></div><div class="pg" id="p199" data-n="199"></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>J.</b></span><b> Interview Tips</b></h3><div class="bx" style="--bx:#f6ebda"><div class="kk"><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>INTERVIEW</b></span></div><p class="sm"><b>Start with the brute force, then name the rewrite:</b> &quot;the inner loop asks whether <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>target − x</code></span> exists; a map answers that in <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(1)</code></span>&quot;. That sentence is the whole pattern.</p><p class="sm"><b>State the space cost</b> and offer the two-pointer alternative when the input is sorted.</p><p class="sm"><b>Know how </b><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>HashMap</code></span><b> works</b> (buckets, collisions, load factor 0.75, treeification at chain length 8): it is the most common follow-up.</p></div><div class="ls"><div class="li" data-m="•"></b></span><b>Follow-ups:</b> return all pairs (handle duplicates), 3Sum with a set, streaming Two Sum (a</div></div><p><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Set</code></span> plus a <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Map</code></span> of counts), Two Sum on a BST, custom <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>hashCode</code></span>/<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>equals</code></span> contract.</p><div class="ls"><div class="li" data-m="•"><b>Edge cases:</b> duplicates (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>[3, 3]</code></span>), negative numbers, empty array, single element, target not reachable, very large values.</div></div><h3><b>Practice Problems</b></h3><div class="tw"><table class="tb"><tbody><tr><td><b>Order</b></td><td><b>Problem</b></td><td><b>Level</b></td><td><b>Primary / secondary</b> <b>pattern</b></td><td><b>Main concept tested</b></td></tr><tr><td><b>1</b></td><td><a href="https://leetcode.com/problems/two-sum/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">1. Two Sum</span></a></td><td><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Easy</b></span></td><td>Hash Complement / Array</td><td>Lookup before insert</td></tr><tr><td><b>2</b></td><td><a href="https://leetcode.com/problems/valid-anagram/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">242. Valid Anagram</span></a></td><td><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Easy</b></span></td><td>Counting / Hash Table</td><td>26-slot count array</td></tr><tr><td><b>3</b></td><td><a href="https://leetcode.com/problems/ransom-note/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">383. Ransom Note</span></a></td><td><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Easy</b></span></td><td>Counting / Hash Table</td><td>Supply vs demand counts</td></tr><tr><td><b>4</b></td><td><a href="https://leetcode.com/problems/isomorphic-strings/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">205. Isomorphic Strings</span></a></td><td><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Easy</b></span></td><td>Hash Mapping / String</td><td>Bijection: check both directions</td></tr><tr><td><b>5</b></td><td><a href="https://leetcode.com/problems/contains-duplicate-ii/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">219. Contains Duplicate II</span></a></td><td><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Easy</b></span></td><td>Hash Set Window / Sliding Window</td><td>Set of the last k values</td></tr><tr><td><b>6</b></td><td><a href="https://leetcode.com/problems/design-hashmap/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">706. Design HashMap</span></a></td><td><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Easy</b></span></td><td>Design / Hash Table</td><td>Chaining, resize at 0.75</td></tr><tr><td><b>7</b></td><td><a href="https://leetcode.com/problems/group-anagrams/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">49. Group Anagrams</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Canonical Key / String</td><td>Sorted letters or count signature</td></tr><tr><td><b>8</b></td><td><a href="https://leetcode.com/problems/longest-consecutive-sequence/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">128. Longest Consecutive Sequence</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Hash Set / Union Find</td><td>Only start walks at x − 1 absent</td></tr><tr><td><b>9</b></td><td><a href="https://leetcode.com/problems/4sum-ii/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">454. 4Sum II</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Meet in the Middle / Hash Table</td><td>Pair-sum counts</td></tr></tbody></table></div><p class="xs">Links point to the official LeetCode problem pages. Problem numbers and levels reflect LeetCode at the time of writing; pages marked <i>premium</i> need a LeetCode subscription. Solve in the <b>Order</b> column, not by level alone.</p><div class="pg" id="p200" data-n="200"></div><div class="bx" style="--bx:#f2efe8"><div class="kk"><b>CHAPTER SUMMARY</b></div><p class="sm">Hash patterns replace an inner loop by an <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(1)</code></span><b> lookup of a computed key:</b> complement (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>target −</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>x</code></span>), membership, canonical key, or count.</p><p class="sm">Two Sum: <b>lookup before insert</b>. Longest Consecutive: a set, walking <b>only from</b> <b>starts</b> (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>x − 1</code></span> absent) in <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n)</code></span>.</p><p class="sm">Group by a <b>canonical key</b> (sorted letters, count signature with a separator); use immutable keys.</p><p class="sm">Know the internals: buckets, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>hash &amp; (cap − 1)</code></span>, chaining, load factor 0.75, resize; and when a sorted array with two pointers saves the memory.</p></div>

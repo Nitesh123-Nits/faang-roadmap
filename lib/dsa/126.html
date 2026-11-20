@@ -1,0 +1,670 @@
+<div class="pg" id="p1076" data-n="1076"></div><div class="kk"><b>PART XIII · MASTERCLASSES AND REFERENCE</b></div><h1><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">M3</span></h1><h1><b>Java DSA Toolkit</b></h1><p class="lead"><i>The Java idioms you reach for in every solution, each one compiled and</i> <i>tested.</i></p><h3><b>About this toolkit</b></h3><p>The same two dozen Java idioms appear in nearly every solution in this book. This chapter collects them in one place so you can rehearse them until they are automatic. Every class below compiles on its own and is covered by oracle tests (Sorting, Heaps, Collections, Math, FastIO, DSU and Trie together account for over two million checks).</p><div class="tw"><table class="tb"><tbody><tr><td><b>Topic</b></td><td><b>Where in this chapter</b></td></tr><tr><td>Custom sorting with <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Comparator</code></span>; sorting arrays and lists</td><td>1. Sorting (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>ToolkitSorting</code></span>)</td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>PriorityQueue</code></span> as min-heap and max-heap; custom objects in</td><td>2. Heaps (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>ToolkitHeaps</code></span>)</td></tr><tr><td>heaps</td><td></td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>HashMap</code></span> frequency counting; <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>ArrayDeque</code></span> as stack and queue; pairs</td><td>3. Collections (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>ToolkitCollections</code></span>)</td></tr><tr><td>and tuples</td><td></td></tr><tr><td>Matrix traversal; graph adjacency lists</td><td>3. Collections</td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Arrays.fill</code></span> and initialisation; <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>StringBuilder</code></span></td><td>3. Collections</td></tr><tr><td>Safe midpoint; integer overflow prevention</td><td>4. Safe arithmetic (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>ToolkitMath</code></span>)</td></tr><tr><td>Fast input and output</td><td>5. Fast I/O (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>FastIO</code></span>)</td></tr><tr><td>Disjoint set union; trie</td><td>6. Structures (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>ToolkitDSU</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>ToolkitTrie</code></span>)</td></tr><tr><td>Binary tree node; linked list node</td><td>7. Node classes (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>TreeNode</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>ListNode</code></span>)</td></tr></tbody></table></div><div class="pg" id="p1077" data-n="1077"></div><div class="ls"><div class="li" data-m="1.">Sorting and comparators</b></div></div><p>Java sorts primitives and objects with different algorithms (see Chapter M2), but the code you write is the same: <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Arrays.sort</code></span> for arrays, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>List.sort</code></span> for lists. For objects, supply a <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Comparator</code></span>. Build it with <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Comparator.comparingInt(...).thenComparing(...)</code></span>, which is readable and cannot overflow.</p><div class="bx" style="--bx:#f6ebda"><div class="kk"><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>THE OVERFLOW TRAP</b></span></div><p class="sm">Never write <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>(a, b) -&gt; a - b</code></span>. For <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>a = Integer.MAX_VALUE</code></span> and <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>b = -1</code></span> the subtraction overflows to a negative number, the comparator answers the wrong way, and the sort silently produces a wrong order (or <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>TimSort</code></span> throws &quot;Comparison method violates its general contract&quot;). Use <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Integer.compare(a, b)</code></span>. The toolkit includes a function that detects exactly when subtraction breaks.</p></div><div class="bx" style="--bx:#f2efe8"><div class="cols c2" style="--gt:362fr 28fr"><div class="col"><div class="kk"><b>ToolkitSorting.java</b></div><pre class="code"><code>import java.util.*;
+
+/** Toolkit: sorting arrays and lists with comparators that cannot overflow. */
+public class ToolkitSorting {
+
+    /** Intervals ordered by start, ties broken by end. */
+    public static void sortIntervals(int[][] intervals) {
+        Arrays.sort(intervals, Comparator.&lt;int[]&gt;comparingInt(a -&gt; a[0])
+                                         .thenComparingInt(a -&gt; a[1]));
+    }
+
+    /** Descending order for int[] without boxing: sort, then reverse. */
+    public static void sortDescending(int[] a) {
+        Arrays.sort(a);
+        for (int i = 0, j = a.length - 1; i &lt; j; i++, j--) {
+            int t = a[i];
+            a[i] = a[j];
+            a[j] = t;
+        }
+    }
+
+    /** Values ordered by frequency (high first), then by value (low first). */
+    public static List&lt;Integer&gt; byFrequencyThenValue(int[] nums) {
+        Map&lt;Integer, Integer&gt; freq = new HashMap&lt;&gt;();
+        for (int x : nums) freq.merge(x, 1, Integer::sum);
+        List&lt;Integer&gt; out = new ArrayList&lt;&gt;();
+        for (int x : nums) out.add(x);
+        out.sort(Comparator.&lt;Integer&gt;comparingInt(freq::get).reversed()
+                           .thenComparingInt(Integer::intValue));
+        return out;
+    }
+
+    /** Shorter strings first; equal lengths alphabetically. */
+    public static void byLengthThenAlpha(List&lt;String&gt; words) {
+        words.sort(Comparator.comparingInt(String::length)
+                             .thenComparing(Comparator.naturalOrder()));
+    }
+
+    /** LeetCode 179: arrange numbers to form the largest value. */
+    public static String largestNumber(int[] nums) {
+        String[] s = new String[nums.length];
+        for (int i = 0; i &lt; nums.length; i++) s[i] = String.valueOf(nums[i]);</code></pre></div><div class="col"><p class="xs">Java 17+</p></div></div></div><div class="pg" id="p1078" data-n="1078"></div><pre class="code"><code>        // a goes before b when &quot;ab&quot; &gt; &quot;ba&quot; as strings
+        Arrays.sort(s, (a, b) -&gt; (b + a).compareTo(a + b));
+        if (s[0].equals(&quot;0&quot;)) return &quot;0&quot;;
+        return String.join(&quot;&quot;, s);
+    }
+
+    /** &quot;argsort&quot;: indices of a ordered by a[i]; a itself is untouched. */
+    public static Integer[] argsort(int[] a) {
+        Integer[] idx = new Integer[a.length];
+        for (int i = 0; i &lt; idx.length; i++) idx[i] = i;
+        Arrays.sort(idx, (i, j) -&gt; Integer.compare(a[i], a[j]));
+        return idx;
+    }
+
+    /**
+     * The classic bug: a - b overflows for extreme values, so the sign is wrong.
+     * Integer.compare never overflows.
+     */
+    public static boolean subtractionComparatorBreaks(int a, int b) {
+        return Integer.signum(a - b) != Integer.compare(a, b);
+    }
+}</code></pre><div class="tw"><table class="tb"><tbody><tr><td><b>You need</b></td><td><b>Write</b></td></tr><tr><td>Intervals by start, then end</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Arrays.sort(iv, Comparator.&lt;int[]&gt;comparingInt(a -&gt;</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>a[0]).thenComparingInt(a -&gt; a[1]))</code></span></td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>int[]</code></span> descending</td><td>Sort ascending, then reverse in place (no boxing)</td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Integer[]</code></span> or <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>List&lt;Integer&gt;</code></span> descending</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Collections.reverseOrder()</code></span> or <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Comparator.reverseOrder()</code></span></td></tr><tr><td>Order by a computed key</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Comparator.comparingInt(key)</code></span>; <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>.reversed()</code></span> flips the whole comparator</td></tr><tr><td>Original indices of a sorted array</td><td>Sort an <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Integer[]</code></span> of indices with a comparator on the values (argsort)</td></tr><tr><td>Concatenation order (largest number)</td><td>A comparator on <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>b + a</code></span> versus <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>a + b</code></span></td></tr></tbody></table></div><div class="ls"><div class="li" data-m="2.">PriorityQueue: min-heap, max-heap and custom objects</b></div></div><p><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>PriorityQueue</code></span> is a binary min-heap. <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>offer</code></span> and <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>poll</code></span> cost <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(log n)</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>peek</code></span> costs <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(1)</code></span>. For a max-heap pass <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Comparator.reverseOrder()</code></span>. For your own objects, either implement</p><p class="sm"><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Comparable</code></span> (as the record <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Job</code></span> does below) or pass a comparator for one field. A heap of <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>int[]</code></span></p><p>pairs is the usual shape for Dijkstra and top-k problems.</p><div class="ls"><div class="li" data-m="•"><b>No decrease-key.</b> To change a priority, insert a new entry and ignore the stale one when it surfaces (lazy deletion). <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>remove(Object)</code></span> is <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n)</code></span>.</div><div class="li" data-m="•"></b></span><b>Never mutate a field that determines the ordering while the object is inside the heap.</b></div></div><p>The heap will not notice.</p><div class="ls"><div class="li" data-m="•"><b>The iterator and </b><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>toString</code></span><b> are not sorted.</b> Poll repeatedly to read in order.</div><div class="li" data-m="•"></b></span><b>Build from a collection with the constructor</b> for <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n)</code></span> heapify instead of <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>n</code></span> offers.</div></div><div class="pg" id="p1079" data-n="1079"></div><div class="bx" style="--bx:#f2efe8"><div class="cols c2" style="--gt:379fr 28fr"><div class="col"><div class="kk"><b>ToolkitHeaps.java</b></div><pre class="code"><code>import java.util.*;
+
+/** Toolkit: PriorityQueue as min-heap, max-heap and heap of custom objects. */
+public class ToolkitHeaps {
+
+    /** Min-heap is the default. */
+    public static PriorityQueue&lt;Integer&gt; minHeap() {
+        return new PriorityQueue&lt;&gt;();
+    }
+
+    /** Max-heap: reverse the natural order (never write (a, b) -&gt; b - a). */
+    public static PriorityQueue&lt;Integer&gt; maxHeap() {
+        return new PriorityQueue&lt;&gt;(Comparator.reverseOrder());
+    }
+
+    /** Bulk construction from a collection is O(n), not O(n log n). */
+    public static PriorityQueue&lt;Integer&gt; heapify(Collection&lt;Integer&gt; values) {
+        return new PriorityQueue&lt;&gt;(values);
+    }
+
+    /** k-th largest: keep a min-heap of the k largest values seen so far. */
+    public static int kthLargest(int[] nums, int k) {
+        PriorityQueue&lt;Integer&gt; heap = new PriorityQueue&lt;&gt;();
+        for (int x : nums) {
+            heap.offer(x);
+            if (heap.size() &gt; k) heap.poll();
+        }
+        return heap.peek();
+    }
+
+    /** Custom object: higher priority first, earlier arrival breaks ties. */
+    public record Job(int id, int priority, int arrival)
+            implements Comparable&lt;Job&gt; {
+        @Override
+        public int compareTo(Job o) {
+            if (priority != o.priority)
+                return Integer.compare(o.priority, priority);
+            return Integer.compare(arrival, o.arrival);
+        }
+    }
+
+    /** Ids in the order a worker would run them. */
+    public static List&lt;Integer&gt; runOrder(List&lt;Job&gt; jobs) {
+        PriorityQueue&lt;Job&gt; heap = new PriorityQueue&lt;&gt;(jobs);
+        List&lt;Integer&gt; order = new ArrayList&lt;&gt;();
+        while (!heap.isEmpty()) order.add(heap.poll().id());
+        return order;
+    }
+
+    /** Heap of int[]{node, dist}: compare one field with Integer.compare. */
+    public static PriorityQueue&lt;int[]&gt; distanceHeap() {
+        return new PriorityQueue&lt;&gt;((a, b) -&gt; Integer.compare(a[1], b[1]));
+    }
+
+    /** Heap sort via PriorityQueue (illustration; O(n log n) time, O(n) space). */
+    public static int[] heapSort(int[] a) {
+        PriorityQueue&lt;Integer&gt; heap = new PriorityQueue&lt;&gt;();
+        for (int x : a) heap.offer(x);
+        int[] out = new int[a.length];</code></pre></div><div class="col"><p class="xs">Java 17+</p></div></div></div><div class="pg" id="p1080" data-n="1080"></div><pre class="code"><code>        for (int i = 0; i &lt; out.length; i++) out[i] = heap.poll();
+        return out;
+    }
+}</code></pre><div class="ls"><div class="li" data-m="3.">Collections: counting, stack, queue, pairs, grids, graphs, fill</b> <b>and</b></div></div><h3><b>StringBuilder</b></h3><p>This single class gathers the idioms you use most: frequency counting with <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>merge</code></span>,</p><p class="sm"><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>ArrayDeque</code></span> as a stack (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>push</code></span> / <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>pop</code></span> / <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>peek</code></span> at the head) and as a queue (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>offer</code></span> at the tail, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>poll</code></span></p><p>from the head), records as pairs and map keys, direction arrays for matrix traversal, adjacency lists (including an array-based forward-star), safe initialisation, and <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>StringBuilder</code></span> with <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>setLength</code></span> for backtracking.</p><div class="tw"><table class="tb"><tbody><tr><td><b>Task</b></td><td><b>Idiom</b></td><td><b>Why</b></td></tr><tr><td>Count occurrences</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>map.merge(x, 1, Integer::sum)</code></span></td><td>One lookup, no null check; <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>getOrDefault(x, 0) + 1</code></span> is the equivalent two-step form</td></tr><tr><td>Group values by key</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>map.computeIfAbsent(k, x -&gt; new</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>ArrayList&lt;&gt;()).add(v)</code></span></td><td>Creates the list only when needed</td></tr><tr><td>Lowercase letters only</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>int[26]</code></span> and <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>c - &#x27;a&#x27;</code></span></td><td>Faster than a map and no boxing</td></tr><tr><td>Stack</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Deque&lt;Integer&gt; st = new ArrayDeque&lt;&gt;()</code></span>; <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>push</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>pop</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>peek</code></span></td><td>Faster than <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Stack</code></span> (synchronised) and <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>LinkedList</code></span></td></tr><tr><td>Queue</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Deque&lt;Integer&gt; q = new ArrayDeque&lt;&gt;()</code></span>; <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>offer</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>poll</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>peek</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>poll</code></span> returns <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>null</code></span> when empty; <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>remove</code></span> would throw</td></tr><tr><td>Pair as a key</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>record Pair&lt;A, B&gt;(A a, B b)</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>equals</code></span> and <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>hashCode</code></span> come free</td></tr><tr><td>Cell as a key in a hot</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>long key = ((long) r &lt;&lt; 32) | (c &amp;</code></span></td><td>No object allocation; the mask stops a</td></tr><tr><td>loop</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>0xFFFFFFFFL)</code></span></td><td>negative <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>c</code></span> from clobbering <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>r</code></span></td></tr><tr><td>4 / 8 neighbours</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>int[][] DIR4</code></span>, loop <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>nr = r + d[0]</code></span></td><td>One loop replaces four copied blocks; check bounds before use</td></tr><tr><td>Fill a 2D array</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>for (int[] row : a) Arrays.fill(row, v)</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Arrays.fill(a, v)</code></span> on an <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>int[][]</code></span> compiles (the <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Object[]</code></span> overload) but throws <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>ArrayStoreException</code></span></td></tr><tr><td>Infinity for <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>int</code></span> distances</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Integer.MAX_VALUE / 2</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>INF + INF</code></span> still fits, so relaxations cannot overflow</td></tr><tr><td>Undo in backtracking</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>sb.append(c)</code></span>, recurse, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>sb.setLength(sb.length()</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>- 1)</code></span></td><td>One shared builder instead of <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>n</code></span> string copies</td></tr></tbody></table></div><div class="pg" id="p1081" data-n="1081"></div><div class="bx" style="--bx:#f2efe8"><div class="cols c2" style="--gt:374fr 28fr"><div class="col"><div class="kk"><b>ToolkitCollections.java</b></div><pre class="code"><code>import java.util.*;
+
+/** Toolkit: counting, ArrayDeque stack and queue, pairs, init, StringBuilder. */
+public class ToolkitCollections {
+
+    // ---------------------------------------------------------------- counting
+    public static Map&lt;Integer, Integer&gt; frequency(int[] nums) {
+        Map&lt;Integer, Integer&gt; freq = new HashMap&lt;&gt;();
+        for (int x : nums) freq.merge(x, 1, Integer::sum);
+        return freq;
+    }
+
+    /** Lowercase letters only: a plain array is faster and needs no boxing. */
+    public static int[] letterCounts(String s) {
+        int[] count = new int[26];
+        for (int i = 0; i &lt; s.length(); i++) count[s.charAt(i) - &#x27;a&#x27;]++;
+        return count;
+    }
+
+    // ------------------------------------------------------- ArrayDeque as stack
+    /** Valid brackets, ArrayDeque as a stack: push / pop / peek at the head. */
+    public static boolean validBrackets(String s) {
+        Deque&lt;Character&gt; stack = new ArrayDeque&lt;&gt;();
+        for (char c : s.toCharArray()) {
+            switch (c) {
+                case &#x27;(&#x27; -&gt; stack.push(&#x27;)&#x27;);
+                case &#x27;[&#x27; -&gt; stack.push(&#x27;]&#x27;);
+                case &#x27;{&#x27; -&gt; stack.push(&#x27;}&#x27;);
+                default -&gt; {
+                    if (stack.isEmpty() || stack.pop() != c) return false;
+                }
+            }
+        }
+        return stack.isEmpty();
+    }
+
+    // ------------------------------------------------------ ArrayDeque as queue
+    /** BFS distances: offer at the tail, poll from the head. */
+    public static int[] bfsDistances(List&lt;List&lt;Integer&gt;&gt; graph, int source) {
+        int[] dist = new int[graph.size()];
+        Arrays.fill(dist, -1);
+        Deque&lt;Integer&gt; queue = new ArrayDeque&lt;&gt;();
+        dist[source] = 0;
+        queue.offer(source);
+        while (!queue.isEmpty()) {
+            int u = queue.poll();
+            for (int v : graph.get(u)) {
+                if (dist[v] == -1) {
+                    dist[v] = dist[u] + 1;
+                    queue.offer(v);
+                }
+            }
+        }
+        return dist;
+    }
+
+    // -------------------------------------------------------------- pair / tuple
+    /** Records supply equals and hashCode, so they work as map keys. */
+    public record Pair&lt;A, B&gt;(A first, B second) { }
+
+    public record Triple&lt;A, B, C&gt;(A first, B second, C third) { }</code></pre></div><div class="col"><p class="xs">Java 17+</p></div></div></div><div class="pg" id="p1082" data-n="1082"></div><pre class="code"><code>    /** Packs a (row, col) cell into one long: cheaper than a Pair key. */
+    public static long pack(int row, int col) {
+        return ((long) row &lt;&lt; 32) | (col &amp; 0xFFFFFFFFL);
+    }
+
+    public static int rowOf(long key) { return (int) (key &gt;&gt; 32); }
+
+    public static int colOf(long key) { return (int) key; }
+
+    // ---------------------------------------------------------- matrix traversal
+    public static final int[][] DIR4 = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    public static final int[][] DIR8 = {{1, 0}, {-1, 0}, {0, 1}, {0, -1},
+        {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+
+    public static boolean inBounds(int r, int c, int rows, int cols) {
+        return r &gt;= 0 &amp;&amp; r &lt; rows &amp;&amp; c &gt;= 0 &amp;&amp; c &lt; cols;
+    }
+
+    /** Neighbours of (r, c) inside a rows x cols grid for the given directions. */
+    public static List&lt;int[]&gt; neighbours(int r, int c, int rows, int cols,
+                                         int[][] dirs) {
+        List&lt;int[]&gt; out = new ArrayList&lt;&gt;();
+        for (int[] d : dirs) {
+            int nr = r + d[0], nc = c + d[1];
+            if (inBounds(nr, nc, rows, cols)) out.add(new int[]{nr, nc});
+        }
+        return out;
+    }
+
+    /** Cells of an m x n grid in anti-diagonal order (sum r + c constant). */
+    public static List&lt;int[]&gt; diagonals(int rows, int cols) {
+        List&lt;int[]&gt; out = new ArrayList&lt;&gt;();
+        for (int s = 0; s &lt;= rows + cols - 2; s++)
+            for (int r = Math.min(s, rows - 1); r &gt;= Math.max(0, s - cols + 1); r--)
+                out.add(new int[]{r, s - r});
+        return out;
+    }
+
+    // ------------------------------------------------------- graph adjacency lists
+    /** Unweighted adjacency list over vertices 0..n-1. */
+    public static List&lt;List&lt;Integer&gt;&gt; adjacency(int n, int[][] edges,
+                                                boolean directed) {
+        List&lt;List&lt;Integer&gt;&gt; g = new ArrayList&lt;&gt;();
+        for (int i = 0; i &lt; n; i++) g.add(new ArrayList&lt;&gt;());
+        for (int[] e : edges) {
+            g.get(e[0]).add(e[1]);
+            if (!directed) g.get(e[1]).add(e[0]);
+        }
+        return g;
+    }
+
+    /** Weighted adjacency list: each entry is {neighbour, weight}. */
+    public static List&lt;List&lt;int[]&gt;&gt; weightedAdjacency(int n, int[][] edges,
+                                                      boolean directed) {
+        List&lt;List&lt;int[]&gt;&gt; g = new ArrayList&lt;&gt;();
+        for (int i = 0; i &lt; n; i++) g.add(new ArrayList&lt;&gt;());
+        for (int[] e : edges) {
+            g.get(e[0]).add(new int[]{e[1], e[2]});
+            if (!directed) g.get(e[1]).add(new int[]{e[0], e[2]});
+        }
+        return g;
+    }
+
+    /** Array-based &quot;forward star&quot;: no object per edge, good for large graphs. */</code></pre><div class="pg" id="p1083" data-n="1083"></div><pre class="code"><code>    public static final class ForwardStar {
+        private final int[] head, next, to;
+        private int edges = 0;
+
+        public ForwardStar(int vertices, int maxEdges) {
+            head = new int[vertices];
+            Arrays.fill(head, -1);
+            next = new int[maxEdges];
+            to = new int[maxEdges];
+        }
+
+        public void addEdge(int u, int v) {
+            to[edges] = v;
+            next[edges] = head[u];
+            head[u] = edges++;
+        }
+
+        public List&lt;Integer&gt; neighbours(int u) {
+            List&lt;Integer&gt; out = new ArrayList&lt;&gt;();
+            for (int e = head[u]; e != -1; e = next[e]) out.add(to[e]);
+            return out;
+        }
+    }
+
+    // ----------------------------------------------------- fill and initialisation
+    /** Arrays.fill on a 2D array must fill each row (rows are separate arrays). */
+    public static int[][] filled(int rows, int cols, int value) {
+        int[][] a = new int[rows][cols];
+        for (int[] row : a) Arrays.fill(row, value);
+        return a;
+    }
+
+    /** INF that survives INF + INF without overflowing int. */
+    public static final int INF = Integer.MAX_VALUE / 2;
+
+    /** A modifiable list of n zeros (nCopies alone is immutable). */
+    public static List&lt;Integer&gt; zeros(int n) {
+        return new ArrayList&lt;&gt;(Collections.nCopies(n, 0));
+    }
+
+    /** Arrays.setAll builds computed arrays without a manual loop. */
+    public static int[] squares(int n) {
+        int[] a = new int[n];
+        Arrays.setAll(a, i -&gt; i * i);
+        return a;
+    }
+
+    // --------------------------------------------------------------- StringBuilder
+    /** Reverse the order of words, collapsing extra spaces. */
+    public static String reverseWords(String s) {
+        String[] parts = s.trim().split(&quot;\\s+&quot;);
+        StringBuilder sb = new StringBuilder();
+        for (int i = parts.length - 1; i &gt;= 0; i--) {
+            sb.append(parts[i]);
+            if (i &gt; 0) sb.append(&#x27; &#x27;);
+        }
+        return sb.toString();
+    }
+
+    /** Backtracking with one shared builder: append, recurse, setLength to undo. */
+    public static List&lt;String&gt; binaryStrings(int n) {
+        List&lt;String&gt; out = new ArrayList&lt;&gt;();
+        build(n, new StringBuilder(), out);
+        return out;</code></pre><div class="pg" id="p1084" data-n="1084"></div><pre class="code"><code>    }
+
+    private static void build(int n, StringBuilder sb, List&lt;String&gt; out) {
+        if (sb.length() == n) {
+            out.add(sb.toString());
+            return;
+        }
+        for (char c = &#x27;0&#x27;; c &lt;= &#x27;1&#x27;; c++) {
+            sb.append(c);
+            build(n, sb, out);
+            sb.setLength(sb.length() - 1);
+        }
+    }
+}</code></pre><div class="bx" style="--bx:#e3efec"><div class="kk"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>TWO QUIET BUGS</b></span></div><p class="sm"><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Arrays.asList(...)</code></span> and <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>List.of(...)</code></span> are <b>fixed-size / immutable</b>: <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>add</code></span> throws. Wrap them in <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>new</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>ArrayList&lt;&gt;(...)</code></span> when you need to modify the list. Compare boxed values with <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>equals</code></span>: <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Integer</code></span> objects between -128 and 127 are cached, so <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>==</code></span> appears to work for small numbers and fails for larger ones.</p></div><div class="ls"><div class="li" data-m="4.">Safe midpoint and integer overflow prevention</b></div></div><p><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>(lo + hi) / 2</code></span> overflows when <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>lo + hi</code></span> exceeds <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Integer.MAX_VALUE</code></span>. Binary search on a large range is the classic place it bites (a famous bug lived in the JDK&#x27;s own binary search for years). Use <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>lo + (hi - lo) /</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>2</code></span>, which is safe whenever <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>hi - lo</code></span> fits in an <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>int</code></span>, or compute in <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>long</code></span> for the general case.</p><div class="tw"><table class="tb"><tbody><tr><td><b>Hazard</b></td><td><b>Safe form</b></td><td><b>Note</b></td></tr><tr><td>Midpoint of <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>lo &lt;= hi</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>lo + (hi - lo) / 2</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>(lo + hi) &gt;&gt;&gt; 1</code></span> also works for non-negative <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>lo</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>hi</code></span>, but is wrong for negatives</td></tr><tr><td>Midpoint for any ints</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>(int) (((long) lo + hi) &gt;&gt; 1)</code></span></td><td>Floor midpoint, even for <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>lo &lt; 0 &lt; hi</code></span> near the limits</td></tr><tr><td>Sum of an array</td><td>Accumulate in <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>long</code></span></td><td>Cast the <b>first</b> operand: <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>(long) a * b</code></span>, not <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>(long) (a * b)</code></span></td></tr><tr><td>Detect overflow</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Math.addExact</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>multiplyExact</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>toIntExact</code></span></td><td>Throw <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>ArithmeticException</code></span> instead of wrapping</td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Math.abs(Integer.MIN_VA</code></span></td><td>Check for it, or work in <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>long</code></span></td><td>Returns <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Integer.MIN_VALUE</code></span>, still</td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>LUE)</code></span></td><td></td><td>negative</td></tr><tr><td>Negative modulo</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Math.floorMod(x, m)</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>%</code></span> keeps the dividend&#x27;s sign: <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>-7 % 3 ==</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>-1</code></span></td></tr><tr><td>Ceiling division</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>-Math.floorDiv(-a, b)</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>(a + b - 1) / b</code></span> overflows near the limit and mishandles negatives</td></tr><tr><td>Modular product</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>a * b % m</code></span> with <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>a, b &lt; m &lt;= ~3e9</code></span></td><td>Both factors must already be reduced; the product must fit in a <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>long</code></span></td></tr></tbody></table></div><div class="pg" id="p1085" data-n="1085"></div><div class="tw"><table class="tb"><tbody><tr><td><b>Hazard</b></td><td><b>Safe form</b></td><td><b>Note</b></td></tr><tr><td>Reversing digits</td><td>Test against <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>MAX_VALUE / 10</code></span> before multiplying</td><td>LeetCode 7 style: check before the overflow, not after</td></tr></tbody></table></div><div class="bx" style="--bx:#f2efe8"><div class="cols c2" style="--gt:374fr 28fr"><div class="col"><div class="kk"><b>ToolkitMath.java</b></div><pre class="code"><code>/** Toolkit: safe midpoint, overflow prevention, modular helpers. */
+public class ToolkitMath {
+
+    /** Floor midpoint of lo &lt;= hi when hi - lo fits in an int. */
+    public static int mid(int lo, int hi) {
+        return lo + (hi - lo) / 2;
+    }
+
+    /** Floor midpoint for any pair of ints, even lo &lt; 0 &lt; hi near the limits. */
+    public static int midAny(int lo, int hi) {
+        return (int) (((long) lo + hi) &gt;&gt; 1);
+    }
+
+    /** Floor of (a + b) / 2 using only int operations (no overflow). */
+    public static int floorAverage(int a, int b) {
+        return (a &amp; b) + ((a ^ b) &gt;&gt; 1);
+    }
+
+    /** Throws ArithmeticException instead of silently wrapping around. */
+    public static int addExact(int a, int b) {
+        return Math.addExact(a, b);
+    }
+
+    /** Saturating add: clamps at the int limits instead of wrapping. */
+    public static int saturatingAdd(int a, int b) {
+        long sum = (long) a + b;
+        if (sum &gt; Integer.MAX_VALUE) return Integer.MAX_VALUE;
+        if (sum &lt; Integer.MIN_VALUE) return Integer.MIN_VALUE;
+        return (int) sum;
+    }
+
+    /** Sum of an int array without overflow: accumulate in long. */
+    public static long sum(int[] a) {
+        long s = 0;
+        for (int x : a) s += x;
+        return s;
+    }
+
+    /** True if a * b does not fit in a long. */
+    public static boolean multiplyOverflows(long a, long b) {
+        try {
+            Math.multiplyExact(a, b);
+            return false;
+        } catch (ArithmeticException e) {
+            return true;
+        }
+    }
+
+    /** Math.abs(Integer.MIN_VALUE) is still negative; this one says so loudly. */
+    public static int absExact(int x) {
+        if (x == Integer.MIN_VALUE) throw new ArithmeticException(&quot;abs overflow&quot;);
+        return Math.abs(x);
+    }
+
+    /** LeetCode 7: reverse the digits of x, or 0 if the result overflows int. */
+    public static int reverseInteger(int x) {</code></pre></div><div class="col"><p class="xs">Java 17+</p></div></div></div><div class="pg" id="p1086" data-n="1086"></div><pre class="code"><code>        int rev = 0;
+        while (x != 0) {
+            int digit = x % 10;
+            x /= 10;
+            int max = Integer.MAX_VALUE, min = Integer.MIN_VALUE;
+            if (rev &gt; max / 10 || (rev == max / 10 &amp;&amp; digit &gt; 7)) return 0;
+            if (rev &lt; min / 10 || (rev == min / 10 &amp;&amp; digit &lt; -8)) return 0;
+            rev = rev * 10 + digit;
+        }
+        return rev;
+    }
+
+    /** (a * b) mod m for 0 &lt;= a, b &lt; m &lt;= 3e9: the product fits in a long. */
+    public static long mulMod(long a, long b, long m) {
+        return a * b % m;
+    }
+
+    /** Non-negative remainder: Java&#x27;s % keeps the sign of the dividend. */
+    public static int mod(int x, int m) {
+        return Math.floorMod(x, m);
+    }
+
+    /** ceil(a / b) for b &gt; 0 and any a; no (a + b - 1) overflow. */
+    public static long ceilDiv(long a, long b) {
+        return -Math.floorDiv(-a, b);
+    }
+}</code></pre><div class="ls"><div class="li" data-m="5.">Fast input and output</b></div></div><p>For inputs of a few thousand numbers, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Scanner</code></span> is fine. For 10⁵ to 10⁶ numbers it becomes the bottleneck because it parses with regular expressions. Read bytes through a large buffer and parse integers yourself, and write through a <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>PrintWriter</code></span> wrapped around a <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>BufferedWriter</code></span>, flushing once at the end. Interview platforms rarely need this, but online judges and timed contests do.</p><div class="ls"><div class="li" data-m="•"></b></span><b>Output:</b> collect lines in a <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>StringBuilder</code></span> or a buffered <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>PrintWriter</code></span>; do not call</div></div><p><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>System.out.println</code></span> a million times.</p><div class="ls"><div class="li" data-m="•"><b>Input:</b> one <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>read</code></span> call fills a 64 KiB buffer; the parser walks it byte by byte.</div><div class="li" data-m="•"></b></span><b>Always flush</b> the writer before the program ends, or the last output is lost.</div></div><div class="bx" style="--bx:#f2efe8"><div class="cols c2" style="--gt:336fr 28fr"><div class="col"><div class="kk"><b>FastIO.java</b></div><pre class="code"><code>import java.io.*;
+import java.util.*;
+
+/** Toolkit: fast buffered input; pair it with a buffered PrintWriter. */
+public class FastIO {
+    private final InputStream in;
+    private final byte[] buf = new byte[1 &lt;&lt; 16];
+    private int len = 0, ptr = 0;
+
+    public FastIO(InputStream in) {
+        this.in = in;
+    }</code></pre></div><div class="col"><p class="xs">Java 17+</p></div></div></div><div class="pg" id="p1087" data-n="1087"></div><pre class="code"><code>    private int read() throws IOException {
+        if (ptr == len) {
+            len = in.read(buf, 0, buf.length);
+            ptr = 0;
+            if (len &lt;= 0) {
+                len = 0;
+                return -1;
+            }
+        }
+        return buf[ptr++];
+    }
+
+    public long nextLong() throws IOException {
+        int c = read();
+        while (c != &#x27;-&#x27; &amp;&amp; (c &lt; &#x27;0&#x27; || c &gt; &#x27;9&#x27;)) {
+            if (c == -1) throw new EOFException(&quot;no more numbers&quot;);
+            c = read();
+        }
+        boolean negative = false;
+        if (c == &#x27;-&#x27;) {
+            negative = true;
+            c = read();
+        }
+        long x = 0;
+        while (c &gt;= &#x27;0&#x27; &amp;&amp; c &lt;= &#x27;9&#x27;) {
+            x = x * 10 + (c - &#x27;0&#x27;);
+            c = read();
+        }
+        return negative ? -x : x;
+    }
+
+    public int nextInt() throws IOException {
+        return (int) nextLong();
+    }
+
+    /** Next whitespace-separated token, or null at end of input. */
+    public String next() throws IOException {
+        int c = read();
+        while (c != -1 &amp;&amp; c &lt;= &#x27; &#x27;) c = read();
+        if (c == -1) return null;
+        StringBuilder sb = new StringBuilder();
+        while (c &gt; &#x27; &#x27;) {
+            sb.append((char) c);
+            c = read();
+        }
+        return sb.toString();
+    }
+
+    public int[] nextInts(int n) throws IOException {
+        int[] a = new int[n];
+        for (int i = 0; i &lt; n; i++) a[i] = nextInt();
+        return a;
+    }
+
+    /** Demo: input &quot;n a1 .. an&quot; gives the running prefix sums on one line. */
+    public static String prefixSumsDemo(String input) throws IOException {
+        FastIO io = new FastIO(new ByteArrayInputStream(input.getBytes()));
+        StringWriter sw = new StringWriter();
+        try (PrintWriter out = new PrintWriter(new BufferedWriter(sw))) {
+            int n = io.nextInt();
+            long sum = 0;
+            for (int i = 0; i &lt; n; i++) {
+                sum += io.nextInt();</code></pre><div class="pg" id="p1088" data-n="1088"></div><pre class="code"><code>                out.print(sum);
+out.print(i + 1 &lt; n ? &#x27; &#x27; : &#x27;\n&#x27;);
+            }
+        }
+        return sw.toString();
+    }
+
+    /** Main: System.in in, buffered System.out out, flush once at the end. */
+    public static void main(String[] args) throws IOException {
+        FastIO io = new FastIO(System.in);
+        PrintWriter out = new PrintWriter(
+                new BufferedWriter(new OutputStreamWriter(System.out)));
+        int n = io.nextInt();
+        long sum = 0;
+        for (int i = 0; i &lt; n; i++) sum += io.nextInt();
+        out.println(sum);
+        out.flush();
+    }
+}</code></pre><div class="ls"><div class="li" data-m="6.">Disjoint set union and trie</b></div></div><p>These two structures are short enough to write from memory. The DSU below uses <b>path</b> <b>halving and union by size</b>, which together give almost constant amortised time (inverse Ackermann, Chapter 52). The trie stores one child array per node; add a count field for prefix counting (Chapter 94) or swap the array for a <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>HashMap</code></span> when the alphabet is large.</p><div class="bx" style="--bx:#f2efe8"><div class="cols c2" style="--gt:345fr 28fr"><div class="col"><div class="kk"><b>ToolkitDSU.java</b></div><pre class="code"><code>/** Toolkit: disjoint set union with path compression and union by size. */
+public class ToolkitDSU {
+    private final int[] parent, size;
+    private int components;
+
+    public ToolkitDSU(int n) {
+        parent = new int[n];
+        size = new int[n];
+        components = n;
+        for (int i = 0; i &lt; n; i++) {
+            parent[i] = i;
+            size[i] = 1;
+        }
+    }
+
+    /** Root of x; path halving keeps the trees shallow. */
+    public int find(int x) {
+        while (parent[x] != x) {
+            parent[x] = parent[parent[x]];
+            x = parent[x];
+        }
+        return x;
+    }
+
+    /** Merges the sets of a and b; false if they were already together. */
+    public boolean union(int a, int b) {
+        int ra = find(a), rb = find(b);
+        if (ra == rb) return false;
+        if (size[ra] &lt; size[rb]) {
+            int t = ra;</code></pre></div><div class="col"><p class="xs">Java 17+</p></div></div></div><div class="pg" id="p1089" data-n="1089"></div><pre class="code"><code>            ra = rb;
+            rb = t;
+        }
+        parent[rb] = ra;
+        size[ra] += size[rb];
+        components--;
+        return true;
+    }
+
+    public boolean connected(int a, int b) { return find(a) == find(b); }
+
+    public int components() { return components; }
+}</code></pre><div class="bx" style="--bx:#f2efe8"><div class="cols c2" style="--gt:353fr 28fr"><div class="col"><div class="kk"><b>ToolkitTrie.java</b></div><pre class="code"><code>/** Toolkit: lowercase-letter trie with insert, search and prefix queries. */
+public class ToolkitTrie {
+    private static final class Node {
+        final Node[] child = new Node[26];
+        boolean word;
+    }
+
+    private final Node root = new Node();
+
+    public void insert(String s) {
+        Node cur = root;
+        for (int i = 0; i &lt; s.length(); i++) {
+            int c = s.charAt(i) - &#x27;a&#x27;;
+            if (cur.child[c] == null) cur.child[c] = new Node();
+            cur = cur.child[c];
+        }
+        cur.word = true;
+    }
+
+    private Node walk(String s) {
+        Node cur = root;
+        for (int i = 0; i &lt; s.length() &amp;&amp; cur != null; i++)
+            cur = cur.child[s.charAt(i) - &#x27;a&#x27;];
+        return cur;
+    }
+
+    public boolean contains(String s) {
+        Node n = walk(s);
+        return n != null &amp;&amp; n.word;
+    }
+
+    /** True if some inserted word starts with prefix; &quot;&quot; always matches. */
+    public boolean startsWith(String prefix) {
+        return walk(prefix) != null;
+    }
+}</code></pre></div><div class="col"><p class="xs">Java 17+</p></div></div></div><div class="ls"><div class="li" data-m="7.">Binary tree and linked list nodes</b></div></div><p>LeetCode supplies these classes, but in an interview or on your own machine you write them. The versions below add small helpers that every test in this book uses: build from LeetCode&#x27;s level-order format (with <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>null</code></span> for a missing child) and read the structure back out.</p><div class="pg" id="p1090" data-n="1090"></div><div class="bx" style="--bx:#f2efe8"><div class="cols c2" style="--gt:370fr 28fr"><div class="col"><div class="kk"><b>TreeNode.java</b></div><pre class="code"><code>import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
+/**
+ * Binary tree node, plus helpers to read and write LeetCode&#x27;s level-order format
+ * ({@code null} = missing child).
+ */
+public class TreeNode {
+    public int val;
+    public TreeNode left, right;
+
+    public TreeNode(int val) { this.val = val; }
+
+    public TreeNode(int val, TreeNode left, TreeNode right) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+    }
+
+    /**
+     * Builds a tree from level-order values, e.g. {3, 9, 20, null, null, 15, 7}.
+     */
+    public static TreeNode fromLevelOrder(Integer... vals) {
+        if (vals.length == 0 || vals[0] == null) return null;
+        TreeNode root = new TreeNode(vals[0]);
+        Queue&lt;TreeNode&gt; queue = new ArrayDeque&lt;&gt;();
+        queue.add(root);
+        int i = 1;
+        while (!queue.isEmpty() &amp;&amp; i &lt; vals.length) {
+            TreeNode node = queue.poll();
+            if (i &lt; vals.length &amp;&amp; vals[i] != null) {
+                node.left = new TreeNode(vals[i]);
+                queue.add(node.left);
+            }
+            i++;
+            if (i &lt; vals.length &amp;&amp; vals[i] != null) {
+                node.right = new TreeNode(vals[i]);
+                queue.add(node.right);
+            }
+            i++;
+        }
+        return root;
+    }
+
+    /**
+     * Level-order values with trailing nulls removed (the inverse of {@link
+     * #fromLevelOrder}).
+     */
+    public static List&lt;Integer&gt; toLevelOrder(TreeNode root) {
+        List&lt;Integer&gt; out = new ArrayList&lt;&gt;();
+        // LinkedList, not ArrayDeque: the queue holds null placeholders
+        Queue&lt;TreeNode&gt; queue = new LinkedList&lt;&gt;();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            if (node == null) { out.add(null); continue; }
+            out.add(node.val);
+            queue.add(node.left);
+            queue.add(node.right);</code></pre></div><div class="col"><p class="xs">Java 17+</p></div></div></div><div class="pg" id="p1091" data-n="1091"></div><pre class="code"><code>        }
+        int end = out.size();
+        while (end &gt; 0 &amp;&amp; out.get(end - 1) == null) end--;
+        return new ArrayList&lt;&gt;(out.subList(0, end));
+    }
+}</code></pre><div class="bx" style="--bx:#f2efe8"><div class="cols c2" style="--gt:391fr 28fr"><div class="col"><div class="kk"><b>ListNode.java</b></div><pre class="code"><code>/** Singly linked list node shared by every list chapter. */
+public class ListNode {
+    public int val;
+    public ListNode next;
+
+    public ListNode(int val) {
+        this.val = val;
+    }
+
+    public ListNode(int val, ListNode next) {
+        this.val = val;
+        this.next = next;
+    }
+
+    /** Builds 1 -&gt; 2 -&gt; 3 from of(1, 2, 3); returns null when no values are given. */
+    public static ListNode of(int... vals) {
+        ListNode dummy = new ListNode(0), tail = dummy;
+        for (int v : vals) {
+            tail.next = new ListNode(v);
+            tail = tail.next;
+        }
+        return dummy.next;
+    }
+
+    /** Copies the values into an array (the list must be acyclic). */
+    public static int[] toArray(ListNode head) {
+        int n = 0;
+        for (ListNode c = head; c != null; c = c.next) n++;
+        int[] a = new int[n];
+        int i = 0;
+        for (ListNode c = head; c != null; c = c.next) a[i++] = c.val;
+        return a;
+    }
+}</code></pre></div><div class="col"><p class="xs">Java 17+</p></div></div></div><div class="ls"><div class="li" data-m="8.">Choosing the right Java collection</b></div></div><div class="tw"><table class="tb"><tbody><tr><td><b>If you need</b></td><td><b>Use</b></td><td><b>Avoid</b></td></tr><tr><td>Growable array, random access</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>ArrayList</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>LinkedList</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Vector</code></span></td></tr><tr><td>Stack (LIFO)</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>ArrayDeque</code></span> with <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>push</code></span> / <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>pop</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Stack</code></span></td></tr><tr><td>Queue or deque (FIFO / both ends)</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>ArrayDeque</code></span> with <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>offer</code></span> / <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>poll</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>LinkedList</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>ArrayList.remove(0)</code></span></td></tr><tr><td>Fast lookup, no order</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>HashMap</code></span> / <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>HashSet</code></span></td><td>Searching a list repeatedly</td></tr><tr><td>Sorted keys, floor / ceiling, range</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>TreeMap</code></span> / <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>TreeSet</code></span></td><td>Sorting after every insert</td></tr><tr><td>queries</td><td></td><td></td></tr></tbody></table></div><div class="pg" id="p1092" data-n="1092"></div><div class="tw"><table class="tb"><tbody><tr><td><b>If you need</b></td><td><b>Use</b></td><td><b>Avoid</b></td></tr><tr><td>Insertion-ordered map or set</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>LinkedHashMap</code></span> / <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>LinkedHashSet</code></span> (also the base of an LRU cache, Chapter 29)</td><td>A <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>HashMap</code></span> plus a separate list</td></tr><tr><td>Repeated min or max</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>PriorityQueue</code></span></td><td>Re-sorting; scanning a list each time</td></tr><tr><td>Counting a small alphabet</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>int[26]</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>int[128]</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>HashMap&lt;Character,</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Integer&gt;</code></span></td></tr><tr><td>Building strings</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>StringBuilder</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>+=</code></span> in a loop</td></tr><tr><td>Range sum with updates</td><td>Fenwick or segment tree (Chapter 96, 97)</td><td>Prefix sums that you rebuild</td></tr></tbody></table></div><div class="bx" style="--bx:#f2efe8"><div class="kk"><b>CHAPTER SUMMARY</b></div><p class="sm">Compare with <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Integer.compare</code></span> or <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Comparator.comparingInt</code></span>, never subtraction.</p><p class="sm"><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>PriorityQueue</code></span> is a min-heap; reverse the comparator for a max-heap; there is no decrease-key, so use lazy deletion.</p><p class="sm"><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>ArrayDeque</code></span> is both your stack and your queue; <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>merge</code></span> counts frequencies; records make clean pair keys.</p><p class="sm">Compute midpoints as <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>lo + (hi - lo) / 2</code></span>, accumulate sums in <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>long</code></span>, and use <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Math.floorMod</code></span> and <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Math.addExact</code></span> where signs or overflow matter.</p><p class="sm">Buffered input and a flushed <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>PrintWriter</code></span> are the only fast I/O you need.</p><p class="sm">A DSU and a trie are each about 40 lines: practise writing them without looking.</p></div>

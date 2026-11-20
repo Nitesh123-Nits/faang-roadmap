@@ -1,0 +1,28 @@
+<div class="pg" id="p106" data-n="106"></div><div class="bx dk" style="--bx:#1e2227"><h2>A.9 Logging Configuration</h2></div><pre class="code"><code>logging:
+  level:
+    root: INFO
+    com.shop: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.springframework.web: INFO
+  structured.format.console: ecs
+  pattern.correlation: &quot;[%X{traceId:-},%X{spanId:-}] &quot;
+# SQL statements (dev only)
+# bind parameters (Hibernate 6; dev only — may log PII)
+# JSON logs (Boot 3.4+)</code></pre><p>Change levels at runtime:<span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>POST</code></span><code> </code><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>/actuator/loggers/com.shop.payment</code></span>with<span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>{&quot;configuredLevel&quot;:&quot;DEBUG&quot;}</code></span>(secure this endpoint). Logback specifics (async appenders, rolling) go in<span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>logback-spring.xml</code></span>with<span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>&lt;springProfile&gt;</code></span>blocks.</p><div class="bx dk" style="--bx:#1e2227"><h2>A.10 Actuator Endpoints</h2></div><div class="tw"><table class="tb"><thead class="dk"><tr><th><b>Endpoint</b></th><th><b>Explanation</b></th></tr></thead><tbody><tr><td><code>/actuator/health</code> ·<code> /health/liveness</code> ·<code> /health/readiness</code></td><td>aggregate health · probe groups</td></tr><tr><td><code>/actuator/info</code></td><td>build/git info ( <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>spring-boot-maven-plugin</code></span> build‐info goal, git‐commit‐id plugin)</td></tr><tr><td><code>/actuator/metrics</code> ·<code> /actuator/metrics/</code> <code>http.server.requests?tag=uri:/api/v1/orders</code></td><td>metric names · one metric filtered by tag</td></tr><tr><td><code>/actuator/prometheus</code></td><td>Prometheus scrape format (micrometer‐registry‐prometheus)</td></tr><tr><td><code>/actuator/loggers</code></td><td>view/change log levels at runtime</td></tr><tr><td><code>/actuator/env</code> ·<code> /configprops</code></td><td>effective properties (values masked by default) — restrict</td></tr><tr><td><code>/actuator/conditions</code> ·<code> /beans</code> ·<code> /mappings</code></td><td>auto‐config report · beans · request mappings</td></tr><tr><td><code>/actuator/threaddump</code> ·<code> /heapdump</code></td><td>⚠sensitive; expose only on an internal port with auth</td></tr><tr><td><code>/actuator/scheduledtasks</code> ·<code> /caches</code></td><td>scheduled jobs · cache managers</td></tr></tbody></table></div><div class="bx dk" style="--bx:#1e2227"><h2>A.11 HTTP and curl Examples</h2></div><div class="bx dk" style="--bx:#1e2227"><p><b>Command</b></p></div><div class="bx dk" style="--bx:#1e2227"><p><b>Explanation</b></p></div><div class="cols c2" style="--gt:226fr 278fr"><div class="col"><pre class="code"><code>curl -sS -i http://localhost:8080/api/v1/orders/42
+curl -sS -X POST localhost:8080/api/v1/orders -H
+&#x27;Content-Type: application/json&#x27; -H &quot;Idempotency-Key: $
+(uuidgen)&quot; -d @order.json
+curl -sS -H &quot;Authorization: Bearer $TOKEN&quot; https://
+api.example.com/me | jq .
+curl -sS -o /dev/null -w &#x27;dns=%{time_namelookup}
+connect=%{time_connect} tls=%{time_appconnect} ttfb=%
+{time_starttransfer} total=%{time_total}\n&#x27; https://
+api.example.com/health
+curl -sS --max-time 3 --retry 2 --retry-connrefused …
+curl -v --cacert ca.pem --cert client.pem --key
+client.key https://svc.internal
+curl -sS -H &#x27;If-None-Match: &quot;v7&quot;&#x27; -i …/products/42
+openssl s_client -connect api.example.com:443 -
+servername api.example.com &lt;/dev/null | openssl x509 -
+noout -dates -subject</code></pre></div><div class="col"><p>show status line + headers + body</p><div class="bx" style="--bx:#faf8f3"><p>POST JSON from a file with an idempotency key</p></div><p>authenticated call, pretty JSON</p><div class="bx" style="--bx:#faf8f3"><p>timing breakdown of a request</p></div><p>bounded time, limited retries</p><div class="bx" style="--bx:#faf8f3"><p>mTLS test</p></div><p>conditional GET →expect 304</p><div class="bx" style="--bx:#faf8f3"><p>inspect server certificate and expiry</p></div></div></div><div class="bx dk" style="--bx:#1e2227"><h2>A.12 Common HTTP Status Codes</h2></div><div class="tw"><table class="tb"><thead class="dk"><tr><th><b>Code</b></th><th><b>Name</b></th><th><b>Code</b></th><th><b>Name</b></th></tr></thead><tbody><tr><td>200</td><td>OK Created (+ Location)</td><td>404</td><td>Not Found Method Not Allowed</td></tr></tbody></table></div>

@@ -1,0 +1,14 @@
+<div class="pg" id="p40" data-n="40"></div><p class="sm">Example: Transaction A runs <code>SELECT * FROM account WHERE id = 1 FOR UPDATE</code> , the row is locked, it updates the balance and commits, and the lock is released. Transaction B issues the same statement, waits, then acquires the lock and proceeds.</p><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>IN SPRING DATA JPA</b></span></div><p class="sm">Optimistic: add a version field.</p><pre class="code"><code>@Entity
+public class Account {
+    @Id
+    private Long id;
+    private Double balance;
+    @Version
+    private Long version;
+}
+-/ Generated: UPDATE --. WHERE id = ? AND version = ?
+-/ On mismatch: OptimisticLockException (Spring wraps it as
+ObjectOptimisticLockingFailureException)</code></pre><p class="sm">Pessimistic: lock on read.</p><pre class="code"><code>@Lock(LockModeType.PESSIMISTIC_WRITE)
+@Query(&quot;SELECT a FROM Account a WHERE a.id = :id&quot;)
+Account findByIdForUpdate(@Param(&quot;id&quot;) Long id);
+-/ Generated: SELECT * FROM account WHERE id = ? FOR UPDATE</code></pre><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>WHEN TO USE WHICH</b></span></div><div class="tw"><table class="tb"><tbody><tr><td><b>OPTIMISTIC WHEN</b></td><td><b>PESSIMISTIC WHEN</b></td></tr><tr><td><b>Reads far outnumber writes</b></td><td>Writes are frequent</td></tr><tr><td><b>Probability of conflict is low</b></td><td>Contention on the same data is high</td></tr><tr><td><b>High scalability matters</b></td><td>Data integrity is critical</td></tr><tr><td><b>Web apps and microservices</b></td><td>Deadlock handling is acceptable</td></tr><tr><td><b>User profiles, product catalogue, CMS, blogs</b></td><td>Banking, trading, inventory, ticket booking</td></tr></tbody></table></div><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>THE 30-SECOND INTERVIEW ANSWER</b></span></div><p class="sm">Optimistic locking assumes conflicts are rare and uses a version field to detect concurrent updates at commit time. It scales better because no lock is held. Pessimistic locking assumes conflicts are common and locks the data with <code>SELECT FOR UPDATE</code> , preventing other transactions from modifying it until the transaction completes. Use optimistic for read-heavy systems, and pessimistic when data consistency is critical and write contention is high.</p><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>QUICK MEMORY TRICK</b></span></div><p class="sm">Optimistic: <b>&quot;Trust first, verify later.&quot;</b> Pessimistic: <b>&quot;Lock first, then work.&quot;</b></p><div class="bx" style="--bx:#b4532a"><p class="sm"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>R E M E M B E R .</b></span> Optimistic: no lock, check version, update. Pessimistic: lock, up‐</p><p>date, commit, release.</p></div>

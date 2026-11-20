@@ -1,0 +1,26 @@
+<div class="pg" id="p24" data-n="24"></div><h3><b>Extract method: before</b></h3><p>One block, four concerns.</p><pre class="code"><code>public void backup(Device d) {
+  if (d != null
+      &amp;&amp; d.getStatus() == DeviceStatus.ONLINE
+      &amp;&amp; d.getIp() != null) {
+    String cfg = ssh.run(d.getIp(),
+        &quot;show running-config&quot;);
+    if (cfg != null &amp;&amp; !cfg.isBlank()) {
+      repo.save(new Backup(d.getId(), cfg,
+          Instant.now()));
+      log.info(&quot;Backup done for {}&quot;, d.getId());
+    }
+  }
+}</code></pre><h3><b>Extract method: after</b></h3><p>Reads like the requirement.</p><pre class="code"><code>public void backup(Device device) {
+  if (!isBackupEligible(device)) return;
+
+  String config = fetchRunningConfig(device);
+  if (config.isBlank()) return;
+
+  saveBackup(device, config);
+}
+
+private boolean isBackupEligible(Device d) {
+  return d != null
+      &amp;&amp; d.getStatus() == DeviceStatus.ONLINE
+      &amp;&amp; d.getIp() != null;
+}</code></pre>

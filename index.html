@@ -3,6 +3,7 @@
 <meta name="description" content="26-week FAANG interview prep tracker: DSA, LLD, HLD, daily log, mocks. Works offline.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="study.css">
+<link rel="stylesheet" href="lib.css">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1a1a18" media="(prefers-color-scheme: dark)">
 <meta name="mobile-web-app-capable" content="yes">
@@ -621,6 +622,10 @@ body.is-offline .pwa-off{display:block}
   <!-- JAVA MANUAL (native study library) -->
   <section class="panel" id="tab-study" role="tabpanel" hidden>
     <div class="sx" id="sx"></div>
+  </section>
+  <!-- BOOKS (PDF library converted to native chapter pages) -->
+  <section class="panel" id="tab-lib" role="tabpanel" hidden>
+    <div class="sx lb" id="lb"></div>
   </section>
 </main>
 <nav class="bnav" id="bnav" aria-label="Main"></nav>
@@ -1312,7 +1317,7 @@ function probRow(pr,w,loc,showWeek){const k="s:"+pr.s,on=done.has(k),id=`${loc}-
 const readsList=x=>`<ul class="reads">${x.reads.map(r=>`<li><a href="${r[1]}" target="_blank" rel="noopener">${esc(r[0])}</a></li>`).join("")}</ul>`;
 
 /* ---------- tabs ---------- */
-const TABS=[["dashboard","Dashboard"],["daily","Daily to-do"],["plan","Plan"],["calendar","Calendar"],["problems","Problems"],["patterns","Patterns"],["prep","Interview prep"],["resources","Resources"],["study","Java Manual"]];
+const TABS=[["dashboard","Dashboard"],["daily","Daily to-do"],["plan","Plan"],["calendar","Calendar"],["problems","Problems"],["patterns","Patterns"],["prep","Interview prep"],["resources","Resources"],["study","Java Manual"],["lib","Books"]];
 let tab="dashboard";
 function showTab(t,scroll){tab=t;TABS.forEach(([k])=>{$("tab-"+k).hidden=k!==t;const b=$("tb-"+k);if(b)b.setAttribute("aria-selected",k===t);});
   try{localStorage.setItem(LS+"-tab",t)}catch(e){}
@@ -1656,11 +1661,13 @@ if(currentWeek()===0)setSave(`Week 1 starts ${fmtL(START)}`);
     bn.querySelector("[data-more]").setAttribute("aria-current",!MAIN.includes(t));
     more.querySelectorAll("button").forEach(b=>b.setAttribute("aria-current",b.dataset.t===t));
     if(t==="study"){const sx=document.getElementById("sx");if(sx&&!sx.dataset.ready&&window.studyRoute)window.studyRoute();}
+    if(t==="lib"){const lb=document.getElementById("lb");if(lb&&!lb.dataset.ready&&window.libRoute)window.libRoute();}
   };
   window.onTabShown(tab);
 })();
 </script>
 <script src="study.js" defer></script>
+<script src="lib.js" defer></script>
 <script src="pwa.js" defer></script>
 
 </body></html>

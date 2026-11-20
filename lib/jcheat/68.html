@@ -1,0 +1,75 @@
+<div class="pg" id="p73" data-n="73"></div><div class="bx" style="--bx:#b4532a"><h2>Working YAML: ConfigMap, Secret, Deployment, Service</h2></div><p class="sm"><b>K8S/ORDERS.YAML — CONFIGMAP + SECRET (PLACEHOLDER) + SERVICE</b></p><pre class="code"><code>apiVersion: v1
+kind: ConfigMap
+metadata: { name: orders-config, labels: { app: orders } }
+data:
+  SPRING_PROFILES_ACTIVE: &quot;prod&quot;
+  JAVA_TOOL_OPTIONS: &quot;-XX:MaxRAMPercentage=75 -XX:+ExitOnOutOfMemoryError&quot;
+  application.yaml: |
+    payment.gateway.timeout: 2s
+---
+apiVersion: v1
+kind: Secret
+metadata: { name: orders-db }
+type: Opaque
+stringData:
+  SPRING_DATASOURCE_USERNAME: orders
+  SPRING_DATASOURCE_PASSWORD: change-me
+---
+apiVersion: v1
+kind: Service
+metadata: { name: orders, labels: { app: orders } }
+spec:
+  selector: { app: orders }
+  ports:
+    - { name: http, port: 80, targetPort: http }
+# base64 ≠encryption:  enable etcd encryption + RBAC,
+# or sync from Vault/Secrets Manager (External Secrets)
+# placeholder — never commit real values</code></pre><p class="sm"><b>K8S/ORDERS-DEPLOYMENT.YAML — DEPLOYMENT WITH RESOURCES, PROBES, SECURITY, GRACEFUL SHUTDOWN</b></p><pre class="code"><code>apiVersion: apps/v1
+kind: Deployment
+metadata: { name: orders, labels: { app: orders } }
+spec:
+  replicas: 3
+  revisionHistoryLimit: 5
+  selector: { matchLabels: { app: orders } }
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: { maxSurge: 1, maxUnavailable: 0 }
+  template:
+    metadata:
+      labels: { app: orders }
+      annotations: { prometheus.io/scrape: &quot;true&quot;, prometheus.io/port: &quot;8081&quot;, prometheus.io/path: &quot;/actuator/
+prometheus&quot; }
+    spec:
+      serviceAccountName: orders
+      terminationGracePeriodSeconds: 45
+      securityContext: { runAsNonRoot: true, runAsUser: 10001, fsGroup: 10001, seccompProfile: { type: RuntimeDefaul
+t } }
+      topologySpreadConstraints:
+        - { maxSkew: 1, topologyKey: topology.kubernetes.io/zone, whenUnsatisfiable: ScheduleAnyway,
+            labelSelector: { matchLabels: { app: orders } } }
+      containers:
+        - name: app
+          image: registry.example.com/orders:1.14.2
+          ports:
+            - { name: http, containerPort: 8080 }
+            - { name: management, containerPort: 8081 }
+          envFrom:
+            - configMapRef: { name: orders-config }
+            - secretRef: { name: orders-db }
+          resources:
+            requests: { cpu: &quot;500m&quot;, memory: &quot;1Gi&quot; }
+            limits: { memory: &quot;1Gi&quot; }
+          startupProbe:
+            httpGet: { path: /actuator/health/liveness, port: management }
+            periodSeconds: 5
+            failureThreshold: 36
+          livenessProbe:
+            httpGet: { path: /actuator/health/liveness, port: management }
+            periodSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet: { path: /actuator/health/readiness, port: management }
+# never drop below desired capacity
+# immutable tag or @sha256 digest
+# memory limit = request; see CPU note below
+# up to 180 s to start</code></pre>

@@ -1,0 +1,204 @@
+<div class="pg" id="p81" data-n="81"></div><div class="kk"><b>PART I · ARRAY &amp; INDEX-BASED PATTERNS</b></div><h1><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">07</span></h1><h1><b>Monotonic Stack</b></h1><p class="lead"><i>Keep a stack in sorted order so each element is pushed once and popped</i> <i>once.</i></p><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>A.</b></span><b> Pattern Overview</b></h3><p><b>A monotonic stack</b> is a stack whose elements are kept in strictly increasing or decreasing order. Before pushing a new element you <b>pop everything that violates the order</b>. The pop is the interesting event: <i>the new element is the answer for every element it pops</i>. Because each element is pushed once and popped once, a whole scan costs <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n)</code></span> even though a single step may pop many items.</p><div class="tw"><table class="tb"><tbody><tr><td><b>Order kept (bottom → top)</b></td><td><b>Pop while…</b></td><td><b>Answers the question…</b></td></tr><tr><td><b>Decreasing</b> (top is smallest)</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>stack.top &lt; current</code></span></td><td><b>Next greater</b> element of each popped item</td></tr><tr><td><b>Increasing</b> (top is largest)</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>stack.top &gt; current</code></span></td><td><b>Next smaller</b> element of each popped item</td></tr><tr><td>Stack below an element after</td><td>—</td><td><b>Previous</b> smaller / greater element of the</td></tr><tr><td>popping</td><td></td><td>current item</td></tr></tbody></table></div><div class="bx" style="--bx:#f2efe8"><div class="kk"><b>KEY IDEA</b></div><p class="sm">Each element asks one question: <i>&quot;who is the first element to my right (or left) that beats</i> <i>me?&quot;</i> The monotonic stack answers it for all elements in one pass, because elements still on the stack are exactly the ones whose answer is still unknown.</p></div><p><b>Versus a normal stack:</b> a normal stack stores pending items (brackets, calls) and pops on a <i>match</i>. A monotonic stack pops on a <i>comparison</i> and exists to find nearest greater/smaller neighbours, or to find the <i>span</i> in which an element is the maximum or minimum.</p><div class="pg" id="p82" data-n="82"></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>B.</b></span><b> When to Recognize This Pattern</b></h3><p><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Pattern Recognition Signals</b></span></p><div class="ls"><div class="li" data-m="•"><b>&quot;Next greater / next smaller / previous greater element&quot;</b>, or <i>how many days until a</i> <i>warmer temperature.</i></div><div class="li" data-m="•"></span>The problem asks for the <b>largest rectangle, area</b>, or <b>span</b> where one element is the</div></div><p>limiting height.</p><div class="ls"><div class="li" data-m="•"><b>&quot;Sum of subarray minimums / maximums&quot;</b>: count the subarrays in which each element is the minimum.</div><div class="li" data-m="•"></b></span><b>Greedy digit / letter removal</b> to obtain the smallest or largest result (Remove K Digits,</div></div><p>Remove Duplicate Letters).</p><div class="ls"><div class="li" data-m="•">Online queries such as <b>stock span</b>: each new element needs the distance to the previous larger one.</div><div class="li" data-m="•"></span>A brute force that scans left or right from every index until it finds something larger or</div></div><p>smaller: <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n²)</code></span> hiding a linear algorithm.</p><div class="bx" style="--bx:#f2efe8"><div class="kk"><b>ONE-LINE TEST</b></div><p class="sm">If the brute force is <i>&quot;for each i, scan right until arr[j] &gt; arr[i]&quot;</i>, it is a monotonic stack. If it is <i>&quot;for each window of size k find the max&quot;</i>, it is a monotonic <b>deque</b> (Chapter 8).</p></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>C.</b></span><b> Core Intuition with Illustrations</b></h3><p><b>Daily Temperatures.</b> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>T = [73, 74, 75, 71, 69, 72, 76, 73]</code></span>. The stack holds the indices of days that are still waiting for a warmer day, so their temperatures are decreasing from bottom to top.</p><div class="pg" id="p83" data-n="83"></div><figure class="fig"><img loading="lazy" src="lib/dsa/img/p83_17.webp" width="901" height="739" alt="Diagram" style="max-width:579px"></figure><p class="lead"><i><b>Figure 17.</b> At i = 5 the 72 pops days 4 and 3; at i = 6 the 76 pops days 5 and 2. Each pop answers that day in</i> <i>one step.</i></p><div class="bx" style="--bx:#e3efec"><div class="kk"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>INTUITION</b></span></div><p class="sm"><b>Amortised O(n).</b> Each index is pushed exactly once and popped at most once, so the total number of pops ≤ <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>n</code></span>. The <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>while</code></span> inside the <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>for</code></span> does not make it quadratic.</p></div><p><b>Largest Rectangle in Histogram.</b> For bar <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>h</code></span>, the widest rectangle of height <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>h</code></span> extends left and right until it meets a <i>strictly shorter</i> bar. A stack of increasing heights finds both borders when a bar is popped: the right border is the bar that caused the pop; the left border is the new stack top.</p><div class="pg" id="p84" data-n="84"></div><figure class="fig"><img loading="lazy" src="lib/dsa/img/p84_18.webp" width="901" height="297" alt="Diagram" style="max-width:579px"></figure><p class="lead"><i><b>Figure 18.</b> The dashed rectangle is the maximum (area 10). Bar 1 (height 1) on the left and bar 4 (height 2) on</i> <i>the right are the strictly shorter borders.</i></p><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>D.</b></span><b> Brute Force to Optimal Solution</b></h3><p><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Example: Largest Rectangle in Histogram (LeetCode 84)</b></span></p><div class="ls"><div class="li" data-m="1."><b>Brute force 1:</b> every pair <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>(i, j)</code></span>, track the minimum height in between: <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n²)</code></span>.</div><div class="li" data-m="2."><b>Brute force 2:</b> for each bar, expand left and right while neighbours are <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>≥</code></span> it: <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n²)</code></span> worst case (sorted input).</div><div class="li" data-m="3."><b>Bottleneck:</b> the expansion repeats work that neighbouring bars have already done.</div><div class="li" data-m="4."><b>Insight:</b> the left border of bar <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>i</code></span> is the <b>previous smaller</b> bar and the right border is the <b>next smaller</b> bar. Both come from a monotonic stack.</div><div class="li" data-m="5."><b>Optimal:</b> one pass, a sentinel <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>0</code></span> at the end flushes the stack. <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n)</code></span> time, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n)</code></span> space.</div></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>E.</b></span><b> Java Implementation</b></h3><p><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Next greater / smaller (linear and circular)</b></span></p><div class="bx" style="--bx:#f2efe8"><div class="cols c2 tab" style="--gt:225fr 28fr"><div class="col"><div class="kk"><b>NextGreaterElements.java — LeetCode 503 and the basic forms</b></div></div><div class="col"><p class="xs">Java 17+</p></div></div><pre class="code"><code>import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Deque;
+
+/** Monotonic-stack toolkit: next greater / next smaller (linear and circular). */
+public class NextGreaterElements {
+
+    /** result[i] = next strictly greater VALUE to the right of i, or -1. */
+    public static int[] nextGreater(int[] nums) {
+        int n = nums.length;
+        int[] result = new int[n];
+        Arrays.fill(result, -1);
+        Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();      // indices, values strictly decreasing
+        for (int i = 0; i &lt; n; i++) {
+            while (!stack.isEmpty() &amp;&amp; nums[stack.peek()] &lt; nums[i]) {
+                // nums[i] is the answer for everything popped</code></pre></div><div class="pg" id="p85" data-n="85"></div><pre class="code"><code>                result[stack.pop()] = nums[i];
+            }
+            stack.push(i);
+        }
+        return result;
+    }
+
+    /** result[i] = next strictly smaller VALUE to the right of i, or -1. */
+    public static int[] nextSmaller(int[] nums) {
+        int n = nums.length;
+        int[] result = new int[n];
+        Arrays.fill(result, -1);
+        Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();      // values strictly increasing
+        for (int i = 0; i &lt; n; i++) {
+            while (!stack.isEmpty() &amp;&amp; nums[stack.peek()] &gt; nums[i]) {
+                result[stack.pop()] = nums[i];
+            }
+            stack.push(i);
+        }
+        return result;
+    }
+
+    /** LeetCode 503 - Next Greater Element II: the array is circular. */
+    public static int[] nextGreaterCircular(int[] nums) {
+        int n = nums.length;
+        int[] result = new int[n];
+        Arrays.fill(result, -1);
+        Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+        for (int i = 0; i &lt; 2 * n; i++) {               // visit every element twice
+            int value = nums[i % n];
+            while (!stack.isEmpty() &amp;&amp; nums[stack.peek()] &lt; value) {
+                result[stack.pop()] = value;
+            }
+            if (i &lt; n) stack.push(i);                   // only first lap pushes indices
+        }
+        return result;
+    }
+}</code></pre><div class="cols c2" style="--gt:196fr 241fr"><div class="col"><div class="bx" style="--bx:#e3efec"><p class="xs"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>TIME</b></span><code> O(n)</code></p></div><div class="bx" style="--bx:#f6ebda"><p class="xs"><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>SPACE</b></span><code> O(n)</code></p></div></div><div class="col"><p class="xs"><i>Store <b>indices</b> on the stack so you can compute distances; compare</i> <i>through </i><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>nums[stack.peek()]</code></span><i>. Circular: iterate </i><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>2n</code></span><i> times, push</i> <i>only in the first lap.</i></p></div></div><p><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Daily Temperatures</b></span></p><div class="bx" style="--bx:#f2efe8"><div class="cols c2 tab" style="--gt:145fr 28fr"><div class="col"><div class="kk"><b>DailyTemperatures.java — LeetCode 739</b></div></div><div class="col"><p class="xs">Java 17+</p></div></div><pre class="code"><code>import java.util.ArrayDeque;
+import java.util.Deque;
+
+/** LeetCode 739 - Daily Temperatures. Stack of indices still waiting for a warmer day. */
+public class DailyTemperatures {
+
+    public static int[] dailyTemperatures(int[] temperatures) {
+        int n = temperatures.length;
+        int[] wait = new int[n];                        // default 0 = never gets warmer
+        Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+        for (int i = 0; i &lt; n; i++) {
+            while (!stack.isEmpty() &amp;&amp; temperatures[stack.peek()] &lt; temperatures[i]) {
+                int colderDay = stack.pop();
+                wait[colderDay] = i - colderDay;</code></pre></div><div class="pg" id="p86" data-n="86"></div><pre class="code"><code>            }
+            stack.push(i);
+        }
+        return wait;
+    }
+}</code></pre><div class="bx" style="--bx:#e3efec"><p class="xs"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>TIME</b></span><code> O(n)</code></p></div><div class="bx" style="--bx:#f6ebda"><p class="xs"><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>SPACE</b></span><code> O(n)</code></p></div><p><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Largest Rectangle in Histogram</b></span></p><div class="bx" style="--bx:#f2efe8"><div class="cols c2 tab" style="--gt:172fr 28fr"><div class="col"><div class="kk"><b>LargestRectangleHistogram.java — LeetCode 84</b></div></div><div class="col"><p class="xs">Java 17+</p></div></div><pre class="code"><code>import java.util.ArrayDeque;
+import java.util.Deque;
+
+/** LeetCode 84 - Largest Rectangle in Histogram. One pass with an increasing stack. */
+public class LargestRectangleHistogram {
+
+    public static int largestRectangleArea(int[] heights) {
+        int n = heights.length;
+        // indices of bars with increasing heights
+        Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+        int best = 0;
+        for (int i = 0; i &lt;= n; i++) {
+            int current = (i == n) ? 0 : heights[i];    // sentinel height 0 flushes the stack
+            while (!stack.isEmpty() &amp;&amp; heights[stack.peek()] &gt;= current) {
+                int height = heights[stack.pop()];
+                // first shorter bar on the left
+                int leftBoundary = stack.isEmpty() ? -1 : stack.peek();
+                // i is the first shorter-or-equal bar on the right
+                int width = i - leftBoundary - 1;
+                best = Math.max(best, height * width);
+            }
+            stack.push(i);
+        }
+        return best;
+    }
+}</code></pre></div><div class="cols c2" style="--gt:196fr 241fr"><div class="col"><div class="bx" style="--bx:#e3efec"><p class="xs"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>TIME</b></span><code> O(n)</code></p></div><div class="bx" style="--bx:#f6ebda"><p class="xs"><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>SPACE</b></span><code> O(n)</code></p></div></div><div class="col"><p class="xs"><i>Pop with </i><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>&gt;=</code></span><i> so equal heights merge; width = </i><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>i -</code></span><i> </i><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>leftBoundary -</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>1</code></span><i>, where </i><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>leftBoundary</code></span><i> is the new stack top or </i><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>-1</code></span><i>.</i></p></div></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>F.</b></span><b> Detailed Dry Run</b></h3><p><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Daily Temperatures: [73, 74, 75, 71, 69, 72, 76, 73]</b></span></p><div class="tw"><table class="tb"><tbody><tr><td><b>i</b></td><td><b>temp</b></td><td><b>popped (day→wait)</b></td><td><b>stack after push (idx(temp))</b></td><td><b>answer so far</b></td></tr><tr><td>0</td><td>73</td><td>—</td><td>[0(73)]</td><td>[0, 0, 0, 0, 0, 0, 0, 0]</td></tr><tr><td>1</td><td>74</td><td>0→1</td><td>[1(74)]</td><td>[1, 0, 0, 0, 0, 0, 0, 0]</td></tr><tr><td>2</td><td>75</td><td>1→1</td><td>[2(75)]</td><td>[1, 1, 0, 0, 0, 0, 0, 0]</td></tr><tr><td>3</td><td>71</td><td>—</td><td>[2(75), 3(71)]</td><td>[1, 1, 0, 0, 0, 0, 0, 0]</td></tr></tbody></table></div><div class="pg" id="p87" data-n="87"></div><div class="tw"><table class="tb"><tbody><tr><td><b>i</b></td><td><b>temp</b></td><td><b>popped (day→wait)</b></td><td><b>stack after push (idx(temp))</b></td><td><b>answer so far</b></td></tr><tr><td>4</td><td>69</td><td>—</td><td>[2(75), 3(71), 4(69)]</td><td>[1, 1, 0, 0, 0, 0, 0, 0]</td></tr><tr><td>5</td><td>72</td><td>4→1, 3→2</td><td>[2(75), 5(72)]</td><td>[1, 1, 0, 2, 1, 0, 0, 0]</td></tr><tr><td>6</td><td>76</td><td>5→1, 2→4</td><td>[6(76)]</td><td>[1, 1, 4, 2, 1, 1, 0, 0]</td></tr><tr><td>7</td><td>73</td><td>—</td><td>[6(76), 7(73)]</td><td>[1, 1, 4, 2, 1, 1, 0, 0]</td></tr></tbody></table></div><p><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Largest Rectangle: [2, 1, 5, 6, 2, 3]</b></span></p><div class="tw"><table class="tb"><tbody><tr><td><b>i</b></td><td><b>height</b></td><td><b>Pops and areas</b></td><td><b>stack (indices)</b></td><td><b>best</b></td></tr><tr><td>0</td><td>2</td><td>—</td><td>[0]</td><td>0</td></tr><tr><td>1</td><td>1</td><td>pop h=2: width 1−-1−1=1, area=2</td><td>[1]</td><td>2</td></tr><tr><td>2</td><td>5</td><td>—</td><td>[1, 2]</td><td>2</td></tr><tr><td>3</td><td>6</td><td>—</td><td>[1, 2, 3]</td><td>2</td></tr><tr><td>4</td><td>2</td><td>pop h=6: width 4−2−1=1, area=6; pop h=5: width 4−1−1=2, area=10</td><td>[1, 4]</td><td>10</td></tr><tr><td>5</td><td>3</td><td>—</td><td>[1, 4, 5]</td><td>10</td></tr><tr><td>6</td><td>sentinel 0</td><td>pop h=3: width 6−4−1=1, area=3; pop h=2: width 6−1−1=4, area=8; pop h=1: width 6−-1−1=6, area=6</td><td>[]</td><td>10</td></tr></tbody></table></div><p class="xs">Best area = 10.</p><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>G.</b></span><b> Variations of the Pattern</b></h3><div class="ls"><div class="li" data-m="1.">Next Greater Element I: stack + HashMap</b></span></div></div><div class="bx" style="--bx:#f2efe8"><div class="cols c2 tab" style="--gt:152fr 28fr"><div class="col"><div class="kk"><b>NextGreaterElementI.java — LeetCode 496</b></div></div><div class="col"><p class="xs">Java 17+</p></div></div><pre class="code"><code>import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
+
+/** LeetCode 496 - Next Greater Element I. nums1 is a subset of nums2 (distinct values). */
+public class NextGreaterElementI {
+
+    public static int[] nextGreaterElement(int[] nums1, int[] nums2) {
+        Map&lt;Integer, Integer&gt; nextOf = new HashMap&lt;&gt;();
+        Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();         // values, strictly decreasing
+        for (int value : nums2) {
+            while (!stack.isEmpty() &amp;&amp; stack.peek() &lt; value) {
+                nextOf.put(stack.pop(), value);
+            }
+            stack.push(value);
+        }
+        int[] answer = new int[nums1.length];
+        for (int i = 0; i &lt; nums1.length; i++) {
+            answer[i] = nextOf.getOrDefault(nums1[i], -1);</code></pre></div><div class="pg" id="p88" data-n="88"></div><pre class="code"><code>        }
+        return answer;
+    }
+}</code></pre><div class="bx" style="--bx:#e3efec"><p class="xs"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>TIME</b></span><code> O(n + m)</code></p></div><div class="bx" style="--bx:#f6ebda"><p class="xs"><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>SPACE</b></span><code> O(m)</code></p></div><div class="ls"><div class="li" data-m="2.">Maximal Rectangle: histogram per row</b></span></div></div><p>Turn each row of the binary matrix into a histogram of consecutive 1s ending at that row, then reuse the histogram routine. <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(rows · cols)</code></span>.</p><div class="bx" style="--bx:#f2efe8"><div class="cols c2 tab" style="--gt:138fr 28fr"><div class="col"><div class="kk"><b>MaximalRectangle.java — LeetCode 85</b></div></div><div class="col"><p class="xs">Java 17+</p></div></div><pre class="code"><code>/** LeetCode 85 - Maximal Rectangle. Row-by-row histogram + largest rectangle in histogram. */
+public class MaximalRectangle {
+
+    public static int maximalRectangle(char[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return 0;
+        int cols = matrix[0].length;
+        // consecutive &#x27;1&#x27;s ending at current row
+        int[] heights = new int[cols];
+        int best = 0;
+        for (char[] row : matrix) {
+            for (int c = 0; c &lt; cols; c++) {
+                heights[c] = row[c] == &#x27;1&#x27; ? heights[c] + 1 : 0;
+            }
+            best = Math.max(best, LargestRectangleHistogram.largestRectangleArea(heights));
+        }
+        return best;
+    }
+}</code></pre></div><div class="bx" style="--bx:#e3efec"><div class="kk"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>TIME</b></span><code> O(R · C)</code></div></div><div class="bx" style="--bx:#f6ebda"><div class="kk"><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>SPACE</b></span><code> O(C)</code></div></div><div class="ls"><div class="li" data-m="3.">Online Stock Span: stack of (price, span)</b></span></div></div><div class="bx" style="--bx:#f2efe8"><div class="cols c2 tab" style="--gt:126fr 28fr"><div class="col"><div class="kk"><b>StockSpanner.java — LeetCode 901</b></div></div><div class="col"><p class="xs">Java 17+</p></div></div><pre class="code"><code>import java.util.ArrayDeque;
+import java.util.Deque;
+
+/** LeetCode 901 - Online Stock Span. Stack stores {price, span}; amortised O(1) per call. */
+public class StockSpanner {
+    private final Deque&lt;int[]&gt; stack = new ArrayDeque&lt;&gt;();
+
+    public int next(int price) {
+        int span = 1;                                   // today counts itself
+        while (!stack.isEmpty() &amp;&amp; stack.peek()[0] &lt;= price) {
+            // absorb the whole span of a smaller price
+            span += stack.pop()[1];
+        }
+        stack.push(new int[]{price, span});
+        return span;
+    }
+}</code></pre></div><div class="pg" id="p89" data-n="89"></div><div class="bx" style="--bx:#e3efec"><p class="xs"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>TIME</b></span><code> O(1) amortised per call</code></p></div><div class="bx" style="--bx:#f6ebda"><p class="xs"><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>SPACE</b></span><code> O(n)</code></p></div><div class="ls"><div class="li" data-m="4.">Contribution technique: Sum of Subarray Minimums</b></span></div></div><p>Instead of enumerating subarrays, ask <i>&quot;in how many subarrays is </i><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>arr[i]</code></span><i> the minimum?&quot;</i>. That equals <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>leftChoices × rightChoices</code></span> where the left span ends at the previous strictly smaller element and the right span ends at the next smaller-or-equal element (asymmetric tie-breaking counts each subarray exactly once).</p><div class="bx" style="--bx:#f2efe8"><div class="cols c2 tab" style="--gt:143fr 28fr"><div class="col"><div class="kk"><b>SumSubarrayMins.java — LeetCode 907</b></div></div><div class="col"><p class="xs">Java 17+</p></div></div><pre class="code"><code>import java.util.ArrayDeque;
+import java.util.Deque;
+
+/**
+ * LeetCode 907 - Sum of Subarray Minimums. Count the subarrays where each element is the
+ * minimum.
+ */
+public class SumSubarrayMins {
+    private static final long MOD = 1_000_000_007L;
+
+    public static int sumSubarrayMins(int[] arr) {
+        int n = arr.length;
+        Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();      // indices, values strictly increasing
+        long total = 0;
+        for (int i = 0; i &lt;= n; i++) {
+            int current = (i == n) ? Integer.MIN_VALUE : arr[i];
+            while (!stack.isEmpty() &amp;&amp; arr[stack.peek()] &gt;= current) {
+                // arr[mid] is the minimum of its subarrays
+                int mid = stack.pop();
+                // strictly smaller on the left
+                int prevLess = stack.isEmpty() ? -1 : stack.peek();
+                int leftChoices = mid - prevLess;
+                // i = first smaller-or-equal on the right
+                int rightChoices = i - mid;
+                total = (total + (long) arr[mid] * leftChoices % MOD * rightChoices) % MOD;
+            }
+            stack.push(i);
+        }
+        return (int) total;
+    }
+}</code></pre></div><div class="cols c2" style="--gt:196fr 219fr"><div class="col"><div class="bx" style="--bx:#e3efec"><p class="xs"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>TIME</b></span><code> O(n)</code></p></div><div class="bx" style="--bx:#f6ebda"><p class="xs"><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>SPACE</b></span><code> O(n)</code></p></div></div><div class="col"><p class="xs"><i>Accumulate </i><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>long</code></span><i> and reduce modulo </i><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>10</code></span><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>⁹</code></span><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code> + 7</code></span><i> at each step.</i></p></div></div><div class="ls"><div class="li" data-m="5.">Greedy with a stack: Remove K Digits</b></span></div></div><p>To get the smallest number, remove a digit whenever a <i>smaller</i> digit follows it. A stack of non-decreasing digits does this; leftover removals trim from the end; strip leading zeros.</p><div class="pg" id="p90" data-n="90"></div><div class="bx" style="--bx:#f2efe8"><div class="cols c2 tab" style="--gt:132fr 28fr"><div class="col"><div class="kk"><b>RemoveKDigits.java — LeetCode 402</b></div></div><div class="col"><p class="xs">Java 17+</p></div></div><pre class="code"><code>/** LeetCode 402 - Remove K Digits. Greedy with an increasing stack of digits. */
+public class RemoveKDigits {
+
+    public static String removeKdigits(String num, int k) {
+        StringBuilder stack = new StringBuilder();      // used as a char stack
+        for (char digit : num.toCharArray()) {
+            while (k &gt; 0 &amp;&amp; stack.length() &gt; 0 &amp;&amp; stack.charAt(stack.length() - 1) &gt; digit) {
+                // a bigger digit before a smaller one: drop it
+                stack.deleteCharAt(stack.length() - 1);
+                k--;
+            }
+            stack.append(digit);
+        }
+        // digits were non-decreasing: trim the tail
+        while (k &gt; 0 &amp;&amp; stack.length() &gt; 0) {
+            stack.deleteCharAt(stack.length() - 1);
+            k--;
+        }
+        int start = 0;                                  // strip leading zeros
+        while (start &lt; stack.length() - 1 &amp;&amp; stack.charAt(start) == &#x27;0&#x27;) start++;
+        String result = stack.substring(start);
+        return result.isEmpty() ? &quot;0&quot; : result;
+    }
+}</code></pre></div><div class="bx" style="--bx:#e3efec"><p class="xs"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>TIME</b></span><code> O(n)</code></p></div><div class="bx" style="--bx:#f6ebda"><p class="xs"><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>SPACE</b></span><code> O(n)</code></p></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>H.</b></span><b> Common Mistakes and Edge Cases</b></h3><div class="tw"><table class="tb"><tbody><tr><td><b>Mistake</b></td><td><b>Why it bites</b></td><td><b>Fix</b></td></tr><tr><td>Wrong comparison direction</td><td>Finds next smaller when you wanted greater</td><td>Draw a 3-element example: decreasing stack ↔ pop when <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>top &lt; cur</code></span></td></tr><tr><td>Pushing values instead of</td><td>Distances / widths become</td><td>Push indices; read values through the</td></tr><tr><td>indices</td><td>impossible</td><td>array</td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>&gt;</code></span> vs <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>&gt;=</code></span> on ties</td><td>Duplicates double-count or drop subarrays</td><td>Choose strict on one side and non-strict on the other</td></tr><tr><td>No sentinel to flush the stack</td><td>Bars left on the stack never get an area</td><td>Iterate to <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>n</code></span> with height <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>0</code></span> (or <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Integer.MIN_VALUE</code></span> for minima)</td></tr><tr><td>Empty stack when reading</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>NoSuchElementException</code></span> / wrong left</td><td>Check <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>isEmpty()</code></span>, use <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>-1</code></span> as the left border</td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>peek()</code></span></td><td>border</td><td></td></tr><tr><td>Circular arrays</td><td>Last elements miss wrap-around greater values</td><td>Loop <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>2n</code></span> times, push only for the first <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>n</code></span></td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>int</code></span> overflow in <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>height *</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>width</code></span> or</td><td>Large histograms</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>long</code></span> when heights and widths are up to</td></tr><tr><td>sums</td><td></td><td>10⁵</td></tr></tbody></table></div><div class="pg" id="p91" data-n="91"></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>I.</b></span><b> Pattern Comparison</b></h3><div class="tw"><table class="tb"><tbody><tr><td><b>Question</b></td><td><b>Monotonic Stack</b></td><td><b>Normal Stack</b></td><td><b>Monotonic Deque</b></td><td><b>Two Pointers</b></td></tr><tr><td>Next greater / smaller element</td><td><b>Best</b>: O(n)</td><td>No</td><td>No</td><td>No</td></tr><tr><td>Matching brackets, expression</td><td>No</td><td><b>Best</b></td><td>No</td><td>No</td></tr><tr><td>parsing</td><td></td><td></td><td></td><td></td></tr><tr><td>Max of every sliding window of size k</td><td>No (no expiry)</td><td>No</td><td><b>Best</b></td><td>No</td></tr><tr><td>Largest rectangle / spans</td><td><b>Best</b></td><td>No</td><td>No</td><td>No</td></tr><tr><td>Water trapped between bars</td><td>Works: O(n), O(n)</td><td>No</td><td>No</td><td><b>Best</b>: O(1) space</td></tr></tbody></table></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>J.</b></span><b> Interview Tips</b></h3><div class="bx" style="--bx:#f6ebda"><div class="kk"><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>INTERVIEW</b></span></div><p class="sm"><b>State the invariant:</b> &quot;the stack is decreasing; everything on it is still waiting for a greater element.&quot; Then say what a pop <i>means.</i></p><p class="sm"><b>Justify </b><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n)</code></span> with the push-once / pop-once argument before the interviewer challenges the nested loop.</p><p class="sm"><b>For histogram problems</b> describe the borders (previous smaller, next smaller) <i>before</i> coding the stack mechanics.</p></div><div class="ls"><div class="li" data-m="•"><b>Follow-ups:</b> previous greater element (read the stack top <i>before</i> pushing), circular arrays, count visible people in a queue (LeetCode 1944), sum of subarray ranges (max contribution minus min contribution), 2D maximal rectangle.<span class="sub">end), all equal values, a single element, zeros.</span></div><div class="li" data-m="•"></b></span><b>Edge cases:</b> strictly increasing or decreasing input (stack never pops / pops once at the</div></div><h3><b>Practice Problems</b></h3><div class="tw"><table class="tb"><tbody><tr><td><b>Order</b></td><td><b>Problem</b></td><td><b>Level</b></td><td><b>Primary / secondary</b> <b>pattern</b></td><td><b>Main concept tested</b></td></tr><tr><td><b>1</b></td><td><a href="https://leetcode.com/problems/next-greater-element-i/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">496. Next Greater Element I</span></a></td><td><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Easy</b></span></td><td>Monotonic Stack / HashMap</td><td>Stack pass + lookup</td></tr><tr><td><b>2</b></td><td><a href="https://leetcode.com/problems/daily-temperatures/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">739. Daily Temperatures</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Monotonic Stack</td><td>Distance to next greater</td></tr><tr><td><b>3</b></td><td><a href="https://leetcode.com/problems/next-greater-element-ii/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">503. Next Greater Element II</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Monotonic Stack / Circular Array</td><td>Loop 2n</td></tr><tr><td><b>4</b></td><td><a href="https://leetcode.com/problems/online-stock-span/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">901. Online Stock Span</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Monotonic Stack / Design</td><td>Accumulate spans while popping</td></tr><tr><td><b>5</b></td><td><a href="https://leetcode.com/problems/remove-k-digits/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">402. Remove K Digits</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Monotonic Stack / Greedy</td><td>Drop larger digit before smaller</td></tr><tr><td><b>6</b></td><td><a href="https://leetcode.com/problems/remove-duplicate-letters/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">316. Remove Duplicate Letters</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Monotonic Stack / Greedy</td><td>Lexicographic order + last occurrence</td></tr></tbody></table></div><div class="pg" id="p92" data-n="92"></div><div class="tw"><table class="tb"><tbody><tr><td><b>Order</b></td><td><b>Problem</b></td><td><b>Level</b></td><td><b>Primary / secondary</b> <b>pattern</b></td><td><b>Main concept tested</b></td></tr><tr><td><b>7</b></td><td><a href="https://leetcode.com/problems/132-pattern/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">456. 132 Pattern</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Monotonic Stack</td><td>Maintain a candidate &#x27;2&#x27; while scanning right to left</td></tr><tr><td><b>8</b></td><td><a href="https://leetcode.com/problems/sum-of-subarray-minimums/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">907. Sum of Subarray Minimums</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Monotonic Stack / Contribution</td><td>Left × right choices with tie-breaking</td></tr><tr><td><b>9</b></td><td><a href="https://leetcode.com/problems/sum-of-subarray-ranges/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">2104. Sum of Subarray Ranges</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Monotonic Stack / Contribution</td><td>Max contribution − min contribution</td></tr><tr><td><b>10</b></td><td><a href="https://leetcode.com/problems/shortest-unsorted-continuous-subarray/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">581. Shortest Unsorted Continuous</span></a> <a href="https://leetcode.com/problems/shortest-unsorted-continuous-subarray/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">Subarray</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Monotonic Stack / Two Pointers</td><td>Find the leftmost and rightmost disorder</td></tr><tr><td><b>11</b></td><td><a href="https://leetcode.com/problems/largest-rectangle-in-histogram/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">84. Largest Rectangle in Histogram</span></a></td><td><b>Hard</b></td><td>Monotonic Stack</td><td>Previous and next smaller borders</td></tr><tr><td><b>12</b></td><td><a href="https://leetcode.com/problems/maximal-rectangle/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">85. Maximal Rectangle</span></a></td><td><b>Hard</b></td><td>Monotonic Stack / DP</td><td>Histogram per row</td></tr><tr><td><b>13</b></td><td><a href="https://leetcode.com/problems/number-of-visible-people-in-a-queue/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">1944. Number of Visible People in a</span></a> <a href="https://leetcode.com/problems/number-of-visible-people-in-a-queue/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">Queue</span></a></td><td><b>Hard</b></td><td>Monotonic Stack</td><td>Count pops plus one blocker</td></tr><tr><td><b>14</b></td><td><a href="https://leetcode.com/problems/trapping-rain-water/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">42. Trapping Rain Water</span></a></td><td><b>Hard</b></td><td>Monotonic Stack / Two Pointers</td><td>Fill water layer by layer on pop</td></tr></tbody></table></div><p class="xs">Links point to the official LeetCode problem pages. Problem numbers and levels reflect LeetCode at the time of writing; pages marked <i>premium</i> need a LeetCode subscription. Solve in the <b>Order</b> column, not by level alone.</p><div class="bx" style="--bx:#f2efe8"><div class="kk"><b>CHAPTER SUMMARY</b></div><p class="sm">Pop while the top violates the order; <b>the popped items&#x27; answer is the current</b> <b>element.</b></p><p class="sm">Decreasing stack → next greater; increasing stack → next smaller; the new top after popping is the previous smaller/greater.</p><p class="sm">Store <b>indices</b>, use a <b>sentinel</b> to flush, break ties asymmetrically, and quote the push-once / pop-once amortisation.</p><p class="sm">Contribution technique: count the subarrays where each element is the min or max.</p></div>

@@ -1,0 +1,16 @@
+<div class="pg" id="p119" data-n="119"></div><div class="kk"><b>JWT FUNDAMENTALS</b></div><div class="tw"><table class="tb"><tbody><tr><td><b>COMPONENT</b></td><td><b>ROLE</b></td></tr><tr><td><code>JwtFilter</code> (<code>OncePerRequestFilter</code>)</td><td>Extracts and validates the JWT, sets the authentication</td></tr><tr><td><code>SecurityContextHolder</code></td><td>Holds the authentication for the current request thread</td></tr></tbody></table></div><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>SECURITY CONFIGURATION SNIPPET</b></span></p><pre class="code"><code>@EnableWebSecurity
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf /&gt; csrf.disable())
+            .sessionManagement(s /&gt;
+s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth /&gt; auth
+                .requestMatchers(&quot;/api/auth/**&quot;).permitAll()
+                .anyRequest().authenticated())
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
+}</code></pre><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>TOKEN STORAGE ON THE CLIENT</b></span></p><div class="tw"><table class="tb"><tbody><tr><td><b>OPTION</b></td><td><b>NOTES</b></td></tr><tr><td><b>Local storage</b></td><td>Easy, but exposed to XSS</td></tr><tr><td><b>Session storage</b></td><td>Cleared with the tab; same XSS exposure</td></tr><tr><td><b>HttpOnly cookie</b></td><td><b>Recommended for web</b>: not readable by JavaScript</td></tr><tr><td><b>Mobile</b></td><td>Secure storage (Keychain / Keystore)</td></tr></tbody></table></div><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>ADVANTAGES</b></span></p><p>Stateless (no server‐side session), scalable, cross‐domain and cross‐service, self‐con‐ tained (claims inside the token), secure (digitally signed).</p><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>BEST PRACTICES</b></span></p><div class="ls"><div class="li" data-m="1.">Use HTTPS always.</div><div class="li" data-m="2.">Keep tokens short‐lived (use refresh tokens for longevity).</div><div class="li" data-m="3.">Use a strong secret or key and rotate it.</div><div class="li" data-m="4.">Store tokens securely on the client.</div><div class="li" data-m="5.">Validate the token on every request.</div><div class="li" data-m="6.">Handle expiration gracefully.</div></div>

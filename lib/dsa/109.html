@@ -1,0 +1,223 @@
+<div class="pg" id="p926" data-n="926"></div><div class="kk"><b>PART XII · ADVANCED ALGORITHMS</b></div><h1><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">94</span></h1><h1><b>Trie (Prefix Tree)</b></h1><p class="lead"><i>Share common prefixes in a tree so insert, lookup and prefix queries cost</i> <i>O(length).</i></p><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>A.</b></span><b> Pattern Overview</b></h3><p><b>A trie</b> stores a set of strings as a tree whose edges are characters. Every node represents the prefix spelled by the path from the root, and a flag marks nodes where a stored word ends. Lookup cost depends only on the <b>length of the query</b>, not on how many words are stored, and every prefix question becomes &quot;walk down and look at the node&quot;.</p><div class="tw"><table class="tb"><tbody><tr><td><b>Operation</b></td><td><b>Trie</b></td><td><b>HashSet of words</b></td><td><b>Sorted array + binary search</b></td></tr><tr><td>Insert word of length <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>L</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(L)</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(L)</code></span> (hashing)</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n)</code></span> shift</td></tr><tr><td>Exact lookup</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(L)</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(L)</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(L log n)</code></span></td></tr><tr><td>Any word with prefix <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>p</code></span>?</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(|p|)</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n L)</code></span> scan</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(|p| log n)</code></span></td></tr><tr><td>Count words with prefix</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(|p|)</code></span> with counters</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n L)</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(|p| log n)</code></span> (two searches)</td></tr><tr><td>Enumerate in sorted order</td><td>DFS in child order</td><td>Needs sort</td><td>Natural</td></tr><tr><td>Memory</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(total chars x</code></span> <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>alphabet)</code></span> worst</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(total chars)</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(total chars)</code></span></td></tr></tbody></table></div><div class="bx" style="--bx:#f2efe8"><div class="kk"><b>KEY IDEA</b></div><p class="sm">A trie trades memory for <b>prefix awareness</b>. If no query is about prefixes, a <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>HashSet</code></span> is simpler and smaller.</p></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>B.</b></span><b> When to Recognize This Pattern</b></h3><div class="pg" id="p927" data-n="927"></div><p><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Pattern Recognition Signals</b></span></p><div class="ls"><div class="li" data-m="•"></b></span><b>&quot;Starts with&quot;, &quot;prefix&quot;, &quot;autocomplete&quot;, &quot;dictionary of words&quot;</b> in the statement.</div><div class="li" data-m="•"><b>Many queries against a fixed word list</b> (precompute once, answer each in <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(length)</code></span>).</div><div class="li" data-m="•"><b>Grid or board search for many words at once</b> (prune the DFS with the trie; Chapter 37).</div><div class="li" data-m="•"></b></span><b>Wildcards</b> such as <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>.</code></span> in the query: DFS over the trie branches.</div><div class="li" data-m="•"><b>Streaming text with suffix matching</b> (reverse the words, walk the reversed stream).</div></div><div class="bx" style="--bx:#f2efe8"><div class="kk"><b>ONE-LINE TEST</b></div><p class="sm">Many strings sharing prefixes, queried by prefix: build a trie.</p></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>C.</b></span><b> Core Intuition with Illustrations</b></h3><div class="ls"><div class="li" data-m="1.">Structure</b></span></div></div><p>Inserting <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>app</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>apple</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>apt</code></span>, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>bat</code></span> creates a shared <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>a-p</code></span> stem. Teal nodes end a word; the blue number is how many inserted words pass through the node (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>countPrefix</code></span>).</p><figure class="fig"><img loading="lazy" src="lib/dsa/img/p927_144.webp" width="689" height="526" alt="Diagram" style="max-width:442px"></figure><p class="xs"><i><b>Figure 144.</b> The prefix </i><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>app</code></span><i> is shared by </i><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>app</code></span><i> and </i><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>apple</code></span>; <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>apt</code></span><i> branches after </i><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>ap</code></span><i>.</i></p><div class="tw"><table class="tb"><tbody><tr><td><b>Insert</b></td><td><b>New nodes</b></td><td><b>Total nodes (with root)</b></td></tr><tr><td>app</td><td>3</td><td>4</td></tr><tr><td>apple</td><td>2</td><td>6</td></tr><tr><td>apt</td><td>1</td><td>7</td></tr><tr><td>bat</td><td>3</td><td>10</td></tr></tbody></table></div><div class="pg" id="p928" data-n="928"></div><div class="ls"><div class="li" data-m="2.">Search versus startsWith</b></span></div></div><p>Both walk the same path. <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>search</code></span> also requires the end flag on the last node; <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>startsWith</code></span> only requires that the path exists.</p><div class="tw"><table class="tb"><tbody><tr><td><b>Call</b></td><td><b>Result</b></td><td><b>Why</b></td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>search(&quot;app&quot;)</code></span></td><td>true</td><td>end flag set</td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>search(&quot;ap&quot;)</code></span></td><td>false</td><td>path breaks or flag unset</td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>startsWith(&quot;ap&quot;)</code></span></td><td>true</td><td>path exists</td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>startsWith(&quot;ba&quot;)</code></span></td><td>true</td><td>path exists</td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>startsWith(&quot;bad&quot;)</code></span></td><td>false</td><td>path breaks or flag unset</td></tr></tbody></table></div><div class="ls"><div class="li" data-m="3.">Node representation</b></span></div></div><div class="tw"><table class="tb"><tbody><tr><td><b>Layout</b></td><td><b>Memory</b></td><td><b>Speed</b></td><td><b>Use when</b></td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Node[26]</code></span> array</td><td>26 pointers per node</td><td>Fastest</td><td>Lowercase letters, many words</td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>HashMap&lt;Character, Node&gt;</code></span></td><td>Only used edges, heavy objects</td><td>Slower</td><td>Large or unknown alphabet</td></tr><tr><td>Flattened <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>int[][]</code></span> / arrays</td><td>Compact, cache friendly</td><td>Fast</td><td>Competitive programming, static word set</td></tr></tbody></table></div><div class="ls"><div class="li" data-m="4.">Counters make deletion and prefix counts cheap</b></span></div></div><p>Store <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>pass</code></span> (words through the node) and <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>end</code></span> (words ending here). <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>countPrefix</code></span> reads <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>pass</code></span>; <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>erase</code></span> decrements <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>pass</code></span> along the path and can detach a node when it reaches zero, keeping the trie small.</p><div class="ls"><div class="li" data-m="5.">Wildcards</b></span></div></div><p>For <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>.</code></span> try every child. Worst case visits the whole trie, but a literal-letter query stays <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(L)</code></span>. This is Design Add and Search Words (LeetCode 211).</p><div class="bx" style="--bx:#e3efec"><div class="kk"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>CROSS-REFERENCE</b></span></div><p class="sm">For Word Search II (Chapter 37) the trie is walked together with the DFS: each grid step moves one node down, a missing child prunes the branch, and a found word&#x27;s node is cleared to avoid duplicates.</p></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>D.</b></span><b> Brute Force to Optimal Solution</b></h3><div class="tw"><table class="tb"><tbody><tr><td><b>Task</b></td><td><b>Brute force</b></td><td><b>Trie</b></td><td><b>Gain</b></td></tr><tr><td>Autocomplete top 3 per prefix</td><td>Filter all words per keystroke, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n L)</code></span></td><td>Walk one node per keystroke, then up to 3 DFS results</td><td>Independent of <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>n</code></span></td></tr><tr><td>Replace words with shortest root</td><td>Test every root per word</td><td>Walk the trie, stop at first end flag</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(L)</code></span> per word</td></tr></tbody></table></div><div class="pg" id="p929" data-n="929"></div><div class="tw"><table class="tb"><tbody><tr><td><b>Task</b></td><td><b>Brute force</b></td><td><b>Trie</b></td><td><b>Gain</b></td></tr><tr><td>Stream suffix queries</td><td>Compare every word&#x27;s suffix</td><td>Reversed-word trie walked from the newest char</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(maxLen)</code></span> per char</td></tr><tr><td>Longest word built one char at a</td><td>Check each prefix in a set</td><td>Walk only through end-flagged</td><td>One pass</td></tr><tr><td>time</td><td></td><td>nodes</td><td></td></tr></tbody></table></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>E.</b></span><b> Java Implementation</b></h3><p><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Trie with counters, erase, wildcard search, prefix listing and MapSum</b></span></p><div class="bx" style="--bx:#f2efe8"><div class="cols c2" style="--gt:289fr 28fr"><div class="col"><p class="xs"><b>Trie.java: array-based trie, counters, erase, wildcard search, MapSum</b></p><pre class="code"><code>import java.util.*;
+
+/** Ch 94: prefix tree with counts; LeetCode 208, 211, 677. */
+public class Trie {
+    private static final class Node {
+        final Node[] next = new Node[26];
+        int pass;       // words passing through this node
+        int end;        // words ending exactly here
+    }
+
+    private final Node root = new Node();
+
+    /** Inserts a lowercase word. */
+    public void insert(String word) {
+        Node cur = root;
+        for (int i = 0; i &lt; word.length(); i++) {
+            int c = word.charAt(i) - &#x27;a&#x27;;
+            if (cur.next[c] == null) cur.next[c] = new Node();
+            cur = cur.next[c];
+            cur.pass++;
+        }
+        cur.end++;
+    }
+
+    private Node find(String s) {
+        Node cur = root;
+        for (int i = 0; i &lt; s.length() &amp;&amp; cur != null; i++)
+            cur = cur.next[s.charAt(i) - &#x27;a&#x27;];
+        return cur;
+    }
+
+    public boolean search(String word) {
+        Node n = find(word);
+        return n != null &amp;&amp; n.end &gt; 0;
+    }
+
+    public boolean startsWith(String prefix) {
+        return find(prefix) != null;
+    }
+
+    /** Number of inserted words that start with prefix. */
+    public int countPrefix(String prefix) {
+        Node n = find(prefix);
+        return n == null ? 0 : n.pass;
+    }</code></pre></div><div class="col"><p class="xs">Java 17+</p></div></div></div><div class="pg" id="p930" data-n="930"></div><pre class="code"><code>    /** Removes one copy of word if present; returns whether it was. */
+    public boolean erase(String word) {
+        if (!search(word)) return false;
+        Node cur = root;
+        for (int i = 0; i &lt; word.length(); i++) {
+            int c = word.charAt(i) - &#x27;a&#x27;;
+            Node child = cur.next[c];
+            if (--child.pass == 0) {       // subtree is now empty: detach
+                cur.next[c] = null;
+                return true;
+            }
+            cur = child;
+        }
+        cur.end--;
+        return true;
+    }
+
+    /** LeetCode 211: &#x27;.&#x27; matches any single letter. */
+    public boolean searchWithDots(String pattern) {
+        return dfs(root, pattern, 0);
+    }
+
+    private boolean dfs(Node node, String p, int i) {
+        if (node == null) return false;
+        if (i == p.length()) return node.end &gt; 0;
+        char ch = p.charAt(i);
+        if (ch != &#x27;.&#x27;) return dfs(node.next[ch - &#x27;a&#x27;], p, i + 1);
+        for (Node child : node.next)
+            if (child != null &amp;&amp; dfs(child, p, i + 1)) return true;
+        return false;
+    }
+
+    /** All stored words with the given prefix in lexicographic order. */
+    public List&lt;String&gt; wordsWithPrefix(String prefix, int limit) {
+        List&lt;String&gt; out = new ArrayList&lt;&gt;();
+        Node n = find(prefix);
+        if (n != null) collect(n, new StringBuilder(prefix), out, limit);
+        return out;
+    }
+
+    private void collect(Node n, StringBuilder sb, List&lt;String&gt; out, int limit) {
+        if (out.size() &gt;= limit) return;
+        for (int k = 0; k &lt; n.end &amp;&amp; out.size() &lt; limit; k++)
+            out.add(sb.toString());
+        for (int c = 0; c &lt; 26 &amp;&amp; out.size() &lt; limit; c++) {
+            if (n.next[c] == null) continue;
+            sb.append((char) (&#x27;a&#x27; + c));
+            collect(n.next[c], sb, out, limit);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+    }
+
+    /** LeetCode 677: sum of values of keys with a given prefix. */
+    public static final class MapSum {
+        private final Map&lt;String, Integer&gt; val = new HashMap&lt;&gt;();
+        private final Map&lt;String, Integer&gt; sums = new HashMap&lt;&gt;();
+
+        public void insert(String key, int v) {
+            int delta = v - val.getOrDefault(key, 0);
+            val.put(key, v);
+            for (int i = 1; i &lt;= key.length(); i++)
+                sums.merge(key.substring(0, i), delta, Integer::sum);
+        }</code></pre><div class="pg" id="p931" data-n="931"></div><pre class="code"><code>        public int sum(String prefix) {
+            return sums.getOrDefault(prefix, 0);
+        }
+    }
+}</code></pre><p><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Applications: Replace Words, Longest Word, Search Suggestions, Stream of Characters</b></span></p><div class="bx" style="--bx:#f2efe8"><div class="cols c2" style="--gt:383fr 28fr"><div class="col"><div class="kk"><b>TrieApps.java: classic trie applications</b></div><pre class="code"><code>import java.util.*;
+
+/** Ch 94: trie applications; LeetCode 648, 720, 1268, 1032. */
+public class TrieApps {
+    private static final class Node {
+        final Node[] next = new Node[26];
+        boolean end;
+    }
+
+    private static Node build(Collection&lt;String&gt; words) {
+        Node root = new Node();
+        for (String w : words) {
+            Node cur = root;
+            for (char ch : w.toCharArray()) {
+                int c = ch - &#x27;a&#x27;;
+                if (cur.next[c] == null) cur.next[c] = new Node();
+                cur = cur.next[c];
+            }
+            cur.end = true;
+        }
+        return root;
+    }
+
+    /** LeetCode 648: replace each word by its shortest dictionary root. */
+    public static String replaceWords(List&lt;String&gt; dictionary, String sentence) {
+        Node root = build(dictionary);
+        StringBuilder out = new StringBuilder();
+        for (String word : sentence.split(&quot; &quot;)) {
+            if (out.length() &gt; 0) out.append(&#x27; &#x27;);
+            Node cur = root;
+            int len = 0;
+            boolean found = false;
+            while (len &lt; word.length() &amp;&amp; cur.next[word.charAt(len) - &#x27;a&#x27;] != null)
+                {
+                cur = cur.next[word.charAt(len++) - &#x27;a&#x27;];
+                if (cur.end) { found = true; break; }
+            }
+            out.append(found ? word.substring(0, len) : word);
+        }
+        return out.toString();
+    }
+
+    /** LeetCode 720: longest word buildable one letter at a time; ties smallest. */
+    public static String longestWord(String[] words) {
+        Node root = build(Arrays.asList(words));
+        String best = &quot;&quot;;
+        Deque&lt;Object[]&gt; stack = new ArrayDeque&lt;&gt;();
+        stack.push(new Object[]{root, &quot;&quot;});
+        while (!stack.isEmpty()) {
+            Object[] top = stack.pop();
+            Node n = (Node) top[0];
+            String s = (String) top[1];</code></pre></div><div class="col"><p class="xs">Java 17+</p></div></div></div><div class="pg" id="p932" data-n="932"></div><pre class="code"><code>            boolean longer = s.length() &gt; best.length();
+            boolean tie = s.length() == best.length() &amp;&amp; s.compareTo(best) &lt; 0;
+            if (longer || tie) best = s;
+            for (int c = 0; c &lt; 26; c++) {
+                Node child = n.next[c];
+                if (child != null &amp;&amp; child.end)
+                    stack.push(new Object[]{child, s + (char) (&#x27;a&#x27; + c)});
+            }
+        }
+        return best;
+    }
+
+    /** LeetCode 1268: up to three lexicographic suggestions per typed prefix. */
+    public static List&lt;List&lt;String&gt;&gt; suggestedProducts(String[] products,
+            String search) {
+        String[] sorted = products.clone();
+        Arrays.sort(sorted);
+        List&lt;List&lt;String&gt;&gt; out = new ArrayList&lt;&gt;();
+        int lo = 0;
+        for (int len = 1; len &lt;= search.length(); len++) {
+            String prefix = search.substring(0, len);
+            while (lo &lt; sorted.length &amp;&amp; sorted[lo].compareTo(prefix) &lt; 0) lo++;
+            List&lt;String&gt; row = new ArrayList&lt;&gt;(3);
+            for (int i = lo; i &lt; sorted.length &amp;&amp; row.size() &lt; 3
+                    &amp;&amp; sorted[i].startsWith(prefix); i++) row.add(sorted[i]);
+            out.add(row);
+        }
+        return out;
+    }
+
+    /** LeetCode 1032: is any word a suffix of the stream so far? Reversed trie. */
+    public static final class StreamChecker {
+        private final Node root = new Node();
+        private final StringBuilder stream = new StringBuilder();
+        private int maxLen;
+
+        public StreamChecker(String[] words) {
+            for (String w : words) {
+                maxLen = Math.max(maxLen, w.length());
+                Node cur = root;
+                for (int i = w.length() - 1; i &gt;= 0; i--) {
+                    int c = w.charAt(i) - &#x27;a&#x27;;
+                    if (cur.next[c] == null) cur.next[c] = new Node();
+                    cur = cur.next[c];
+                }
+                cur.end = true;
+            }
+        }
+
+        public boolean query(char letter) {
+            stream.append(letter);
+            Node cur = root;
+            for (int i = stream.length() - 1, k = 0; i &gt;= 0 &amp;&amp; k &lt; maxLen; i--, k++)
+                {
+                cur = cur.next[stream.charAt(i) - &#x27;a&#x27;];
+                if (cur == null) return false;
+                if (cur.end) return true;
+            }
+            return false;
+        }
+    }
+}</code></pre><div class="pg" id="p933" data-n="933"></div><div class="cols c2" style="--gt:277fr 161fr"><div class="col"><div class="bx" style="--bx:#e3efec"><p class="xs"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>TIME</b></span><code> O(L) per operation</code></p></div><div class="bx" style="--bx:#f6ebda"><p class="xs"><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>SPACE</b></span><code> O(total chars x 26)</code></p></div></div><div class="col"><p class="xs"><i>Each insert, search or prefix query walks at</i> <i>most </i><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>L</code></span><i> nodes. The array layout costs 26</i> <i>references per node (about 100 bytes on a</i> <i>64-bit JVM with compressed oops).</i></p></div></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>F.</b></span><b> Detailed Dry Run</b></h3><p><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>searchWithDots(&quot;a.t&quot;)</code></span> on <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>{app, apple, apt, bat}</code></span>: root has child <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>a</code></span>, move there. The pattern char <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>.</code></span> tries each child of <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>a</code></span>: only <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>p</code></span>. From <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>p</code></span> the next pattern char is <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>t</code></span>; <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>p</code></span> has children <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>p</code></span> and <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>t</code></span>, so only <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>t</code></span> matches, and its end flag is set (<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>apt</code></span>). Result true.</p><pre class="code"><code>suggestedProducts([&quot;mobile&quot;, &quot;mouse&quot;, &quot;moneypot&quot;, &quot;monitor&quot;, &quot;mousepad&quot;], &quot;mouse&quot;):</code></pre><p>sorted products are <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>mobile, moneypot, monitor, mouse, mousepad</code></span>. Typing <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>m</code></span> gives the first three; <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>mo</code></span> the same three; <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>mou</code></span> gives <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>mouse, mousepad</code></span>; <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>mous</code></span> and <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>mouse</code></span> give the same two. Walk one trie node per keystroke and collect up to 3 words in lexicographic DFS order.</p><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>G.</b></span><b> Variations of the Pattern</b></h3><div class="ls"><div class="li" data-m="1.">Prefix counting and deletion</b></span></div></div><p>Counters per node give <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>countPrefix</code></span> and make <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>erase</code></span> correct when the same word was inserted more than once (Implement Trie II).</p><div class="ls"><div class="li" data-m="2.">MapSum</b></span></div></div><p>Store the sum of values under each prefix. When a key is overwritten, add the <b>difference</b> along the path (LeetCode 677).</p><div class="ls"><div class="li" data-m="3.">Compressed (radix) tries</b></span></div></div><p>Merge single-child chains into one edge labelled with a string. Saves memory; used in routers and databases. Rarely coded in interviews, worth naming.</p><div class="ls"><div class="li" data-m="4.">Suffix structures</b></span></div></div><p>A trie of all suffixes is a suffix trie; the compressed form is a suffix tree, and the sorted array of suffixes is a suffix array. All answer substring queries but need much more memory than the dictionary trie.</p><div class="ls"><div class="li" data-m="5.">Aho-Corasick</b></span></div></div><p>A trie plus failure links (the KMP idea on a tree) matches many patterns in one pass over the text. Mention it when the question is &quot;find any of these 10 000 words in a document&quot;.</p><div class="pg" id="p934" data-n="934"></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>H.</b></span><b> Common Mistakes and Edge Cases</b></h3><div class="tw"><table class="tb"><tbody><tr><td><b>Mistake</b></td><td><b>Why it bites</b></td><td><b>Fix</b></td></tr><tr><td>Treating <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>startsWith</code></span> like <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>search</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>search(&quot;app&quot;)</code></span> is false if only <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>apple</code></span> was inserted</td><td>Keep a separate end flag</td></tr><tr><td>Forgetting to reset a child on <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>erase</code></span></td><td>Memory retained, wrong prefix counts</td><td>Decrement counters, null out empty children</td></tr><tr><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Node[26]</code></span> for non-lowercase input</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>ArrayIndexOutOfBounds</code></span></td><td>Validate alphabet or switch to a map</td></tr><tr><td>Wildcard DFS without bounding</td><td>Exponential on <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>....</code></span></td><td>Prune at the first missing child; the trie</td></tr><tr><td>recursion</td><td></td><td>depth bounds work</td></tr><tr><td>Rebuilding the trie per query</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(n L)</code></span> per call</td><td>Build once in the constructor</td></tr><tr><td>Storing whole strings in each node</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(L^2)</code></span> memory</td><td>Store a flag or the word only at the end node</td></tr><tr><td>Duplicate results in Word Search II</td><td>Same word found twice</td><td>Clear the word at the node after recording it</td></tr><tr><td>Empty-string queries</td><td>Root has no end flag</td><td>Define the semantics, usually <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>startsWith(&quot;&quot;)</code></span> is true</td></tr></tbody></table></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>I.</b></span><b> Pattern Comparison</b></h3><div class="tw"><table class="tb"><tbody><tr><td><b>Trie</b></td><td><b>HashSet</b></td><td><b>Sorted array</b></td><td><b>Bloom filter</b></td></tr><tr><td>Exact match <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(L)</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(L)</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(L log n)</code></span></td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(k)</code></span>, false positives</td></tr><tr><td>Prefix match <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(L)</code></span></td><td>No</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(L log n)</code></span></td><td>No</td></tr><tr><td>Memory High</td><td>Low</td><td>Low</td><td>Very low</td></tr><tr><td>Ordered output Yes</td><td>No</td><td>Yes</td><td>No</td></tr></tbody></table></div><h3><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>J.</b></span><b> Interview Tips</b></h3><div class="bx" style="--bx:#f6ebda"><div class="kk"><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>INTERVIEW</b></span></div><p class="sm"><b>Write </b><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>Node</code></span><b> with </b><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>children[26]</code></span><b> and a boolean first,</b> then add counters only when asked.</p><p class="sm"><b>Say the cost aloud:</b> &quot;<span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(L)</code></span> per operation, <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(total characters)</code></span> memory&quot;.</p><p class="sm"><b>For grid word search</b> say the trie replaces re-scanning the board for every word.</p></div><div class="ls"><div class="li" data-m="•"><b>Follow-ups:</b> delete a word; top-k suggestions by frequency (store counts and a heap or sorted list per node); Unicode alphabet; persist to disk.</div><div class="li" data-m="•"></b></span><b>Edge cases:</b> empty word, duplicate inserts, prefix equal to a word, words that are</div></div><p>prefixes of each other.</p><div class="pg" id="p935" data-n="935"></div><h3><b>Practice Problems</b></h3><div class="tw"><table class="tb"><tbody><tr><td><b>Order</b></td><td><b>Problem</b></td><td><b>Level</b></td><td><b>Primary / secondary</b> <b>pattern</b></td><td><b>Main concept tested</b></td></tr><tr><td><b>1</b></td><td><a href="https://leetcode.com/problems/longest-common-prefix/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">14. Longest Common Prefix</span></a></td><td><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))"><b>Easy</b></span></td><td>Trie Walk / Warm-up</td><td>Single-child path</td></tr><tr><td><b>2</b></td><td><a href="https://leetcode.com/problems/implement-trie-prefix-tree/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">208. Implement Trie (Prefix Tree)</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Core Trie / Insert / Search</td><td>End flag</td></tr><tr><td><b>3</b></td><td><a href="https://leetcode.com/problems/replace-words/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">648. Replace Words</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Shortest Root / Prefix Walk</td><td>Stop at first end</td></tr><tr><td><b>4</b></td><td><a href="https://leetcode.com/problems/map-sum-pairs/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">677. Map Sum Pairs</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Counter on Path / Prefix Aggregation</td><td>Delta on overwrite</td></tr><tr><td><b>5</b></td><td><a href="https://leetcode.com/problems/longest-word-in-dictionary/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">720. Longest Word in Dictionary</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>End-Flag Chain / Trie / Sorting</td><td>Build one char at a time</td></tr><tr><td><b>6</b></td><td><a href="https://leetcode.com/problems/search-suggestions-system/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">1268. Search Suggestions System</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Prefix Walk + DFS / Autocomplete</td><td>Lexicographic top 3</td></tr><tr><td><b>7</b></td><td><a href="https://leetcode.com/problems/design-add-and-search-words-data-structure/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">211. Design Add and Search Words</span></a> <a href="https://leetcode.com/problems/design-add-and-search-words-data-structure/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">Data Structure</span></a></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Wildcard DFS / Trie DFS</td><td><span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>.</code></span> tries all</td></tr><tr><td><b>8</b></td><td><a href="https://leetcode.com/problems/implement-trie-ii-prefix-tree/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">1804. Implement Trie II (Prefix Tree)</span></a> <span style="color:color-mix(in srgb,#b45309 78%,var(--fg))">(premium)</span></td><td><span style="color:color-mix(in srgb,#b45309 78%,var(--fg))"><b>Medium</b></span></td><td>Counters + Erase / Trie Counting</td><td>pass / end</td></tr><tr><td><b>9</b></td><td><a href="https://leetcode.com/problems/word-search-ii/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">212. Word Search II</span></a></td><td><b>Hard</b></td><td>Trie + Grid DFS / Backtracking</td><td>Prune by node</td></tr><tr><td><b>10</b></td><td><a href="https://leetcode.com/problems/stream-of-characters/" target="_blank" rel="noopener"><span style="color:color-mix(in srgb,#0f766e 78%,var(--fg))">1032. Stream of Characters</span></a></td><td><b>Hard</b></td><td>Reversed Trie / Suffix Match</td><td>Walk from newest</td></tr></tbody></table></div><p class="xs">Links point to the official LeetCode problem pages. Problem numbers and levels reflect LeetCode at the time of writing; pages marked <i>premium</i> need a LeetCode subscription. Solve in the <b>Order</b> column, not by level alone.</p><div class="bx" style="--bx:#f2efe8"><div class="kk"><b>CHAPTER SUMMARY</b></div><p class="sm"><b>A trie shares common prefixes,</b> so insert, search and prefix queries cost <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>O(length)</code></span> regardless of dictionary size.</p><p class="sm"><b>Two fields do most of the work:</b> a child table and an end flag; add <span style="color:color-mix(in srgb,#0b5c56 78%,var(--fg))"><code>pass</code></span> counters for prefix counts and deletion.</p><p class="sm"><b>Wildcards and autocomplete are DFS over the trie</b> below the node reached by the literal prefix.</p><p class="sm"><b>Pair a trie with another traversal</b> (grid DFS, text stream) to prune work early.</p><p class="sm"><b>Pay attention to memory:</b> use arrays for a small alphabet, maps for a large one, or compress chains.</p></div>

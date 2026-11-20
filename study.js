@@ -386,6 +386,7 @@
     catch (e) { msg.textContent = " Couldn't download everything. Check your connection."; btn.disabled = false; }
   }
 
+  window.sxHl = hl;
   window.studyRoute = route;
   if (tabNow() === "study") route();
   window.studyStats = () => IX ? { guides: allGuides(), done: totalDone() } : null;

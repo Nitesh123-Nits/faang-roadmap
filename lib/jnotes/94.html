@@ -1,0 +1,15 @@
+<div class="pg" id="p110" data-n="110"></div><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>BACKOFF STRATEGIES</b></span></p><div class="tw"><table class="tb"><tbody><tr><td><b>STRATEGY</b></td><td><b>CONFIG</b></td><td><b>BEHAVIOUR</b></td></tr><tr><td><b>Fixed delay</b></td><td><code>@Backoff(delay = 2000)</code></td><td>Wait 2 s between attempts</td></tr><tr><td><b>Exponential</b></td><td><code>@Backoff(delay = 1000, multiplier = 2)</code></td><td>Waits 1 s, 2 s, 4 s, 8 s ...</td></tr><tr><td><b>Exponential +</b></td><td><code>@Backoff(delay = 1000, multiplier = 2,</code></td><td>Each wait is a random time</td></tr><tr><td><b>jitter</b></td><td><code>random = true, maxDelay = 30000)</code></td><td>inside the calculated range</td></tr></tbody></table></div><pre class="code"><code>@Retryable(
+    retryFor = RuntimeException.class,
+    maxAttempts = 5,
+    backoff = @Backoff(delay = 1000, multiplier = 2, random = true, maxDelay =
+30000))
+public void callDownstream() { /* call downstream service // }</code></pre><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>RETRY ONLY SPECIFIC EXCEPTIONS</b></span></p><pre class="code"><code>@Retryable(
+    retryFor = { SocketTimeoutException.class, ConnectException.class },
+    noRetryFor = { IllegalArgumentException.class, ValidationException.class },
+    maxAttempts = 4)</code></pre><div class="tw"><table class="tb"><tbody><tr><td><b>EXCEPTION</b></td><td><b>RETRY?</b></td></tr><tr><td><code>TimeoutException</code></td><td>Yes</td></tr><tr><td><code>ConnectException</code></td><td>Yes</td></tr><tr><td><code>IllegalArgumentException</code></td><td>No</td></tr><tr><td><code>ValidationException</code></td><td>No</td></tr></tbody></table></div><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>RECOVERY METHOD (@RECOVER)</b></span></p><p>Called after all retries are exhausted. It must have the same return type, take the ex‐ ception as its first parameter, and be in the same class.</p><pre class="code"><code>@Retryable(retryFor = RuntimeException.class, maxAttempts = 3)
+public String charge() { throw new RuntimeException(&quot;Payment Gateway Down&quot;); }
+
+@Recover
+public String recover(RuntimeException ex) {
+    return &quot;Fallback Response&quot;;
+}</code></pre><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>ACCESS THE RETRY COUNT</b></span></p><pre class="code"><code>int count = RetrySynchronizationManager.getContext().getRetryCount();</code></pre>

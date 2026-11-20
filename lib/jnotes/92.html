@@ -1,0 +1,14 @@
+<div class="pg" id="p108" data-n="108"></div><div class="ls"><div class="li" data-m="3.">(OPTIONAL) CONFIGURE THE EXECUTOR</b></span></div></div><pre class="code"><code>@Configuration
+public class AsyncConfig implements AsyncConfigurer {
+
+    @Bean(name = &quot;taskExecutor&quot;)
+    public ThreadPoolTaskExecutor taskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(5);
+        executor.setMaxPoolSize(20);
+        executor.setQueueCapacity(100);
+        executor.setThreadNamePrefix(&quot;async-exec-&quot;);
+        executor.initialize();
+        return executor;
+    }
+}</code></pre><h3>The bean named <code>taskExecutor</code> is picked up by <code>@Async</code> automatically. Use</h3><h3><code>@Async(&quot;otherExecutor&quot;)</code> to choose a specific executor.</h3><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>IMPORTANT</b></span></p><h3><code>@Async</code> works through a <b>Spring AOP proxy</b>. Calls within the same class (self‐invoc‐ ation) bypass the proxy, so <code>@Async</code> will not be applied.</h3><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>BEST PRACTICES</b></span></p><div class="ls"><div class="li" data-m="•"></span>Use for I/O‐bound or time‐consuming tasks: emails, file processing, third‐party</div></div><h3>calls.</h3><div class="ls"><div class="li" data-m="•"></b></span><b>Handle exceptions inside </b><code>@Async</code><b> methods.</b> They will not propagate to the caller</div></div><h3>(use <code>AsyncUncaughtExceptionHandler</code> for <code>void</code> methods).</h3><div class="ls"><div class="li" data-m="•"></span>Avoid returning <code>void</code> if you need to know the result; return <code>CompletableFuture</code> .</div><div class="li" data-m="•"></span>Tune the pool size to the workload; too many async tasks exhaust system re‐</div></div><h3>sources.</h3><div class="ls"><div class="li" data-m="•"></span>Use MDC if you need to pass logging context to async threads.</div><div class="li" data-m="•"></span>For complex workflows, consider Spring Events, message queues or Project Re‐</div></div><h3>actor.</h3>

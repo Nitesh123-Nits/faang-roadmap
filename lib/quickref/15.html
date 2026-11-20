@@ -1,0 +1,15 @@
+<div class="pg" id="p26" data-n="26"></div><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>CHAPTER 05</b></span></div><h1>Comments, Constants and the Final Checklist</h1><h3><b>Comments explain why, never what</b></h3><p>Noise:</p><pre class="code"><code>// increment counter
+counter++;
+
+// get user by id
+User getUserById(long id) { ... }
+
+// old logic
+// if (retry &gt; 5) return;</code></pre><p>Adds knowledge the code can&#x27;t:</p><pre class="code"><code>// Gateway rejects payloads above 1 MB,
+// so split first
+List&lt;Chunk&gt; chunks = splitByMaxSize(config);
+
+// Overdue 5 days after due date (contract §4.2)
+return today.isAfter(dueDate.plusDays(5));
+
+// TODO(BKP-214): drop after v2 API migration</code></pre><p class="sm"><b>Explaining why: trade-off, workaround, constraint</b> It repeats the method name or signature</p>

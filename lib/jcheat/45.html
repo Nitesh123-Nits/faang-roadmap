@@ -1,0 +1,69 @@
+<div class="pg" id="p48" data-n="48"></div><div class="bx" style="--bx:#f0ede7"><div class="cols c4 tab" style="--gt:45fr 42fr 46fr 73fr"><div class="col"><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">IDEMPOTENT</span></div></div><div class="col"><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">CONSUMERS</span></div></div><div class="col"><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">(MANDATORY</span></div></div><div class="col"><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">FOR</span> <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">AT‐LEAST‐ONCE)</span></div></div></div><p class="sm">Upsert by business key /<span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>INSERT</code></span><code> </code><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>…</code></span><code> </code><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>ON</code></span><code> </code><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>CONFLICT</code></span><code> </code><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>DO</code></span><code> </code><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>NOTHING</code></span></p><div class="ls"><div class="li" data-m="•">Track processed</div></div><p>in the same DB transaction as the effect (inbox table).</p><pre class="code"><code>eventId
+                 version &lt;= stored version</code></pre><div class="ls"><div class="li" data-m="•">Version checks: ignore events with</div></div><p>(also fixes out‐of‐order replays).</p></div><div class="bx" style="--bx:#b4532a"><h2><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">6.5</span>Spring Kafka: Producer and Consumer</h2></div><div class="cols c2 tab" style="--gt:153fr 71fr"><div class="col"><div class="kk"><b>JAVA — PRODUCER (KEY = AGGREGATE ID)</b></div></div><div class="col"><div class="kk"><b>JAVA — CONSUMER</b></div></div></div><pre class="code"><code>@KafkaListener(topics = &quot;orders.v1&quot;,
+               groupId = &quot;billing&quot;,
+               concurrency = &quot;3&quot;)
+void onOrder(OrderEvent e,
+             @Header(KafkaHeaders.RECEIVED_KEY) String key,
+             @Header(KafkaHeaders.OFFSET) long offset) {
+  if (inbox.alreadyProcessed(e.id())) return;
+  billing.handle(e);
+}
+// ≤partitions
+                  // dedup
+// same TX as inbox insert</code></pre><pre class="code"><code>@Component
+class OrderEventPublisher {
+  private final KafkaTemplate&lt;String, OrderEvent&gt; kafka;
+  OrderEventPublisher(KafkaTemplate&lt;String, OrderEvent&gt; k)
+{
+    this.kafka = k;
+  }
+  CompletableFuture&lt;SendResult&lt;String, OrderEvent&gt;&gt;
+      publish(OrderEvent e) {
+    var rec = new ProducerRecord&lt;&gt;(&quot;orders.v1&quot;,
+        e.orderId().toString(), e);
+                                                                spring.kafka.consumer:
+        e.type().getBytes(UTF_8));
+                                                                  auto-offset-reset: earliest
+      if (ex != null) log.error(&quot;publish failed {}&quot;, e.id()
+                                                                spring.kafka.listener.ack-mode: record</code></pre><pre class="code"><code>    rec.headers().add(&quot;eventType&quot;,
+                                                                  group-id: billing
+    return kafka.send(rec).whenComplete((r, ex) -&gt; {
+                                                                  max-poll-records: 100
+, ex);
+    });
+  }
+}</code></pre><div class="bx" style="--bx:#faf8f3"><div class="kk">SERIALIZATION</div><p>Use explicit schemas (Avro / Protobuf + Schema Registry) for shared topics. With JSON, pin the target type via headers or type mappings and never allow arbitrary class names from headers (<span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>spring.json.trusted.packages</code></span>should not be<span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>*</code></span>). Spring Kafka&#x27;s Jackson‐based</p><p>serializer class names changed with the Jackson 3 move in Spring Kafka 4 (Boot 4) — check your version&#x27;s docs.</p></div><div class="bx" style="--bx:#b4532a"><h2><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">6.6</span>Error Handling: Retries, Retry Topics and DLT</h2></div><div class="cols c2 tab" style="--gt:121fr 141fr"><div class="col"><div class="kk"><b>JAVA — BLOCKING RETRIES + DLT</b></div></div><div class="col"><div class="kk"><b>JAVA — NON-BLOCKING RETRY TOPICS</b></div></div></div><pre class="code"><code>@Bean
+DefaultErrorHandler errorHandler(KafkaTemplate&lt;Object, Obje
+ct&gt; t) {
+  var recoverer = new DeadLetterPublishingRecoverer(t,
+      (rec, ex) -&gt; new TopicPartition(rec.topic() + &quot;.DLT&quot;,
+                                      rec.partition()));
+  var backoff = new ExponentialBackOffWithMaxRetries( );
+  backoff.setInitialInterval 500
+  backoff.setMultiplier 2.0
+  var h = new DefaultErrorHandler(recoverer, backoff);
+  h.addNotRetryableExceptions(ValidationException.class,
+      DeserializationException.class);
+now
+  return h;
+bean
+}
+    );
+);</code></pre><pre class="code"><code>@DltHandler
+void dlt(PaymentEvent e,
+alerts.raise(&quot;payment DLT&quot;, e.id(), err);</code></pre><pre class="code"><code>                                                   @RetryableTopic(attempts = &quot;4&quot;,
+                                                       backoff = @Backoff(delay = 1000, multiplier = 3),
+                                                       dltTopicSuffix = &quot;.DLT&quot;,
+                                                       exclude = ValidationException.class)
+                                                   @KafkaListener(topics = &quot;payments.v1&quot;, groupId = &quot;ledger&quot;)
+                                                   void handle(PaymentEvent e) { ledger.apply(e); }
+                                        3
+               (
+          (
+                                                            @Header(KafkaHeaders.EXCEPTION_MESSAGE) String
+                                                   err) {
+                            // poison →DLT
+                                                   }
+  // Boot wires a single DefaultErrorHandler
+
+// into the auto-configured container factory</code></pre><div class="tw"><table class="tb"><thead class="dk"><tr><th></th><th><b>Blocking retries (</b><code> DefaultErrorHandler</code> )</th><th><b>Non-blocking (</b><code> @RetryableTopic</code> )</th></tr></thead><tbody><tr><td>Ordering</td><td>preserved (partition waits)</td><td>broken for that key (record moves to retry topic)</td></tr><tr><td>Throughput during failure</td><td>partition stalls</td><td>other records keep flowing</td></tr><tr><td>Use when</td><td>ordering matters, failures short</td><td>independent events, long backoffs (minutes)</td></tr></tbody></table></div><div class="bx" style="--bx:#faf8f3"><div class="cols c2 tab" style="--gt:45fr 60fr"><div class="col"><div class="kk">PRODUCTION</div></div><div class="col"><div class="kk">CONSIDERATIONS</div></div></div><div class="ls"><div class="li" data-m="•">Poison pills: deserialization failures must not loop forever — wrap with</div></div><p>, send to DLT.</p><pre class="code"><code>ErrorHandlingDeserializer</code></pre><div class="ls"><div class="li" data-m="•">DLT is not a black hole: alert on it, keep headers (original topic/partition/offset, exception), build a replay tool.</div><div class="li" data-m="•">Distinguish transient (retry) from permanent (DLT now) errors.</div></div></div>

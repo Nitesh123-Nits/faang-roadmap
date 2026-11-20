@@ -1,0 +1,37 @@
+<div class="pg" id="p57" data-n="57"></div><div class="bx" style="--bx:#b4532a"><h2>Spring Data Redis</h2></div><div class="cols c2 tab" style="--gt:66fr 151fr"><div class="col"><div class="kk"><b>APPLICATION.YML</b></div></div><div class="col"><div class="kk"><b>JAVA — PER-CACHE TTLS + JSON VALUES</b></div></div></div><pre class="code"><code>    .withCacheConfiguration(&quot;product&quot;, RedisCacheConfigurat
+ion
+                                                         (
+(</code></pre><pre class="code"><code>spring:
+  data.redis:
+    host: redis
+    port: 6379
+    password: ${REDIS_PASSWORD}
+    ssl.enabled: true
+    timeout: 500ms
+    lettuce.pool:
+      max-active: 32
+  cache:
+    type: redis
+    redis:
+      time-to-live: 10m
+      key-prefix: &quot;catalog:v3:&quot;
+      cache-null-values: false
+                                                                        .serializeValuesWith(json));
+                                                                }
+                                                                // StringRedisTemplate for raw ops:
+                                                                redis.opsForValue().increment(&quot;views:&quot; + id);
+                                                                redis.opsForZSet().add(&quot;leaderboard&quot;, userId, score);</code></pre><pre class="code"><code>                              @Bean
+                              RedisCacheManagerBuilderCustomizer caches() {
+                                var json = RedisSerializationContext.SerializationPair
+                                    .fromSerializer(new GenericJackson2JsonRedisSerialize
+                              r());
+                                return b -&gt; b
+# command timeout
+# needs commons-pool2
+                                      .defaultCacheConfig().entryTtl(Duration.ofMinutes 1
+                              0))
+                                      .serializeValuesWith(json))
+                                  .withCacheConfiguration(&quot;price&quot;, RedisCacheConfiguratio
+                              n
+                                      .defaultCacheConfig().entryTtl(Duration.ofSeconds 3
+                              0))</code></pre><div class="bx" style="--bx:#faf8f3"><div class="cols c2 tab" style="--gt:32fr 34fr"><div class="col"><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">COMMON</span></div></div><div class="col"><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">MISTAKES</span></div></div></div><div class="ls"><div class="li" data-m="•">Default</div></div><pre class="code"><code>RedisTemplate</code></pre><p>uses JDK serialization →unreadable binary keys and the deserialization risks from Chapter 1. Configure</p><p>String/JSON serializers.</p><div class="ls"><div class="li" data-m="•">No command timeout →a Redis stall blocks request threads indefinitely.</div><div class="li" data-m="•">Treating Redis as the system of record for money/inventory without AOF + replicas + a recovery plan.</div></div></div><div class="bx" style="--bx:#b4532a"><h2><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">7.13</span>Monitoring Redis</h2></div><div class="tw"><table class="tb"><thead class="dk"><tr><th><b>Command / metric</b></th><th><b>Look for</b></th></tr></thead><tbody><tr><td><code>INFO stats</code> →<code>keyspace_hits</code>,<code> keyspace_misses</code></td><td>hit ratio = hits / (hits + misses); falling ratio = wrong TTLs or key churn</td></tr><tr><td><code>INFO stats</code> →<code>evicted_keys</code>,<code> expired_keys</code></td><td>evictions in a cache = memory pressure</td></tr><tr><td><code>INFO memory</code> →<code>used_memory</code>,<code> maxmemory</code>, <code>mem_fragmentation_ratio</code></td><td>headroom, fragmentation</td></tr><tr><td><code>INFO clients</code> →<code>connected_clients</code>,<code> blocked_clients</code></td><td>connection leaks, blocking pops</td></tr><tr><td><code>INFO replication</code> →<code>master_repl_offset</code> vs replica offsets</td><td>replica lag</td></tr><tr><td><code>SLOWLOG GET 20</code></td><td>commands above <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>slowlog-log-slower-than</code></span> (μs)</td></tr><tr><td><code>LATENCY DOCTOR</code></td><td>latency spikes &amp; causes (fork, AOF fsync)</td></tr><tr><td><code>redis-cli --bigkeys</code> /<code> --memkeys</code></td><td>largest keys (uses SCAN; run off‐peak)</td></tr><tr><td><code>redis-cli --hotkeys</code></td><td>most accessed keys (requires an LFU policy)</td></tr><tr><td><code>MEMORY USAGE &lt;key&gt;</code></td><td>bytes for one key</td></tr><tr><td><code>redis-cli --latency -h host</code></td><td>client‐observed round‐trip</td></tr></tbody></table></div><p>References:<a href="https://redis.io/docs/latest/commands/" target="_blank" rel="noopener">Redis</a><a href="https://redis.io/docs/latest/commands/" target="_blank" rel="noopener"> </a><a href="https://redis.io/docs/latest/commands/" target="_blank" rel="noopener">command reference</a></p><p class="sm">·</p><p><a href="https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/" target="_blank" rel="noopener">Redis</a><a href="https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/" target="_blank" rel="noopener"> </a><a href="https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/" target="_blank" rel="noopener">persistence</a></p><p class="sm">·</p><p><a href="https://docs.spring.io/spring-data/redis/reference/" target="_blank" rel="noopener">Spring Data</a><a href="https://docs.spring.io/spring-data/redis/reference/" target="_blank" rel="noopener"> </a><a href="https://docs.spring.io/spring-data/redis/reference/" target="_blank" rel="noopener">Redis</a></p><div class="ls"><div class="li" data-m="•"><a href="https://valkey.io/" target="_blank" rel="noopener">Valkey</a></div></div>

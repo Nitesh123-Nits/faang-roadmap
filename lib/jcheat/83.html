@@ -1,0 +1,66 @@
+<div class="pg" id="p88" data-n="88"></div><div class="bx" style="--bx:#b4532a"><h2>LLD Patterns for Java Developers</h2></div><div class="cols c2 tab" style="--gt:228fr 168fr"><div class="col"><div class="kk"><b>STRATEGY — SWAP ALGORITHMS (SPRING INJECTS ALL IMPLS)</b></div></div><div class="col"><div class="kk"><b>DECORATOR — ADD BEHAVIOUR BY WRAPPING</b></div></div></div><pre class="code"><code>}</code></pre><pre class="code"><code>class CachingRates implements RateProvider {
+  private final RateProvider delegate;
+  private final Cache&lt;String, BigDecimal&gt; cache;
+  public BigDecimal rate(String pair) {
+    return cache.get(pair, delegate::rate);
+  }
+    // also: RetryingRates, MeteredRates — compose freely</code></pre><pre class="code"><code>interface PricingStrategy { Money price(Cart c); boolean
+supports(Tier t); }
+@Component class GoldPricing implements PricingStrategy {
+… }
+@Component class DefaultPricing implements PricingStrategy
+{ … }
+                                                                }
+@Service class PricingService {
+  private final List&lt;PricingStrategy&gt; strategies;
+  PricingService(List&lt;PricingStrategy&gt; s) {
+                                                                class LegacyCrmAdapter implements CustomerDirectory {
+  Money price(Cart c) {
+                                                                  public Optional&lt;Customer&gt; find(CustomerId id) {
+r()))
+                                                                                   .map(CustomerMapper::toDomain);
+  }
+                                                                }</code></pre><div class="kk"><b>ADAPTER — TRANSLATE A FOREIGN INTERFACE</b></div><pre class="code"><code>this.strategies = s; }
+                                                                  private final LegacyCrmClient crm;
+    return strategies.stream().filter(s -&gt; s.supports(c.tie
+                                                                    return Optional.ofNullable(crm.lookupCust(id.value()))
+        .findFirst().orElseThrow().price(c);
+                                                                  }
+                                                                    // anti-corruption layer in DDD terms</code></pre><div class="kk"><b>STATE — BEHAVIOUR DEPENDS ON LIFECYCLE STATE</b></div><div class="kk"><b>FACTORY — CREATION BEHIND ONE METHOD</b></div><pre class="code"><code>}</code></pre><pre class="code"><code>                                                                enum OrderState {
+                                                                                                { return PAID; } },
+                                                                                                { return SHIPPED; }
+    case RAZORPAY -&gt; new RazorpayClient(cfg);
+                                                                  SHIPPED, REFUNDING, CANCELLED;
+                                                                                      { throw illegal(&quot;pay&quot;); }
+                                                                                      { throw illegal(&quot;ship&quot;); }
+                                                                  OrderState cancel() { throw illegal(&quot;cancel&quot;); }
+                                                                  IllegalStateException illegal(String a) {
+var req = HttpRequest.newBuilder(URI.create(url))
+    .timeout(Duration.ofSeconds 2
+    .header(&quot;Idempotency-Key&quot;, key)
+    .POST(BodyPublishers.ofString(json)).build();
+// own classes: Lombok @Builder or a static nested Builder
+
+                                                                interface Check { Optional&lt;Rejection&gt; apply(Txn t); }
+                                                                List&lt;Check&gt; chain = List.of(new Blocklist(), new VelocityLi
+publisher.publishEvent(new OrderPlaced(order.id()));
+                                                                                            new AmountLimit(), new FraudSco
+@TransactionalEventListener(phase = AFTER_COMMIT)
+void on(OrderPlaced e) { emails.sendConfirmation(e.id()); }
+                                                                c.apply(txn))
+                                                                    .flatMap(Optional::stream).findFirst();
+                                                                // Servlet filters &amp; Spring Security are chains too</code></pre><pre class="code"><code>static PaymentClient of(Provider p, Props cfg) {
+                                                                  PENDING { OrderState pay()
+
+    case STRIPE -&gt; new StripeClient(cfg);
+                                                                            OrderState cancel() { return REFUNDING; } },
+
+  };
+                                                                  OrderState pay()</code></pre><pre class="code"><code>return switch (p) {
+                                                                PAID</code></pre><pre class="code"><code>// exhaustive over enum
+                                          { OrderState ship()</code></pre><pre class="code"><code>}
+                                                                  OrderState ship()</code></pre><div class="kk"><b>BUILDER — MANY OPTIONAL PARAMS, IMMUTABLE RESULT</b></div><pre class="code"><code>                                     return new IllegalStateException(a + &quot; from &quot; + this);
+( ))
+                                 }</code></pre><div class="kk"><b>CHAIN OF RESPONSIBILITY — ORDERED HANDLERS</b></div><pre class="code"><code>mit(),
+re());
+Optional&lt;Rejection&gt; r = chain.stream().map(c -&gt;</code></pre><div class="kk"><b>OBSERVER — IN-PROCESS DOMAIN EVENTS</b></div><div class="bx" style="--bx:#f0ede7"><div class="cols c2 tab" style="--gt:61fr 116fr"><div class="col"><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">WHEN</span> <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">PATTERNS</span></div></div><div class="col"><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">HELP</span> <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">(AND</span> <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">WHEN</span> <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">THEY</span> <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">DON&#x27;T)</span></div></div></div><p>Use a pattern when it removes a real factories, interfaces and builders &quot;for flexibility&quot; with a single implementation — YAGNI. In interviews, explain the force the pattern resolves, not just its name.</p><pre class="code"><code>if/else</code></pre><p>explosion, isolates a volatile dependency, or names an existing structure. Don&#x27;t add</p></div><div class="cols c2" style="--gt:162fr 299fr"><div class="col"><p>References: Kleppmann,<i> Designing Data‐Intensive</i></p></div><div class="col"><p><i>Applications</i> ·<a href="https://sre.google/sre-book/table-of-contents/" target="_blank" rel="noopener">Google</a><a href="https://sre.google/sre-book/table-of-contents/" target="_blank" rel="noopener"> </a><a href="https://sre.google/sre-book/table-of-contents/" target="_blank" rel="noopener">SRE</a><a href="https://sre.google/sre-book/table-of-contents/" target="_blank" rel="noopener"> </a><a href="https://sre.google/sre-book/table-of-contents/" target="_blank" rel="noopener">Book</a>· Gamma et al.,<i> Design Patterns</i> ·<a href="https://aws.amazon.com/builders-library/" target="_blank" rel="noopener">Amazon Builders&#x27;</a><a href="https://aws.amazon.com/builders-library/" target="_blank" rel="noopener"> </a><a href="https://aws.amazon.com/builders-library/" target="_blank" rel="noopener">Library</a></p></div></div>

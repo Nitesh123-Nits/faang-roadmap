@@ -1,0 +1,60 @@
+<div class="pg" id="p28" data-n="28"></div><div class="bx" style="--bx:#b4532a"><h2>Caching with Spring Cache</h2></div><pre class="code"><code>@EnableCaching @Configuration class CacheConfig { }
+
+@Cacheable(cacheNames = &quot;product&quot;, key = &quot;#id&quot;, unless = &quot;#result == null&quot;)
+public ProductDto get(UUID id) { ... }
+
+@CacheEvict(cacheNames = &quot;product&quot;, key = &quot;#cmd.id()&quot;)
+@Transactional
+public void update(UpdateProduct cmd) { ... }
+// evicts after method returns (beforeInvocation=false)</code></pre><div class="ls"><div class="li" data-m="•">Providers: Caffeine (in‐process, fastest, per‐instance), Redis (shared, network hop). Configure TTLs per cache — Spring</div></div><p>Cache itself has no TTL concept.</p><div class="ls"><div class="li" data-m="•">Same proxy rules as</div></div><p>: self‐invocation bypasses the cache.</p><pre class="code"><code>@Transactional</code></pre><div class="ls"><div class="li" data-m="•">Eviction runs on method return, but the DB commit may happen later (or roll back) →consider</div></div><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>@TransactionalEventListener(phase</code></span><code> </code><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>=</code></span><code> </code><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>AFTER_COMMIT)</code></span>for eviction.</p><div class="bx" style="--bx:#b4532a"><h2><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">3.10</span>Scheduling and Asynchronous Execution</h2></div><pre class="code"><code>);
+    }
+}
+@Scheduled(fixedDelayString = &quot;${jobs.sync.delay:PT1M}&quot;)
+@SchedulerLock(name = &quot;sync&quot;, lockAtMostFor = &quot;PT5M&quot;) //
+ShedLock
+void sync() { ... }
+
+@Async
+public CompletableFuture&lt;Report&gt; build(UUID id) { ... }</code></pre><div class="bx" style="--bx:#faf8f3"><div class="cols c2 tab" style="--gt:32fr 34fr"><div class="col"><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">COMMON</span></div></div><div class="col"><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">MISTAKES</span></div></div></div><div class="cols c2 tab" style="--gt:8fr 174fr"><div class="col"><p>•</p></div><div class="col"><p>runs on every replica — use ShedLock / a DB</p></div></div><p>lock / a single scheduler service for cluster‐wide jobs.</p><div class="ls"><div class="li" data-m="•">Default scheduler pool is 1 thread →one slow job delays all</div></div><p>others (<span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>spring.task.scheduling.pool.size</code></span>).</p><div class="cols c3 tab" style="--gt:8fr 66fr 73fr"><div class="col"><p>•</p></div><div class="col"><p>method returning</p></div><div class="col"><p>→exceptions go to</p></div></div><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>AsyncUncaughtExceptionHandler</code></span>and are easily lost.</p><div class="ls"><div class="li" data-m="•"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>@Async</code></span>on self‐invoked method →runs synchronously. •</div></div><p>with a job slower than the rate →executions</p><p>back up; prefer<span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>fixedDelay</code></span>.</p></div><pre class="code"><code>@EnableScheduling @EnableAsync @Configuration
+class AsyncConfig {
+                                                                  @Scheduled</code></pre><pre class="code"><code>    @Bean ThreadPoolTaskExecutor applicationTaskExecutor()
+{
+        var ex = new ThreadPoolTaskExecutor();
+        ex.setCorePoolSize 8
+        ex.setQueueCapacity 200
+                                                                  @Async</code></pre><pre class="code"><code>                                                (
+                               );
+        ex.setThreadNamePrefix(&quot;async-&quot;);
+        ex.setTaskDecorator(new MdcTaskDecorator()); //
+copy MDC
+        return ex;
+                                                                   fixedRate</code></pre><pre class="code"><code>( ); ex.setMaxPoolSize 16
+ (
+                                                                 void</code></pre><div class="bx" style="--bx:#b4532a"><h2><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">3.11</span>Actuator, Health Indicators and Metrics</h2></div><pre class="code"><code>management:
+  server.port: 8081
+  endpoints.web.exposure.include: health,info,prometheus,metrics
+  endpoint.health:
+    probes.enabled: true
+    show-details: when-authorized
+    group.readiness.include: readinessState,db,redis
+  metrics.tags.application: ${spring.application.name}
+  tracing.sampling.probability: 0.1
+# keep ops endpoints off the public port
+# /actuator/health/liveness and /readiness
+# dependencies affect readiness only</code></pre><pre class="code"><code>@Component
+class PaymentGatewayHealth implements HealthIndicator {
+    public Health health() {
+        return gateway.ping(Duration.ofMillis 300
+            ? Health.up().build()
+            : Health.down().withDetail(&quot;gateway&quot;, &quot;unreacha</code></pre><div class="bx" style="--bx:#faf8f3"><div class="cols c2 tab" style="--gt:32fr 34fr"><div class="col"><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">COMMON</span></div></div><div class="col"><div class="kk"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))">MISTAKES</span></div></div></div><div class="ls"><div class="li" data-m="•">Putting DB/Redis checks in the liveness group →a DB</div></div><p>outage restarts every pod (cascading failure). Dependencies</p><p>belong in readiness, if anywhere.</p><div class="cols c3 tab" style="--gt:42fr 8fr 91fr"><div class="col"><div class="ls"><div class="li" data-m="•">Exposing</div></div></div><div class="col"><p>,</p></div><div class="col"><p>,</p><p>publicly —</p><pre class="code"><code>threaddump</code></pre></div></div><p>they leak secrets and memory contents.</p><div class="ls"><div class="li" data-m="•">High‐cardinality metric tags (user id, order id, raw URL) →</div></div><p>metrics backend explodes.</p></div><pre class="code"><code>                                             (
+
+                                                                            /actuator/env
+ble&quot;).build();
+    }
+}
+// Micrometer custom metric
+Timer.builder(&quot;payment.authorize&quot;)
+     .tag(&quot;provider&quot;, &quot;acme&quot;).publishPercentileHistogram()
+     .register(registry).record(() -&gt;
+gateway.authorize(req));</code></pre><pre class="code"><code>))
+                                         heapdump</code></pre>

@@ -1,0 +1,35 @@
+<div class="pg" id="p105" data-n="105"></div><div class="kk"><b>GLOBAL EXCEPTION HANDLING</b></div><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>IMPLEMENTATION</b></span></p><pre class="code"><code>@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleNotFound(
+            ResourceNotFoundException ex, WebRequest request) {
+        ErrorResponse error = new ErrorResponse(
+            HttpStatus.NOT_FOUND.value(),
+            &quot;NOT_FOUND&quot;,
+            ex.getMessage(),
+            request.getDescription(false),
+            LocalDateTime.now());
+        return new ResponseEntity/&gt;(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(Exception.class)            // fallback
+    public ResponseEntity&lt;ErrorResponse&gt; handleAll(Exception ex, WebRequest
+request) {
+        ErrorResponse error = new ErrorResponse(
+            HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            &quot;INTERNAL_SERVER_ERROR&quot;,
+            &quot;Something went wrong. Please try again later.&quot;,
+            request.getDescription(false),
+            LocalDateTime.now());
+        return new ResponseEntity/&gt;(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}</code></pre><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>CUSTOM EXCEPTION</b></span></p><pre class="code"><code>public class ResourceNotFoundException extends RuntimeException {
+    public ResourceNotFoundException(String message) { super(message); }
+}</code></pre><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>A STANDARD ERROR RESPONSE</b></span></p><pre class="code"><code>{
+  &quot;timestamp&quot;: &quot;2024-05-20T10:15:30.123Z&quot;,
+  &quot;status&quot;: 404,
+  &quot;error&quot;: &quot;NOT_FOUND&quot;,
+  &quot;message&quot;: &quot;Resource with id 123 not found&quot;,
+  &quot;path&quot;: &quot;/api/users/123&quot;
+}</code></pre><p><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><b>EXCEPTION FLOW</b></span></p><div class="ls"><div class="li" data-m="1.">An exception occurs in a controller, service or repository.</div><div class="li" data-m="2.">It propagates up the call stack.</div><div class="li" data-m="3.">It is matched by an <code>@ExceptionHandler</code> in <code>@RestControllerAdvice</code> .</div></div>
