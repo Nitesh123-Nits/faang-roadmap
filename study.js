@@ -3,7 +3,7 @@
 (function () {
   "use strict";
   const LS = "faang-run-2027";
-  const K = { studied: LS + "-studied", marks: LS + "-bookmarks", cards: LS + "-cards", prac: LS + "-practice", days: LS + "-sxdays", last: LS + "-sxlast" };
+  const K = { studied: LS + "-studied", marks: LS + "-bookmarks", cards: LS + "-cards", prac: LS + "-practice", days: LS + "-sxdays", last: LS + "-sxlast", side: LS + "-sxside" };
   const root = document.getElementById("sx");
   if (!root) return;
 
@@ -128,8 +128,18 @@
 
   /* ---------------- chrome ---------------- */
   function pill() { const n = allGuides(), d = totalDone(), p = n ? Math.round(d / n * 100) : 0; return `<a class="sx-pill" href="#study/practice?q=progress"><b>${p}%</b> studied</a>`; }
+  const sideHidden = () => { try { return localStorage.getItem(K.side) === "1"; } catch (e) { return false; } };
+  function applySide() {
+    const h = sideHidden(); root.classList.toggle("sx-collapsed", h);
+    root.querySelectorAll(".sx-tog").forEach(b => { b.setAttribute("aria-expanded", String(!h)); b.title = h ? "Show sidebar" : "Hide sidebar"; });
+  }
+  root.addEventListener("click", e => {
+    if (!e.target.closest(".sx-tog")) return;
+    try { localStorage.setItem(K.side, sideHidden() ? "0" : "1"); } catch (err) {}
+    applySide();
+  });
   function top(extra) {
-    return `<div class="sx-top"><a class="sx-home" href="#study">Library</a>
+    return `<div class="sx-top"><button type="button" class="sx-btn sx-tog" aria-label="Toggle sidebar" aria-expanded="${!sideHidden()}" title="${sideHidden() ? "Show sidebar" : "Hide sidebar"}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="1.8" y="2.8" width="12.4" height="10.4" rx="2"/><path d="M6 3v10"/></svg></button><a class="sx-home" href="#study">Library</a>
       <div class="sx-search"><input id="sxQ" type="search" placeholder="Search guides and questions" autocomplete="off" aria-label="Search guides and questions"><div class="sx-results" id="sxRes" hidden></div></div>
       <a class="sx-btn" href="#study/practice">Practice</a>${pill()}</div>${extra || ""}`;
   }
@@ -369,7 +379,7 @@
         else html = await viewCheat(id);
       } else html = viewHome();
       if (my !== busy) return;
-      root.innerHTML = html; wireSearch(); if (after) after();
+      root.innerHTML = html; applySide(); wireSearch(); if (after) after();
       if (!(r.q && docMeta[id] && docMeta[id].item.kind === "qa")) scrollTop();
     } catch (e) {
       if (my !== busy) return;
