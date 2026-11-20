@@ -1,9 +1,9 @@
 /* FAANG Run 2027 service worker: precache app shell, runtime-cache fonts, offline fallback. */
-const VERSION = "v4";
+const VERSION = "v5";
 const SHELL = `faang-shell-${VERSION}`;
 const RUNTIME = "faang-runtime";
 const PRECACHE = [
-  "./", "index.html", "pwa.js", "manifest.webmanifest",
+  "./", "index.html", "pwa.js", "study.js", "study.css", "study/index.json", "manifest.webmanifest",
   "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png",
   "icons/icon-maskable-512.png", "icons/apple-touch-icon.png",
   "favicon.ico", "icons/favicon-32.png", "icons/favicon-16.png"
@@ -27,8 +27,8 @@ self.addEventListener("fetch", e => {
   if (req.method !== "GET") return;
   const url = new URL(req.url);
 
-  // Google Fonts + Prism (syntax highlighting for the Java manual): stale-while-revalidate, works offline after first load.
-  if (url.hostname === "fonts.googleapis.com" || url.hostname === "fonts.gstatic.com" || url.hostname === "cdnjs.cloudflare.com") {
+  // Google Fonts: stale-while-revalidate so type works offline after first load.
+  if (url.hostname === "fonts.googleapis.com" || url.hostname === "fonts.gstatic.com") {
     e.respondWith((async () => {
       const cache = await caches.open(RUNTIME);
       const hit = await cache.match(req);
@@ -40,17 +40,14 @@ self.addEventListener("fetch", e => {
 
   if (url.origin !== location.origin) return;   // external study links: let the browser handle them
 
-  // Navigations: network-first (fresh deploys), fall back to cache offline.
-  // The Java manual (loaded in an iframe, also a navigation) is cached under its own URL.
+  // Navigations: network-first (fresh deploys), fall back to the cached shell offline.
   if (req.mode === "navigate") {
-    const isManual = url.pathname.includes("/manual/");
     e.respondWith((async () => {
       try {
         const r = await fetch(req);
-        if (r.ok) (await caches.open(SHELL)).put(isManual ? url.pathname : "index.html", r.clone());
+        if (r.ok) (await caches.open(SHELL)).put("index.html", r.clone());
         return r;
       } catch {
-        if (isManual) return (await caches.match(url.pathname)) || new Response("Java manual is not cached yet. Open it once while online.", { status: 503, headers: { "Content-Type": "text/plain" } });
         return (await caches.match("index.html")) || (await caches.match("./"));
       }
     })());

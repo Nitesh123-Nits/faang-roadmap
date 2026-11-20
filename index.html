@@ -2,6 +2,7 @@
 <title>FAANG Run 2027</title>
 <meta name="description" content="26-week FAANG interview prep tracker: DSA, LLD, HLD, daily log, mocks. Works offline.">
 <link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="study.css">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1a1a18" media="(prefers-color-scheme: dark)">
 <meta name="mobile-web-app-capable" content="yes">
@@ -26,6 +27,7 @@
   --p1-soft:#e6ecf8; --p2-soft:#dff0ec; --p3-soft:#f6ebd9; --p4-soft:#f5e3ea; --p5-soft:#e4f0de;
   --adbe:#c0392b; --atl:#0c66e4; --gs:#5f7186; --fk:#2874f0; --wmt:#0071ce; --amz:#b05a00; --goo:#1a5fd0; --meta:#0b63e6; --msft:#2b8a3e; --apl:#4a4f5c; --uber:#111827; --bbg:#9c36b5;
   --shadow:none;
+  --faint:#8592A0; --line-strong:#CBD3DB; --warn:#9A4E08; --warn-soft:#FBF0E3; --tip:#2C6A3C; --tip-soft:#E6F2E9; --code-bg:#0E1820; --code-ink:#D4DEE6; --code-bar:#15222C; --code-muted:#7D8D9A; --code-line:#24343F; --tk-key:#7FC4E0; --tk-str:#B7D98B; --tk-num:#E6B673; --tk-com:#6A7C8A; --tk-fn:#E8D28E; --tk-ann:#D99BD6; --tk-type:#8FD3C3; --tk-op:#A3B2BE; --lvl-junior:#2C6A3C; --lvl-mid:#0B6C88; --lvl-senior:#8A3E7A; --dg-node:#EAF3F6; --dg-border:#86ADBD; --dg-line:#5A6976; --dg-alt:#F1F4F6; --dg-cluster:#F6F8FA; --dg-note:#FBF2DF; --t-conc:#0D7A8F; --t-lc:#B0570F; --t-java:#A8601B; --t-spring:#3C7D34; --t-api:#7A4FB0; --t-micro:#4A55A8; --t-dist:#8A3E7A; --t-sd:#6B5B12; --t-lld:#1F6F68; --t-db:#2F6DB5; --t-kafka:#3F4C59; --t-redis:#B23A30; --t-scn:#B5325E; --t-ops:#22708F; --t-conc:#0D7A8F; --t-lc:#B0570F; --t-java:#A8601B; --t-spring:#3C7D34; --t-api:#7A4FB0; --t-micro:#4A55A8; --t-dist:#8A3E7A; --t-sd:#6B5B12; --t-lld:#1F6F68; --t-db:#2F6DB5; --t-kafka:#3F4C59; --t-redis:#B23A30; --t-scn:#B5325E; --t-ops:#22708F;
   --display:"Fraunces",Georgia,"Times New Roman",serif;
   --body:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
@@ -36,6 +38,7 @@
   --p1:#8fa8e6; --p2:#58c4b3; --p3:#e0a550; --p4:#e087a8; --p5:#86c46f;
   --p1-soft:#1b2335; --p2-soft:#14302b; --p3-soft:#33270f; --p4-soft:#35192a; --p5-soft:#1b2d15;
   --adbe:#ff8a7d; --atl:#6ea6ff; --gs:#a9b9cc; --fk:#7aa9ff; --wmt:#5eb2ff; --amz:#ffae57; --goo:#8ab4ff; --meta:#7fb0ff; --msft:#7fd492; --apl:#c9cede; --uber:#e8ecf5; --bbg:#e09cf0;
+  --faint:#66737F; --line-strong:#2B3945; --warn:#E5A462; --warn-soft:#2A1E12; --tip:#7DC592; --tip-soft:#132719; --code-bg:#0A1218; --code-ink:#D4DEE6; --code-bar:#0F1A21; --code-muted:#7D8D9A; --code-line:#1E2C36; --tk-key:#7FC4E0; --tk-str:#B7D98B; --tk-num:#E6B673; --tk-com:#6A7C8A; --tk-fn:#E8D28E; --tk-ann:#D99BD6; --tk-type:#8FD3C3; --tk-op:#A3B2BE; --lvl-junior:#7DC592; --lvl-mid:#5BB8D4; --lvl-senior:#CB82BC; --dg-node:#14262F; --dg-border:#3D6878; --dg-line:#8E9BA7; --dg-alt:#17222B; --dg-cluster:#111A21; --dg-note:#2B2315; --t-conc:#45B4C6; --t-lc:#F0A05A; --t-java:#DB9550; --t-spring:#7DBB70; --t-api:#B191E6; --t-micro:#8F99E6; --t-dist:#CB82BC; --t-sd:#D4B84E; --t-lld:#5CC2B6; --t-db:#74A9EA; --t-kafka:#9AAAB8; --t-redis:#EC7A6E; --t-scn:#EC7EA1; --t-ops:#5FB6D6; --t-conc:#45B4C6; --t-lc:#F0A05A; --t-java:#DB9550; --t-spring:#7DBB70; --t-api:#B191E6; --t-micro:#8F99E6; --t-dist:#CB82BC; --t-sd:#D4B84E; --t-lld:#5CC2B6; --t-db:#74A9EA; --t-kafka:#9AAAB8; --t-redis:#EC7A6E; --t-scn:#EC7EA1; --t-ops:#5FB6D6;
   color-scheme:dark }}
 :root[data-theme="dark"]{
   --bg:#121211; --surface:#1a1a18; --surface-2:#232321; --fg:#ecebe6; --muted:#9b978d; --line:#2e2d29;
@@ -43,6 +46,7 @@
   --p1:#8fa8e6; --p2:#58c4b3; --p3:#e0a550; --p4:#e087a8; --p5:#86c46f;
   --p1-soft:#1b2335; --p2-soft:#14302b; --p3-soft:#33270f; --p4-soft:#35192a; --p5-soft:#1b2d15;
   --adbe:#ff8a7d; --atl:#6ea6ff; --gs:#a9b9cc; --fk:#7aa9ff; --wmt:#5eb2ff; --amz:#ffae57; --goo:#8ab4ff; --meta:#7fb0ff; --msft:#7fd492; --apl:#c9cede; --uber:#e8ecf5; --bbg:#e09cf0;
+  --faint:#66737F; --line-strong:#2B3945; --warn:#E5A462; --warn-soft:#2A1E12; --tip:#7DC592; --tip-soft:#132719; --code-bg:#0A1218; --code-ink:#D4DEE6; --code-bar:#0F1A21; --code-muted:#7D8D9A; --code-line:#1E2C36; --tk-key:#7FC4E0; --tk-str:#B7D98B; --tk-num:#E6B673; --tk-com:#6A7C8A; --tk-fn:#E8D28E; --tk-ann:#D99BD6; --tk-type:#8FD3C3; --tk-op:#A3B2BE; --lvl-junior:#7DC592; --lvl-mid:#5BB8D4; --lvl-senior:#CB82BC; --dg-node:#14262F; --dg-border:#3D6878; --dg-line:#8E9BA7; --dg-alt:#17222B; --dg-cluster:#111A21; --dg-note:#2B2315; --t-conc:#45B4C6; --t-lc:#F0A05A; --t-java:#DB9550; --t-spring:#7DBB70; --t-api:#B191E6; --t-micro:#8F99E6; --t-dist:#CB82BC; --t-sd:#D4B84E; --t-lld:#5CC2B6; --t-db:#74A9EA; --t-kafka:#9AAAB8; --t-redis:#EC7A6E; --t-scn:#EC7EA1; --t-ops:#5FB6D6; --t-conc:#45B4C6; --t-lc:#F0A05A; --t-java:#DB9550; --t-spring:#7DBB70; --t-api:#B191E6; --t-micro:#8F99E6; --t-dist:#CB82BC; --t-sd:#D4B84E; --t-lld:#5CC2B6; --t-db:#74A9EA; --t-kafka:#9AAAB8; --t-redis:#EC7A6E; --t-scn:#EC7EA1; --t-ops:#5FB6D6;
   color-scheme:dark }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -430,10 +434,6 @@ body.is-offline .pwa-off{display:block}
 .hero .eyebrow{padding-right:50px}
 .pwa-btn.danger{color:var(--accent);border-color:var(--accent)}
 .pwa-date{font:600 .78rem var(--body);border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:5px 10px;margin:0 6px 6px 0}
-#tab-manual{scroll-margin-top:50px}
-#manualFrame{display:block;width:100%;height:calc(100dvh - 50px);min-height:480px;border:0;background:var(--surface)}
-body.on-manual main.wrap{max-width:none;padding:0}
-@media (max-width:760px){#manualFrame{height:calc(100dvh - 64px - env(safe-area-inset-bottom,0px))}#tab-manual{scroll-margin-top:0}}
 </style>
 <div class="pwa-off" role="status">OFFLINE</div>
 <header class="hero">
@@ -618,9 +618,9 @@ body.on-manual main.wrap{max-width:none;padding:0}
     <div class="phead"><div class="eyebrow">Links</div><h2>Resources</h2><p>Few and good. Finish one sheet before starting another. Each week in the Plan also has its own reading list.</p></div>
     <div class="rgrid" id="resGrid"></div>
   </section>
-  <!-- JAVA MANUAL -->
-  <section class="panel" id="tab-manual" role="tabpanel" hidden>
-    <iframe id="manualFrame" title="Java Backend Field Manual" data-src="manual/"></iframe>
+  <!-- JAVA MANUAL (native study library) -->
+  <section class="panel" id="tab-study" role="tabpanel" hidden>
+    <div class="sx" id="sx"></div>
   </section>
 </main>
 <nav class="bnav" id="bnav" aria-label="Main"></nav>
@@ -1312,7 +1312,7 @@ function probRow(pr,w,loc,showWeek){const k="s:"+pr.s,on=done.has(k),id=`${loc}-
 const readsList=x=>`<ul class="reads">${x.reads.map(r=>`<li><a href="${r[1]}" target="_blank" rel="noopener">${esc(r[0])}</a></li>`).join("")}</ul>`;
 
 /* ---------- tabs ---------- */
-const TABS=[["dashboard","Dashboard"],["daily","Daily to-do"],["plan","Plan"],["calendar","Calendar"],["problems","Problems"],["patterns","Patterns"],["prep","Interview prep"],["resources","Resources"],["manual","Java Manual"]];
+const TABS=[["dashboard","Dashboard"],["daily","Daily to-do"],["plan","Plan"],["calendar","Calendar"],["problems","Problems"],["patterns","Patterns"],["prep","Interview prep"],["resources","Resources"],["study","Java Manual"]];
 let tab="dashboard";
 function showTab(t,scroll){tab=t;TABS.forEach(([k])=>{$("tab-"+k).hidden=k!==t;const b=$("tb-"+k);if(b)b.setAttribute("aria-selected",k===t);});
   try{localStorage.setItem(LS+"-tab",t)}catch(e){}
@@ -1625,7 +1625,7 @@ function wirePatterns(){
   $("planSpan").textContent=`26 weeks · ${f(START,a)} → ${f(e,a)}`;
   $("calSpan").textContent=`${f(START,{month:"short",year:"numeric"})} – ${f(e,{month:"short",year:"numeric"})}`;})();
 try{const t=localStorage.getItem(LS+"-tab");if(t&&TABS.some(x=>x[0]===t))tab=t;}catch(e){}
-const h=(location.hash||"").slice(1);if(TABS.some(x=>x[0]===h))tab=h;
+const h=(location.hash||"").slice(1).split("/")[0].split("?")[0];if(TABS.some(x=>x[0]===h))tab=h;
 renderTabs();renderHero();renderDash();renderPhases();renderFilters();renderWeeks();renderCal();renderBank();renderPrep();updateStats();applyFilter();wireDaily();renderDaily();wirePatterns();renderPatterns();showTab(tab);
 if(currentWeek()===0)setSave(`Week 1 starts ${fmtL(START)}`);
 (async()=>{
@@ -1655,26 +1655,12 @@ if(currentWeek()===0)setSave(`Week 1 starts ${fmtL(START)}`);
     bn.querySelectorAll("button[data-t]").forEach(b=>b.setAttribute("aria-current",b.dataset.t===t));
     bn.querySelector("[data-more]").setAttribute("aria-current",!MAIN.includes(t));
     more.querySelectorAll("button").forEach(b=>b.setAttribute("aria-current",b.dataset.t===t));
-    document.body.classList.toggle("on-manual",t==="manual");
-    if(t==="manual"){
-      const f=document.getElementById("manualFrame");
-      if(!f.getAttribute("src")){
-        try{localStorage.setItem("jbfm-theme",curTheme());}catch(e){}
-        f.addEventListener("load",()=>{try{const d=f.contentDocument,st=d.createElement("style");st.textContent="#theme-btn,#themeBtn,[data-theme-toggle]{display:none!important}";d.head.appendChild(st);}catch(e){}});
-        f.setAttribute("src",f.dataset.src);
-      }
-      setTimeout(()=>document.getElementById("tab-manual").scrollIntoView({block:"start"}),30);
-    }
-  };
-  function curTheme(){return document.documentElement.getAttribute("data-theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");}
-  window.syncManualTheme=function(){
-    try{localStorage.setItem("jbfm-theme",curTheme());}catch(e){}
-    const f=document.getElementById("manualFrame");
-    if(f&&f.getAttribute("src")&&f.contentWindow)try{f.contentWindow.location.reload();}catch(e){}
+    if(t==="study"){const sx=document.getElementById("sx");if(sx&&!sx.dataset.ready&&window.studyRoute)window.studyRoute();}
   };
   window.onTabShown(tab);
 })();
 </script>
+<script src="study.js" defer></script>
 <script src="pwa.js" defer></script>
 
 </body></html>

@@ -2,8 +2,9 @@
 (function () {
   "use strict";
   const LS = "faang-run-2027";
-  const KEYS = [LS, LS + "-days", LS + "-tab", LS + "-start", LS + "-theme"];
-  const PROGRESS_KEYS = [LS, LS + "-days", LS + "-tab"];
+  const SX = ["-studied", "-bookmarks", "-cards", "-practice", "-sxdays", "-sxlast"].map(x => LS + x);
+  const KEYS = [LS, LS + "-days", LS + "-tab", LS + "-start", LS + "-theme", ...SX];
+  const PROGRESS_KEYS = [LS, LS + "-days", LS + "-tab", ...SX];
 
   /* offline badge */
   const syncOnline = () => document.body.classList.toggle("is-offline", !navigator.onLine);
@@ -43,7 +44,7 @@
   const effective = () => root.getAttribute("data-theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
   const paint = () => { document.querySelectorAll("meta[name=theme-color]").forEach(m => { m.removeAttribute("media"); m.content = effective() === "dark" ? "#1a1a18" : "#ffffff"; });
      if (tbtn) { const d = effective() === "dark"; tbtn.textContent = d ? "☀" : "☾"; tbtn.title = d ? "Switch to light mode" : "Switch to dark mode"; tbtn.setAttribute("aria-label", tbtn.title); } };
-  if (tbtn) tbtn.onclick = () => { const n = effective() === "dark" ? "light" : "dark"; root.setAttribute("data-theme", n); try { localStorage.setItem(LS + "-theme", n); } catch (e) {} paint(); if (window.syncManualTheme) window.syncManualTheme(); };
+  if (tbtn) tbtn.onclick = () => { const n = effective() === "dark" ? "light" : "dark"; root.setAttribute("data-theme", n); try { localStorage.setItem(LS + "-theme", n); } catch (e) {} paint() };
   paint();
 
   /* footer tools */
@@ -89,7 +90,7 @@
 
   /* reset progress (keeps theme and start date) */
   btn("Reset progress", () => {
-    if (!confirm("Reset ALL progress on this device?\n\nThis clears completed tasks, problems and the daily log. A backup file will be downloaded first so you can undo it with Import backup.")) return;
+    if (!confirm("Reset ALL progress on this device?\n\nThis clears completed tasks, problems, the daily log and your study progress. A backup file will be downloaded first so you can undo it with Import backup.")) return;
     exportBackup();
     setTimeout(() => { PROGRESS_KEYS.forEach(k => { try { localStorage.removeItem(k); } catch (e) {} }); location.reload(); }, 600);
   }).classList.add("danger");
