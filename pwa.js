@@ -3,9 +3,8 @@
   "use strict";
   const LS = "faang-run-2027";
   const SX = ["-studied", "-bookmarks", "-cards", "-practice", "-sxdays", "-sxlast"].map(x => LS + x);
-  const BK = ["-bk-read", "-bk-marks", "-bk-last"].map(x => LS + x);
-  const KEYS = [LS, LS + "-days", LS + "-tab", LS + "-start", LS + "-theme", ...SX, ...BK];
-  const PROGRESS_KEYS = [LS, LS + "-days", LS + "-tab", ...SX, ...BK];
+  const KEYS = [LS, LS + "-days", LS + "-tab", LS + "-start", LS + "-theme", ...SX];
+  const PROGRESS_KEYS = [LS, LS + "-days", LS + "-tab", ...SX];
 
   /* offline badge */
   const syncOnline = () => document.body.classList.toggle("is-offline", !navigator.onLine);

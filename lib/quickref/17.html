@@ -1,7 +1,0 @@
-<div class="pg" id="p28" data-n="28"></div><p><b>A closed set of states</b> An enum (with behaviour if needed)</p><pre class="code"><code>BackupStatus.IN_PROGRESS</code></pre><p><b>Tunable per environment</b> A configuration property, bound to a typed class</p><pre class="code"><code>backup.retry.max-attempts</code></pre><p><b>Secret or endpoint</b> External config: env var, Kubernetes Secret / ConfigMap</p><pre class="code"><code>${DB_PASSWORD}</code></pre><h3><b>Spring Boot: typed configuration</b></h3><pre class="code"><code>@ConfigurationProperties(prefix = &quot;backup.retry&quot;)
-public record RetryProperties(
-    int maxAttempts, Duration backoff) {}</code></pre><pre class="code"><code># application.yml
-backup:
-  retry:
-    max-attempts: 3
-    backoff: 2s</code></pre><p>Not every literal needs a constant. <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>0</code></span>, <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>1</code></span>, <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>&quot;&quot;</code></span>,</p><p class="sm"><span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>list.get(0)</code></span> or <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>total / 2</code></span> are self-evident. A constant</p><p>like <span style="color:color-mix(in srgb,#b4532a 78%,var(--fg))"><code>ZERO = 0</code></span> adds indirection, not meaning. Name a value when its reason isn&#x27;t obvious.</p>
