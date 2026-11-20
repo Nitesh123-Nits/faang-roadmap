@@ -1,5 +1,5 @@
 /* FAANG Run 2027 service worker: precache app shell, runtime-cache fonts, offline fallback. */
-const VERSION = "v3";
+const VERSION = "v4";
 const SHELL = `faang-shell-${VERSION}`;
 const RUNTIME = "faang-runtime";
 const PRECACHE = [
@@ -27,8 +27,8 @@ self.addEventListener("fetch", e => {
   if (req.method !== "GET") return;
   const url = new URL(req.url);
 
-  // Google Fonts: stale-while-revalidate so type works offline after first load.
-  if (url.hostname === "fonts.googleapis.com" || url.hostname === "fonts.gstatic.com") {
+  // Google Fonts + Prism (syntax highlighting for the Java manual): stale-while-revalidate, works offline after first load.
+  if (url.hostname === "fonts.googleapis.com" || url.hostname === "fonts.gstatic.com" || url.hostname === "cdnjs.cloudflare.com") {
     e.respondWith((async () => {
       const cache = await caches.open(RUNTIME);
       const hit = await cache.match(req);

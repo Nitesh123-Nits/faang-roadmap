@@ -430,9 +430,10 @@ body.is-offline .pwa-off{display:block}
 .hero .eyebrow{padding-right:50px}
 .pwa-btn.danger{color:var(--accent);border-color:var(--accent)}
 .pwa-date{font:600 .78rem var(--body);border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:5px 10px;margin:0 6px 6px 0}
-.mhead{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap}
-.mhead a{font:600 .82rem var(--body)}
-#manualFrame{width:100%;height:calc(100dvh - 150px);min-height:520px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+#tab-manual{scroll-margin-top:50px}
+#manualFrame{display:block;width:100%;height:calc(100dvh - 50px);min-height:480px;border:0;background:var(--surface)}
+body.on-manual main.wrap{max-width:none;padding:0}
+@media (max-width:760px){#manualFrame{height:calc(100dvh - 64px - env(safe-area-inset-bottom,0px))}#tab-manual{scroll-margin-top:0}}
 </style>
 <div class="pwa-off" role="status">OFFLINE</div>
 <header class="hero">
@@ -619,7 +620,6 @@ body.is-offline .pwa-off{display:block}
   </section>
   <!-- JAVA MANUAL -->
   <section class="panel" id="tab-manual" role="tabpanel" hidden>
-    <div class="mhead"><div class="phead"><div class="eyebrow">Study library</div><h2>Java Backend Field Manual</h2><p>Guides, code and graded interview questions for Java, Spring Boot, microservices and distributed systems.</p></div><a href="manual/" target="_blank" rel="noopener">Open full screen ↗</a></div>
     <iframe id="manualFrame" title="Java Backend Field Manual" data-src="manual/"></iframe>
   </section>
 </main>
@@ -1655,7 +1655,22 @@ if(currentWeek()===0)setSave(`Week 1 starts ${fmtL(START)}`);
     bn.querySelectorAll("button[data-t]").forEach(b=>b.setAttribute("aria-current",b.dataset.t===t));
     bn.querySelector("[data-more]").setAttribute("aria-current",!MAIN.includes(t));
     more.querySelectorAll("button").forEach(b=>b.setAttribute("aria-current",b.dataset.t===t));
-    if(t==="manual"){const f=document.getElementById("manualFrame");if(!f.getAttribute("src"))f.setAttribute("src",f.dataset.src);}
+    document.body.classList.toggle("on-manual",t==="manual");
+    if(t==="manual"){
+      const f=document.getElementById("manualFrame");
+      if(!f.getAttribute("src")){
+        try{localStorage.setItem("jbfm-theme",curTheme());}catch(e){}
+        f.addEventListener("load",()=>{try{const d=f.contentDocument,st=d.createElement("style");st.textContent="#theme-btn,#themeBtn,[data-theme-toggle]{display:none!important}";d.head.appendChild(st);}catch(e){}});
+        f.setAttribute("src",f.dataset.src);
+      }
+      setTimeout(()=>document.getElementById("tab-manual").scrollIntoView({block:"start"}),30);
+    }
+  };
+  function curTheme(){return document.documentElement.getAttribute("data-theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");}
+  window.syncManualTheme=function(){
+    try{localStorage.setItem("jbfm-theme",curTheme());}catch(e){}
+    const f=document.getElementById("manualFrame");
+    if(f&&f.getAttribute("src")&&f.contentWindow)try{f.contentWindow.location.reload();}catch(e){}
   };
   window.onTabShown(tab);
 })();

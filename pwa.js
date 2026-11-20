@@ -43,7 +43,7 @@
   const effective = () => root.getAttribute("data-theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
   const paint = () => { document.querySelectorAll("meta[name=theme-color]").forEach(m => { m.removeAttribute("media"); m.content = effective() === "dark" ? "#1a1a18" : "#ffffff"; });
      if (tbtn) { const d = effective() === "dark"; tbtn.textContent = d ? "☀" : "☾"; tbtn.title = d ? "Switch to light mode" : "Switch to dark mode"; tbtn.setAttribute("aria-label", tbtn.title); } };
-  if (tbtn) tbtn.onclick = () => { const n = effective() === "dark" ? "light" : "dark"; root.setAttribute("data-theme", n); try { localStorage.setItem(LS + "-theme", n); } catch (e) {} paint(); };
+  if (tbtn) tbtn.onclick = () => { const n = effective() === "dark" ? "light" : "dark"; root.setAttribute("data-theme", n); try { localStorage.setItem(LS + "-theme", n); } catch (e) {} paint(); if (window.syncManualTheme) window.syncManualTheme(); };
   paint();
 
   /* footer tools */
