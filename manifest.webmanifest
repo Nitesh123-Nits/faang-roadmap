@@ -1,0 +1,24 @@
+{
+  "name": "FAANG Run 2027",
+  "short_name": "FAANG Run",
+  "description": "26-week FAANG interview prep tracker: DSA, LLD, HLD, daily log and mocks. Works offline.",
+  "id": "./",
+  "start_url": "./?source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f1426",
+  "theme_color": "#0f1426",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"},
+    {"src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"}
+  ],
+  "shortcuts": [
+    {"name": "Daily to-do", "url": "./?source=shortcut#daily", "icons": [{"src": "icons/icon-192.png", "sizes": "192x192"}]},
+    {"name": "Problems", "url": "./?source=shortcut#problems", "icons": [{"src": "icons/icon-192.png", "sizes": "192x192"}]},
+    {"name": "Plan", "url": "./?source=shortcut#plan", "icons": [{"src": "icons/icon-192.png", "sizes": "192x192"}]}
+  ]
+}

@@ -1,6 +1,14 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>FAANG Run 2027</title>
-<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="26-week FAANG interview prep tracker: DSA, LLD, HLD, daily log, mocks. Works offline.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0f1426">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="FAANG Run">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <style>
@@ -390,6 +398,15 @@ footer{padding-block:20px 50px;color:var(--muted);font-size:.8rem}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
+<style>
+.pwa-btn{font:600 .78rem var(--body);border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:6px 12px;margin:0 6px 6px 0;cursor:pointer}
+.pwa-btn:hover{border-color:var(--ink);color:var(--ink)}
+.pwa-toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:50;background:var(--hero);color:var(--hero-fg);border-radius:14px;padding:10px 14px;display:flex;gap:12px;align-items:center;box-shadow:var(--shadow);font-size:.86rem;max-width:calc(100vw - 24px)}
+.pwa-toast button{font:700 .8rem var(--body);background:var(--accent);color:#fff;border:0;border-radius:999px;padding:6px 12px;cursor:pointer}
+.pwa-off{display:none;position:fixed;top:env(safe-area-inset-top,0px);right:10px;z-index:40;background:var(--p3);color:#fff;font:700 .68rem var(--mono);letter-spacing:.08em;padding:3px 9px;border-radius:0 0 10px 10px}
+body.is-offline .pwa-off{display:block}
+</style>
+<div class="pwa-off" role="status">OFFLINE</div>
 <header class="hero">
   <div class="wrap">
     <div class="hero-top">
@@ -572,7 +589,7 @@ footer{padding-block:20px 50px;color:var(--muted);font-size:.8rem}
     <div class="rgrid" id="resGrid"></div>
   </section>
 </main>
-<footer><div class="wrap">Progress saves to your Claude account when you're signed in, and also in this browser. Plan built 17 Oct 2026.</div></footer>
+<footer><div class="wrap">Progress is saved on this device and works offline. <span id="pwaTools"></span> Plan built 17 Oct 2026.</div></footer>
 
 <script>
 const PHASES = [
@@ -1581,5 +1598,6 @@ if(currentWeek()===0)setSave(`Week 1 starts ${fmtL(START)}`);
   }catch(e){setSave("Saved in this browser");}
 })();
 </script>
+<script src="pwa.js" defer></script>
 
 </body></html>
