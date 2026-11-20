@@ -1,5 +1,5 @@
 /* FAANG Run 2027 service worker: precache app shell, runtime-cache fonts, offline fallback. */
-const VERSION = "v2";
+const VERSION = "v3";
 const SHELL = `faang-shell-${VERSION}`;
 const RUNTIME = "faang-runtime";
 const PRECACHE = [
@@ -40,14 +40,17 @@ self.addEventListener("fetch", e => {
 
   if (url.origin !== location.origin) return;   // external study links: let the browser handle them
 
-  // Navigations: network-first (fresh deploys), fall back to cached shell offline.
+  // Navigations: network-first (fresh deploys), fall back to cache offline.
+  // The Java manual (loaded in an iframe, also a navigation) is cached under its own URL.
   if (req.mode === "navigate") {
+    const isManual = url.pathname.includes("/manual/");
     e.respondWith((async () => {
       try {
         const r = await fetch(req);
-        const c = await caches.open(SHELL); c.put("index.html", r.clone());
+        if (r.ok) (await caches.open(SHELL)).put(isManual ? url.pathname : "index.html", r.clone());
         return r;
       } catch {
+        if (isManual) return (await caches.match(url.pathname)) || new Response("Java manual is not cached yet. Open it once while online.", { status: 503, headers: { "Content-Type": "text/plain" } });
         return (await caches.match("index.html")) || (await caches.match("./"));
       }
     })());
