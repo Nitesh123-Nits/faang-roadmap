@@ -1,5 +1,5 @@
 /* FAANG Run 2027 service worker: precache app shell, runtime-cache fonts, offline fallback. */
-const VERSION = "v18";
+const VERSION = "v19";
 const SHELL = `faang-shell-${VERSION}`;
 const RUNTIME = "faang-runtime";
 const PRECACHE = [
@@ -57,7 +57,7 @@ self.addEventListener("fetch", e => {
   // Same-origin static assets: cache-first, refresh in background.
   e.respondWith((async () => {
     const hit = await caches.match(req);
-    const net = fetch(req).then(async r => { if (r.ok) (await caches.open(SHELL)).put(req, r.clone()); return r; }).catch(() => hit);
+    const net = fetch(req, { cache: "no-cache" }).then(async r => { if (r.ok) (await caches.open(SHELL)).put(req, r.clone()); return r; }).catch(() => hit);
     // code files: prefer the network so a deploy shows up on the next load; fall back to cache offline
     return /\.(js|css)$/.test(url.pathname) ? (net.then(r => r || hit).catch(() => hit)) : (hit || net);
   })());
