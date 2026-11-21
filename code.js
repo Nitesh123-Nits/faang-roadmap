@@ -103,7 +103,7 @@
   <div class="cx-io"><div><label for="cxIn">Input (stdin)</label><textarea class="cx-in" id="cxIn" spellcheck="false" placeholder="Optional. One value per line."></textarea></div><div><label>Output</label><pre class="cx-out" id="cxOut" aria-live="polite"><span class="m">Press Run to execute.</span></pre></div></div>
   <details class="cx-set" id="cxSet"><summary>Runner settings (optional, for Java, C++, C#)</summary>
     <div class="row"><select id="cxType" aria-label="Runner type"><option value="godbolt">Compiler Explorer (default, no setup)</option><option value="judge0">Judge0 compatible</option><option value="piston">Piston compatible</option></select><input id="cxUrl" placeholder="Runner URL, e.g. https://your-judge0.example.com" aria-label="Runner URL"><input id="cxHn" placeholder="Auth header name (optional)" aria-label="Auth header name"><input id="cxHv" type="password" placeholder="Auth header value (optional)" aria-label="Auth header value"></div>
-    <p>You can leave this alone. By default Java, C++ and C# are sent to the free public Compiler Explorer (godbolt.org) to compile and run, which is rate-limited and meant for short programs. JavaScript and Python never leave your browser. To use your own Judge0 or Piston server instead, pick its type and enter the URL (it must allow requests from this site). The header value is stored only in this browser.</p></details>`;
+    <p>You can leave this alone. By default Java, C++ and C# are sent to the free public Compiler Explorer (godbolt.org), with Wandbox (wandbox.org) as a backup, to compile and run. Both are rate-limited and meant for short programs. JavaScript and Python never leave your browser. To use your own Judge0 or Piston server instead, pick its type and enter the URL (it must allow requests from this site). The header value is stored only in this browser.</p></details>`;
 
   const $ = id => document.getElementById(id);
   const ta = $("cxTa"), pre = $("cxPre"), gut = $("cxGut"), out = $("cxOut"), runBtn = $("cxRun");
@@ -237,11 +237,48 @@
       if (!o && !e && !j.code) show("(no output)", "m");
       if (build.trim() && /warning/i.test(build) && !o && !e) show("\n" + build, "m");
     } catch (e) {
-      show((e.name === "AbortError" ? "Timed out after 40 s." : "Could not reach Compiler Explorer: " + e.message) + "\nYou need internet access. If this keeps failing, set your own runner under Runner settings.\n", "e");
+      throw new Error("Compiler Explorer: " + (e.name === "AbortError" ? "timed out after 40 s" : e.message));
     } finally { clearTimeout(t); }
   }
+  /* Wandbox: second free, keyless service used when Compiler Explorer can't be reached */
+  const WB = "https://wandbox.org/api", WB_LANG = { java: "Java", cpp: "C++", csharp: "C#" };
+  let wbList = null; const wbPick = {};
+  async function wbCompiler(lang, signal) {
+    if (wbPick[lang]) return wbPick[lang];
+    if (!wbList) { const r = await fetch(WB + "/list.json", { signal }); if (!r.ok) throw new Error("list replied " + r.status); wbList = await r.json(); }
+    const ver = n => ((n.match(/\d+(?:\.\d+)*/g) || ["0"]).pop()).split(".").map(x => +x || 0);
+    const cmp = (a, b) => { const x = ver(a.name), y = ver(b.name); for (let i = 0; i < 4; i++) if ((x[i] || 0) !== (y[i] || 0)) return (y[i] || 0) - (x[i] || 0); return 0; };
+    let pool = wbList.filter(c => c.language === WB_LANG[lang] && !/head|trunk|dev|rc|beta|alpha/i.test(c.name));
+    if (lang === "cpp") pool = pool.filter(c => /^gcc/.test(c.name) && !/-c$/.test(c.name));
+    else if (lang === "java") pool = pool.filter(c => /^openjdk/.test(c.name));
+    else { const dn = pool.filter(c => /^dotnet/.test(c.name)); pool = dn.length ? dn : pool; }
+    const best = pool.sort(cmp)[0]; if (!best) throw new Error("no " + L(lang).name + " compiler listed");
+    return wbPick[lang] = best.name;
+  }
+  async function runWandbox(lang, code, stdin) {
+    const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 40000);
+    try {
+      const compiler = await wbCompiler(lang, ctl.signal);
+      const r = await fetch(WB + "/compile.json", { method: "POST", signal: ctl.signal, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code, compiler, stdin, options: lang === "cpp" ? "warning,boost-nothing,c++17" : "", save: false }) });
+      if (!r.ok) throw new Error("replied " + r.status);
+      const j = await r.json();
+      if (j.compiler_error && (j.status !== "0" && j.status !== 0) && !j.program_output && !j.program_error) { show(j.compiler_error || j.compiler_message, "e"); return; }
+      if (j.program_output) show(j.program_output.endsWith("\n") ? j.program_output : j.program_output + "\n");
+      if (j.program_error) show(j.program_error, "e");
+      if (j.status && String(j.status) !== "0") show("\nExit code " + j.status + "\n", "m");
+      if (!j.program_output && !j.program_error && String(j.status || 0) === "0") show("(no output)", "m");
+    } catch (e) { throw new Error("Wandbox: " + (e.name === "AbortError" ? "timed out after 40 s" : e.message)); }
+    finally { clearTimeout(t); }
+  }
+  async function runFree(lang, code, stdin) {
+    const errs = [];
+    for (const f of [runGodbolt, runWandbox]) {
+      try { return await f(lang, code, stdin); } catch (e) { errs.push(e.message); }
+    }
+    show("Could not run " + L(lang).name + " online.\n" + errs.map(e => " • " + e).join("\n") + "\nIf these say \"Failed to fetch\", your network or browser is blocking the service (try another network, or turn off ad/privacy blockers for this site).\n", "e");
+  }
   async function runRemote(lang, code, stdin) {
-    if (st.cfg.type === "godbolt" || !st.cfg.url) return runGodbolt(lang, code, stdin);
+    if (st.cfg.type === "godbolt" || !st.cfg.url) return runFree(lang, code, stdin);
     const c = st.cfg, base = (c.url || "").replace(/\/+$/, "");
     const headers = { "Content-Type": "application/json" }; if (c.hn && c.hv) headers[c.hn] = c.hv;
     const L = LANGS[lang]; let res;
