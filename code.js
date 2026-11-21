@@ -226,12 +226,12 @@
       const id = await gbCompiler(lang, ctl.signal);
       const r = await fetch(`${GB}/compiler/${encodeURIComponent(id)}/compile`, {
         method: "POST", signal: ctl.signal, headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ source: code, lang: GB_LANG[lang], options: { userArguments: lang === "cpp" ? "-O1 -std=c++17" : "", executeParameters: { args: [], stdin }, compilerOptions: { executorRequest: true }, filters: { execute: true }, tools: [], libraries: [] } })
+        body: JSON.stringify({ source: lang === "java" ? code.replace(/^(\s*)public\s+(?=(?:(?:final|abstract|sealed|strictfp)\s+)*(?:class|interface|enum|record)\b)/gm, "$1") : code, lang: GB_LANG[lang], options: { userArguments: lang === "cpp" ? "-O1 -std=c++17" : "", executeParameters: { args: [], stdin }, compilerOptions: { executorRequest: true }, filters: { execute: true }, tools: [], libraries: [] } })
       });
       if (!r.ok) throw new Error("Compiler Explorer replied " + r.status + (r.status === 429 ? " (too many requests, wait a moment)" : ""));
       const j = await r.json(), b = j.buildResult || {};
       const build = txt(b.stdout) + txt(b.stderr), o = txt(j.stdout), e = txt(j.stderr);
-      if (j.didExecute === false || (b.code && b.code !== 0)) { show(build || "Compilation failed.\n", "e"); return; }
+      if (j.didExecute === false || (b.code && b.code !== 0)) { if (/should be declared in a file named/.test(build)) throw new Error("Java file naming rejected by Compiler Explorer"); show(build || "Compilation failed.\n", "e"); return; }
       if (o) show(o); if (e) show(e, "e");
       if (j.code) show("\nExit code " + j.code + "\n", "m");
       if (!o && !e && !j.code) show("(no output)", "m");
