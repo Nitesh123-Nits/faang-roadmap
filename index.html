@@ -489,7 +489,6 @@ body.is-offline .pwa-off{display:block}
           <div class="card tile"><span>Current phase</span><b id="tPhase" style="font-size:1.25rem;padding-top:6px">—</b><span id="tPhaseSub"></span><div class="bar"><i id="tPhaseBar"></i></div></div>
           <div class="card tile"><span>Contest rating goal</span><b class="num">1700+</b><span>Sun 08:00 IST weekly</span></div>
         </div>
-        <div class="card box" id="lcCard"><h3>LeetCode <small id="lcWho"></small></h3><div id="lcBody"></div></div>
         <div class="card box"><h3>Company readiness <small>problems solved per tag</small></h3><div class="cobars" id="cobars"></div></div>
         <div class="card box"><h3>Next checkpoint</h3><div class="next" id="nextCk"></div></div>
         <div class="card box"><h3>Daily routine</h3>
@@ -617,6 +616,12 @@ body.is-offline .pwa-off{display:block}
 
     <div class="phead" id="syllabus"><h3>Syllabus</h3><p>Dark pills come up most often in SDE-2 backend loops. The Patterns tab has templates and practice for each.</p></div>
     <div class="tgrid" id="topicGrid"></div>
+  </section>
+
+  <!-- LEETCODE -->
+  <section class="panel" id="tab-leetcode" role="tabpanel" hidden>
+    <div class="phead"><div class="eyebrow">Live from your profile</div><h2>LeetCode</h2><p>Your solved count from your public LeetCode profile. Enter your username once; it is remembered on this device.</p></div>
+    <div class="card box" id="lcCard" style="max-width:560px"><h3>Solved problems <small id="lcWho"></small></h3><div id="lcBody"></div></div>
   </section>
 
   <!-- RESOURCES -->
@@ -1321,7 +1326,7 @@ function probRow(pr,w,loc,showWeek){const k="s:"+pr.s,on=done.has(k),id=`${loc}-
 const readsList=x=>`<ul class="reads">${x.reads.map(r=>`<li><a href="${r[1]}" target="_blank" rel="noopener">${esc(r[0])}</a></li>`).join("")}</ul>`;
 
 /* ---------- tabs ---------- */
-const TABS=[["dashboard","Dashboard"],["daily","Daily to-do"],["plan","Plan"],["calendar","Calendar"],["problems","Problems"],["patterns","Patterns"],["prep","Interview prep"],["resources","Resources"],["study","Java Manual"]];
+const TABS=[["dashboard","Dashboard"],["daily","Daily to-do"],["plan","Plan"],["calendar","Calendar"],["problems","Problems"],["leetcode","LeetCode"],["patterns","Patterns"],["prep","Interview prep"],["resources","Resources"],["study","Java Manual"]];
 let tab="dashboard";
 function showTab(t,scroll){tab=t;TABS.forEach(([k])=>{$("tab-"+k).hidden=k!==t;const b=$("tb-"+k);if(b)b.setAttribute("aria-selected",k===t);});
   try{localStorage.setItem(LS+"-tab",t)}catch(e){}
@@ -1731,7 +1736,7 @@ if(START_SET&&currentWeek()===0)setSave(`Week 1 starts ${fmtL(START)}`);
       el("lcRetry").onclick=e=>{e.preventDefault();run(true);};el("lcChg2").onclick=e=>{e.preventDefault();save({});who.textContent="";form();};}
   }
   // ?lc=username in the URL connects it once (handy for a first-time setup link)
-  try{const q=new URLSearchParams(location.search).get("lc");if(q){const u=clean(q);if(u)save({u});history.replaceState(null,"",location.pathname+location.hash);}}catch(e){}
+  try{const q=new URLSearchParams(location.search).get("lc");if(q){const u=clean(q);if(u)save({u});if(typeof showTab==="function")showTab("leetcode");history.replaceState(null,"",location.pathname+location.hash);}}catch(e){}
   run(false);
 })();
 </script>
