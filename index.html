@@ -1,5 +1,5 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>FAANG Run 2027</title>
+<title>FAANG Run</title>
 <meta name="description" content="26-week FAANG interview prep tracker: DSA, LLD, HLD, daily log, mocks. Works offline.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="study.css">
@@ -442,7 +442,7 @@ body.is-offline .pwa-off{display:block}
     <div class="hero-top">
       <div>
         <div class="eyebrow">26-week interview prep · Backend Engineer → SDE-2 / L4–L5</div>
-        <h1>FAANG Run <em id="runYear"></em></h1>
+        <h1>FAANG Run</h1>
         <p class="sub"><span id="planSpan">26 weeks · pick your start date</span> · ~20 h a week around a full-time job. DSA every day, design on weekends, loops in March and April.</p>
         <div class="badges" id="badges"></div>
       </div>
@@ -1642,7 +1642,6 @@ function wirePatterns(){
 /* ---------- boot ---------- */
 (function(){const e=new Date(START);e.setDate(e.getDate()+26*7-1);const f=(d,o)=>d.toLocaleDateString("en-GB",o);
   const a={weekday:"short",day:"numeric",month:"short",year:"numeric"};
-  $("runYear").textContent=e.getFullYear();
   if(START_SET)$("planSpan").textContent=`26 weeks · ${f(START,a)} → ${f(e,a)}`;
   if(START_SET)$("calSpan").textContent=`${f(START,{month:"short",year:"numeric"})} – ${f(e,{month:"short",year:"numeric"})}`;})();
 try{const t=localStorage.getItem(LS+"-tab");if(t&&TABS.some(x=>x[0]===t))tab=t;}catch(e){}

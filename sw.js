@@ -1,5 +1,5 @@
-/* FAANG Run 2027 service worker: precache app shell, runtime-cache fonts, offline fallback. */
-const VERSION = "v19";
+/* FAANG Run service worker: precache app shell, runtime-cache fonts, offline fallback. */
+const VERSION = "v20";
 const SHELL = `faang-shell-${VERSION}`;
 const RUNTIME = "faang-runtime";
 const PRECACHE = [

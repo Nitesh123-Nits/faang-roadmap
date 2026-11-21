@@ -1,4 +1,4 @@
-# FAANG Run 2027
+# FAANG Run
 
 🔗 **Live app:** [https://nitesh123-nits.github.io/faang-roadmap/](https://nitesh123-nits.github.io/faang-roadmap/) · installable as a PWA
 
