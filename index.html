@@ -441,9 +441,9 @@ body.is-offline .pwa-off{display:block}
   <div class="wrap">
     <div class="hero-top">
       <div>
-        <div class="eyebrow">Nitesh Kumar Sah · Backend Engineer · 3 YOE → SDE-2 / L4–L5</div>
-        <h1>FAANG Run <em>2027</em></h1>
-        <p class="sub"><span id="planSpan">26 weeks · Mon 19 Oct 2026 → Sun 18 Apr 2027</span> · ~20 h a week around a full-time job. DSA every day, design on weekends, loops in March and April.</p>
+        <div class="eyebrow">26-week interview prep · Backend Engineer → SDE-2 / L4–L5</div>
+        <h1>FAANG Run <em id="runYear"></em></h1>
+        <p class="sub"><span id="planSpan">26 weeks · pick your start date</span> · ~20 h a week around a full-time job. DSA every day, design on weekends, loops in March and April.</p>
         <div class="badges" id="badges"></div>
       </div>
       <div class="ringbox" aria-live="polite">
@@ -474,13 +474,18 @@ body.is-offline .pwa-off{display:block}
 <main class="wrap">
   <!-- DASHBOARD -->
   <section class="panel" id="tab-dashboard" role="tabpanel">
+    <div class="card" id="startCard" hidden style="padding:18px;margin-bottom:14px;border-left:6px solid var(--p1)">
+      <h3 style="margin:0 0 4px">Start your 26-week plan</h3>
+      <p class="note" style="margin:0 0 12px">Pick the day you want to begin. It snaps to that week's Monday, and every date, the calendar and the week counter are built from it. You can change it any time from the footer.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><input type="date" id="startIn" aria-label="Plan start date" style="height:38px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);padding:0 10px;font:500 .9rem var(--body)"><button type="button" class="chip on" id="startGo" style="height:38px">Start plan</button></div>
+    </div>
     <div class="card todayc" id="todayCard"></div>
     <div class="dash">
       <div class="card thisweek" id="thisWeek"></div>
       <div class="side-col">
         <div class="tiles">
           <div class="card tile"><span>Problems solved</span><b class="num" id="tProb">0</b><span id="tProbSub">goal ~380 by week 26</span><div class="bar"><i id="tProbBar" style="--pc:var(--p1)"></i></div></div>
-          <div class="card tile"><span>Days to FAANG applications</span><b class="num" id="tApply">0</b><span>Week 22 · Mon 15 Mar 2027</span></div>
+          <div class="card tile"><span>Days to FAANG applications</span><b class="num" id="tApply">0</b><span id="tApplyDate">Week 22</span></div>
           <div class="card tile"><span>Current phase</span><b id="tPhase" style="font-size:1.25rem;padding-top:6px">—</b><span id="tPhaseSub"></span><div class="bar"><i id="tPhaseBar"></i></div></div>
           <div class="card tile"><span>Contest rating goal</span><b class="num">1700+</b><span>Sun 08:00 IST weekly</span></div>
         </div>
@@ -537,7 +542,7 @@ body.is-offline .pwa-off{display:block}
 
   <!-- CALENDAR -->
   <section class="panel" id="tab-calendar" role="tabpanel" hidden>
-    <div class="phead"><div class="eyebrow" id="calSpan">Oct 2026 – Apr 2027</div><h2>Calendar</h2><p>Every day of the plan, coloured by phase. Small numbers mark the start of each week; solid days are checkpoint Sundays. Tap any day to open that week.</p></div>
+    <div class="phead"><div class="eyebrow" id="calSpan">Your 26 weeks</div><h2>Calendar</h2><p>Every day of the plan, coloured by phase. Small numbers mark the start of each week; solid days are checkpoint Sundays. Tap any day to open that week.</p></div>
     <div class="legend" id="legend"></div>
     <div class="calwrap">
       <div class="months" id="months"></div>
@@ -625,7 +630,7 @@ body.is-offline .pwa-off{display:block}
 </main>
 <nav class="bnav" id="bnav" aria-label="Main"></nav>
 <div class="more" id="more" role="menu"></div>
-<footer><div class="wrap">Progress is saved on this device and works offline. <span id="pwaTools"></span> Plan built 17 Oct 2026.</div></footer>
+<footer><div class="wrap">Progress is saved on this device and works offline. <span id="pwaTools"></span></div></footer>
 
 <script>
 const PHASES = [
@@ -635,8 +640,11 @@ const PHASES = [
   {id:4,name:"Company Mode",weeks:[19,22],c:"p4",goal:"Tailor, brand, apply",items:["Company-tagged problems","Story bank + resume rewrite","Referrals and first applications","~320 problems solved"]},
   {id:5,name:"Mocks & Loops",weeks:[23,26],c:"p5",goal:"Interview-ready and interviewing",items:["12+ mocks, weak spots fixed","Real loops, fast feedback","Offer comparison and negotiation","~380 problems solved"]}
 ];
-const DEFAULT_START = new Date(2026,9,19); // Mon 19 Oct 2026
-const START = (()=>{try{const v=localStorage.getItem("faang-run-2027-start");if(/^\d{4}-\d{2}-\d{2}$/.test(v||"")){const[y,m,d]=v.split("-").map(Number);return new Date(y,m-1,d);}}catch(e){}return DEFAULT_START;})();
+const START_KEY="faang-run-2027-start";
+const mondayOf=d=>{const m=new Date(d.getFullYear(),d.getMonth(),d.getDate());m.setDate(m.getDate()-((m.getDay()+6)%7));return m;};
+const START_SET=(()=>{try{return /^\d{4}-\d{2}-\d{2}$/.test(localStorage.getItem(START_KEY)||"");}catch(e){return false;}})();
+// no hard-coded date: until the user picks one, dates preview from the current week's Monday and nothing counts as "running"
+const START=(()=>{if(START_SET){const[y,m,d]=localStorage.getItem(START_KEY).split("-").map(Number);return new Date(y,m-1,d);}return mondayOf(new Date());})();
 
 // [focus, dsa pattern, theory track, tasks[], problems, milestone?]
 // Company codes → full names. Tags reflect how often each problem is commonly reported in those companies' interviews; not an official list.
@@ -1289,7 +1297,7 @@ const fmt=d=>d.toLocaleDateString("en-IN",{day:"numeric",month:"short"});
 const fmtL=d=>d.toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short",year:"numeric"});
 function phaseOf(w){return PHASES.find(p=>w>=p.weeks[0]&&w<=p.weeks[1]);}
 function today(){const n=new Date();return new Date(n.getFullYear(),n.getMonth(),n.getDate());}
-function currentWeek(){const d=Math.floor((today()-START)/DAY);if(d<0)return 0;const w=Math.floor(d/7)+1;return w>26?27:w;}
+function currentWeek(){if(!START_SET)return 0;const d=Math.floor((today()-START)/DAY);if(d<0)return 0;const w=Math.floor(d/7)+1;return w>26?27:w;}
 const focusWeek=()=>Math.max(1,Math.min(26,currentWeek()));
 const vars=p=>`--pc:var(--${p.c});--pcs:var(--${p.c}-soft)`;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -1329,7 +1337,8 @@ function renderHero(){
   $("track").querySelectorAll("a").forEach(a=>a.onclick=e=>{e.preventDefault();openWeek(+a.dataset.w);});
   $("trackmeta").innerHTML=PHASES.map(p=>`<span style="--n:${p.weeks[1]-p.weeks[0]+1};${vars(p)}">${p.id}. ${p.name}</span>`).join("");
   let b;
-  if(cw===0){const d=Math.ceil((START-today())/DAY);b=[`Starts in <b>${d} day${d===1?"":"s"}</b>`,`Week 1 · ${START.toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"})}`];}
+  if(!START_SET)b=["Not started","Pick a start date below"];
+  else if(cw===0){const d=Math.ceil((START-today())/DAY);b=[`Starts in <b>${d} day${d===1?"":"s"}</b>`,`Week 1 · ${START.toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"})}`];}
   else if(cw>26)b=["Plan complete","Time to update the resume"];
   else b=[`Week <b>${cw}</b> of 26`,`${phaseOf(cw).name}`];
   b.push("Target: Amazon · Google · Microsoft");
@@ -1353,7 +1362,7 @@ function renderDash(){
   const nx=W.findIndex((y,i)=>y.ms&&i+1>=w);const nw=nx+1,np=phaseOf(nw),[,ne]=wkDates(nx);
   const days=Math.max(0,Math.ceil((ne-today())/DAY));
   $("nextCk").innerHTML=`<div class="dia" style="${vars(np)};background:var(--pcs);color:var(--pc)">◆</div><div><b>Week ${nw}: ${esc(W[nx].f)}</b><span>${fmt(ne)} · ${days} days away · ${esc(W[nx].tasks.filter(t=>/CHECKPOINT|target/.test(t)).map(t=>t.replace(/^CHECKPOINT:\s*/,"")).join(" · "))}</span></div>`;
-  const ap=new Date(2027,2,15);$("tApply").textContent=Math.max(0,Math.ceil((ap-today())/DAY));
+  const ap=wkDates(21)[0];$("tApplyDate").textContent=`Week 22 · ${fmtL(ap)}`;$("tApply").textContent=Math.max(0,Math.ceil((ap-today())/DAY));
   $("tPhase").textContent=p.name;$("tPhase").style.color=`var(--${p.c})`;
   $("tPhaseSub").textContent=`Weeks ${p.weeks[0]}–${p.weeks[1]} · ${p.goal}`;
   $("tPhaseBar").style.setProperty("--pc",`var(--${p.c})`);
@@ -1393,7 +1402,7 @@ function renderCal(){
   const end=new Date(START);end.setDate(end.getDate()+26*7-1);const td=today();
   const evDays=new Set(EVENTS.map(([w])=>+wkDates(w-1)[0]));
   let html="";
-  for(let m=new Date(2026,9,1);m<=end;m=new Date(m.getFullYear(),m.getMonth()+1,1)){
+  for(let m=new Date(START.getFullYear(),START.getMonth(),1);m<=end;m=new Date(m.getFullYear(),m.getMonth()+1,1)){
     const first=new Date(m),lead=(first.getDay()+6)%7,dim=new Date(m.getFullYear(),m.getMonth()+1,0).getDate();
     let cells=["M","T","W","T","F","S","S"].map(d=>`<span class="dow">${d}</span>`).join("")+"<span></span>".repeat(lead);
     const wks=new Set();
@@ -1622,12 +1631,15 @@ function wirePatterns(){
 /* ---------- boot ---------- */
 (function(){const e=new Date(START);e.setDate(e.getDate()+26*7-1);const f=(d,o)=>d.toLocaleDateString("en-GB",o);
   const a={weekday:"short",day:"numeric",month:"short",year:"numeric"};
-  $("planSpan").textContent=`26 weeks · ${f(START,a)} → ${f(e,a)}`;
-  $("calSpan").textContent=`${f(START,{month:"short",year:"numeric"})} – ${f(e,{month:"short",year:"numeric"})}`;})();
+  $("runYear").textContent=e.getFullYear();
+  if(START_SET)$("planSpan").textContent=`26 weeks · ${f(START,a)} → ${f(e,a)}`;
+  if(START_SET)$("calSpan").textContent=`${f(START,{month:"short",year:"numeric"})} – ${f(e,{month:"short",year:"numeric"})}`;})();
 try{const t=localStorage.getItem(LS+"-tab");if(t&&TABS.some(x=>x[0]===t))tab=t;}catch(e){}
 const h=(location.hash||"").slice(1).split("/")[0].split("?")[0];if(TABS.some(x=>x[0]===h))tab=h;
 renderTabs();renderHero();renderDash();renderPhases();renderFilters();renderWeeks();renderCal();renderBank();renderPrep();updateStats();applyFilter();wireDaily();renderDaily();wirePatterns();renderPatterns();showTab(tab);
-if(currentWeek()===0)setSave(`Week 1 starts ${fmtL(START)}`);
+if(!START_SET){const c=$("startCard");c.hidden=false;const d=mondayOf(new Date()),z=n=>String(n).padStart(2,"0");$("startIn").value=`${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`;
+  $("startGo").onclick=()=>{const v=$("startIn").value;if(!v)return;const[y,m,dd]=v.split("-").map(Number),k=mondayOf(new Date(y,m-1,dd));try{localStorage.setItem(START_KEY,`${k.getFullYear()}-${z(k.getMonth()+1)}-${z(k.getDate())}`);}catch(e){}location.reload();};}
+if(START_SET&&currentWeek()===0)setSave(`Week 1 starts ${fmtL(START)}`);
 (async()=>{
   if(!window.claude||!window.claude.use){setSave("Saved in this browser");return;}
   try{const[d,u]=await Promise.all([window.claude.use("db"),window.claude.use("user")]);

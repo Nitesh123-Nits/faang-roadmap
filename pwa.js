@@ -4,7 +4,7 @@
   const LS = "faang-run-2027";
   const SX = ["-studied", "-bookmarks", "-cards", "-practice", "-sxdays", "-sxlast"].map(x => LS + x);
   const KEYS = [LS, LS + "-days", LS + "-tab", LS + "-start", LS + "-theme", ...SX];
-  const PROGRESS_KEYS = [LS, LS + "-days", LS + "-tab", ...SX];
+  const PROGRESS_KEYS = [LS, LS + "-days", LS + "-tab", LS + "-start", ...SX];
 
   /* offline badge */
   const syncOnline = () => document.body.classList.toggle("is-offline", !navigator.onLine);
@@ -98,7 +98,7 @@
   /* change plan start date (restarts the week counter and calendar) */
   const dateIn = document.createElement("input"); dateIn.type = "date"; dateIn.className = "pwa-date"; dateIn.setAttribute("aria-label", "Plan start date");
   const startKey = LS + "-start";
-  dateIn.value = localStorage.getItem(startKey) || "2026-10-19";
+  dateIn.value = localStorage.getItem(startKey) || "";
   const setStart = btn("Set start date", () => {
     const v = dateIn.value; if (!v) return toast("Pick a date first.");
     const [y, m, d] = v.split("-").map(Number), dt = new Date(y, m - 1, d);
