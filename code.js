@@ -29,7 +29,7 @@
   /* ---------- state ---------- */
   const load = () => { try { return JSON.parse(localStorage.getItem(LS)) || {}; } catch (e) { return {}; } };
   let st = load();
-  st.src = st.src || {}; st.cfg = st.cfg || { type: "judge0", url: "", hn: "", hv: "" };
+  st.src = st.src || {}; st.cfg = st.cfg || { type: "godbolt", url: "", hn: "", hv: "" };
   st.lang = LANGS[st.lang] ? st.lang : "javascript";
   const persist = () => { try { localStorage.setItem(LS, JSON.stringify(st)); } catch (e) {} };
 
@@ -91,7 +91,7 @@
   document.head.appendChild(css);
 
   root.innerHTML = `
-  <div class="phead"><div class="eyebrow">Practice</div><h2>Code editor</h2><p>Write and run code without leaving the app. JavaScript and Python run right in your browser; Java, C++ and C# run through a runner you configure below. Your code is saved per language on this device.</p></div>
+  <div class="phead"><div class="eyebrow">Practice</div><h2>Code editor</h2><p>Write and run code without leaving the app. JavaScript and Python run right in your browser; Java, C++ and C# are compiled on Compiler Explorer (free, no setup, needs internet). Your code is saved per language on this device.</p></div>
   <div class="cx-bar">
     <select id="cxLang" aria-label="Language">${ORDER.map(k => `<option value="${k}">${LANGS[k].name}</option>`).join("")}</select>
     <button id="cxRun" class="run" type="button">Run ▶</button>
@@ -101,9 +101,9 @@
   </div>
   <div class="cx-ed"><pre class="cx-gut" id="cxGut" aria-hidden="true">1</pre><div class="cx-wrap"><pre class="cx-pre" id="cxPre" aria-hidden="true"></pre><textarea class="cx-ta" id="cxTa" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Code editor"></textarea></div></div>
   <div class="cx-io"><div><label for="cxIn">Input (stdin)</label><textarea class="cx-in" id="cxIn" spellcheck="false" placeholder="Optional. One value per line."></textarea></div><div><label>Output</label><pre class="cx-out" id="cxOut" aria-live="polite"><span class="m">Press Run to execute.</span></pre></div></div>
-  <details class="cx-set" id="cxSet"><summary>Runner settings (needed for Java, C++, C#)</summary>
-    <div class="row"><select id="cxType" aria-label="Runner type"><option value="judge0">Judge0 compatible</option><option value="piston">Piston compatible</option></select><input id="cxUrl" placeholder="Runner URL, e.g. https://your-judge0.example.com" aria-label="Runner URL"><input id="cxHn" placeholder="Auth header name (optional)" aria-label="Auth header name"><input id="cxHv" type="password" placeholder="Auth header value (optional)" aria-label="Auth header value"></div>
-    <p>JavaScript and Python never use this. Java, C++ and C# are compiled on the server you point to, so they need internet and a runner that allows requests from this site (CORS). Free public runners are rate-limited or need an API key; your own Judge0 or Piston instance is the reliable option. The header value is stored only in this browser.</p></details>`;
+  <details class="cx-set" id="cxSet"><summary>Runner settings (optional, for Java, C++, C#)</summary>
+    <div class="row"><select id="cxType" aria-label="Runner type"><option value="godbolt">Compiler Explorer (default, no setup)</option><option value="judge0">Judge0 compatible</option><option value="piston">Piston compatible</option></select><input id="cxUrl" placeholder="Runner URL, e.g. https://your-judge0.example.com" aria-label="Runner URL"><input id="cxHn" placeholder="Auth header name (optional)" aria-label="Auth header name"><input id="cxHv" type="password" placeholder="Auth header value (optional)" aria-label="Auth header value"></div>
+    <p>You can leave this alone. By default Java, C++ and C# are sent to the free public Compiler Explorer (godbolt.org) to compile and run, which is rate-limited and meant for short programs. JavaScript and Python never leave your browser. To use your own Judge0 or Piston server instead, pick its type and enter the URL (it must allow requests from this site). The header value is stored only in this browser.</p></details>`;
 
   const $ = id => document.getElementById(id);
   const ta = $("cxTa"), pre = $("cxPre"), gut = $("cxGut"), out = $("cxOut"), runBtn = $("cxRun");
@@ -117,7 +117,7 @@
     if (ta.value && st.lang) st.src[st.lang] = ta.value;
     st.lang = l; ta.value = st.src[l] != null ? st.src[l] : LANGS[l].code; ta.style.tabSize = pre.style.tabSize = LANGS[l].tab;
     $("cxLang").value = l; paint(); persist();
-    $("cxHint").textContent = REMOTE.has(l) ? "Needs a runner (see settings below)" : "Ctrl/⌘ + Enter to run";
+    $("cxHint").textContent = REMOTE.has(l) ? "Runs online · Ctrl/⌘ + Enter" : "Runs in your browser · Ctrl/⌘ + Enter";
   }
   ta.addEventListener("input", () => { st.src[st.lang] = ta.value; persist(); paint(); });
   ta.addEventListener("scroll", () => { pre.scrollTop = ta.scrollTop; pre.scrollLeft = ta.scrollLeft; gut.scrollTop = ta.scrollTop; });
@@ -205,9 +205,44 @@
       w.postMessage({ code, stdin, base: PYODIDE });
     });
   }
+  const GB = "https://godbolt.org/api", GB_LANG = { java: "java", cpp: "c++", csharp: "csharp" }, gbPick = {};
+  const txt = a => Array.isArray(a) ? a.map(x => (x && x.text != null ? x.text : String(x))).join("\n") + (a.length ? "\n" : "") : "";
+  async function gbCompiler(lang, signal) {
+    if (gbPick[lang]) return gbPick[lang];
+    const r = await fetch(`${GB}/compilers/${encodeURIComponent(GB_LANG[lang])}?fields=id,name`, { headers: { Accept: "application/json" }, signal });
+    if (!r.ok) throw new Error("Compiler Explorer replied " + r.status);
+    const list = await r.json(), ver = n => ((n.match(/\d+(?:\.\d+)*/g) || ["0"]).pop()).split(".").map(x => +x || 0);
+    const cmp = (a, b) => { const x = ver(a.name), y = ver(b.name); for (let i = 0; i < 3; i++) if (x[i] !== y[i]) return y[i] - x[i]; return 0; };
+    const stable = n => !/trunk|snapshot|nightly|assertions|main|master|experimental|preview|rc|beta|clang|msvc|icc|zapcc|arm|riscv|mips|power|sparc|s390|avr|msp|cross|wasm|gccgo|djgpp|elf|ppc|loongarch|sh|bpf|kvx|m68k|hexagon|vax/i.test(n);
+    const pool = list.filter(c => lang === "cpp" ? /^x86-64 gcc \d/.test(c.name) : lang === "java" ? /^(java|openjdk)\b/i.test(c.name) || /jdk/i.test(c.name) : /\.NET|dotnet|csharp/i.test(c.name)).filter(c => stable(c.name));
+    const best = (pool.length ? pool : list).sort(cmp)[0];
+    if (!best) throw new Error("No compiler available for " + L(lang).name);
+    return gbPick[lang] = best.id;
+  }
+  const L = k => LANGS[k];
+  async function runGodbolt(lang, code, stdin) {
+    const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 40000);
+    try {
+      const id = await gbCompiler(lang, ctl.signal);
+      const r = await fetch(`${GB}/compiler/${encodeURIComponent(id)}/compile`, {
+        method: "POST", signal: ctl.signal, headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ source: code, lang: GB_LANG[lang], options: { userArguments: lang === "cpp" ? "-O1 -std=c++17" : "", executeParameters: { args: [], stdin }, compilerOptions: { executorRequest: true }, filters: { execute: true }, tools: [], libraries: [] } })
+      });
+      if (!r.ok) throw new Error("Compiler Explorer replied " + r.status + (r.status === 429 ? " (too many requests, wait a moment)" : ""));
+      const j = await r.json(), b = j.buildResult || {};
+      const build = txt(b.stdout) + txt(b.stderr), o = txt(j.stdout), e = txt(j.stderr);
+      if (j.didExecute === false || (b.code && b.code !== 0)) { show(build || "Compilation failed.\n", "e"); return; }
+      if (o) show(o); if (e) show(e, "e");
+      if (j.code) show("\nExit code " + j.code + "\n", "m");
+      if (!o && !e && !j.code) show("(no output)", "m");
+      if (build.trim() && /warning/i.test(build) && !o && !e) show("\n" + build, "m");
+    } catch (e) {
+      show((e.name === "AbortError" ? "Timed out after 40 s." : "Could not reach Compiler Explorer: " + e.message) + "\nYou need internet access. If this keeps failing, set your own runner under Runner settings.\n", "e");
+    } finally { clearTimeout(t); }
+  }
   async function runRemote(lang, code, stdin) {
+    if (st.cfg.type === "godbolt" || !st.cfg.url) return runGodbolt(lang, code, stdin);
     const c = st.cfg, base = (c.url || "").replace(/\/+$/, "");
-    if (!base) { show("Java, C++ and C# are compiled on a server, so they need a runner.\nOpen \"Runner settings\" below and enter a Judge0 or Piston compatible URL.\nJavaScript and Python work without any setup.\n", "m"); $("cxSet").open = true; return; }
     const headers = { "Content-Type": "application/json" }; if (c.hn && c.hv) headers[c.hn] = c.hv;
     const L = LANGS[lang]; let res;
     const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 30000);
