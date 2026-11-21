@@ -624,11 +624,6 @@ body.is-offline .pwa-off{display:block}
     <div class="card box" id="lcCard" style="max-width:560px"><h3>Solved problems <small id="lcWho"></small></h3><div id="lcBody"></div></div>
   </section>
 
-  <!-- CODE -->
-  <section class="panel" id="tab-code" role="tabpanel" hidden>
-    <div id="cx"></div>
-  </section>
-
   <!-- RESOURCES -->
   <section class="panel" id="tab-resources" role="tabpanel" hidden>
     <div class="phead"><div class="eyebrow">Links</div><h2>Resources</h2><p>Few and good. Finish one sheet before starting another. Each week in the Plan also has its own reading list.</p></div>
@@ -1331,7 +1326,7 @@ function probRow(pr,w,loc,showWeek){const k="s:"+pr.s,on=done.has(k),id=`${loc}-
 const readsList=x=>`<ul class="reads">${x.reads.map(r=>`<li><a href="${r[1]}" target="_blank" rel="noopener">${esc(r[0])}</a></li>`).join("")}</ul>`;
 
 /* ---------- tabs ---------- */
-const TABS=[["dashboard","Dashboard"],["daily","Daily to-do"],["plan","Plan"],["calendar","Calendar"],["problems","Problems"],["leetcode","LeetCode"],["code","Code"],["patterns","Patterns"],["prep","Interview prep"],["resources","Resources"],["study","Java Manual"]];
+const TABS=[["dashboard","Dashboard"],["daily","Daily to-do"],["plan","Plan"],["calendar","Calendar"],["problems","Problems"],["leetcode","LeetCode"],["patterns","Patterns"],["prep","Interview prep"],["resources","Resources"],["study","Java Manual"]];
 let tab="dashboard";
 function showTab(t,scroll){tab=t;TABS.forEach(([k])=>{$("tab-"+k).hidden=k!==t;const b=$("tb-"+k);if(b)b.setAttribute("aria-selected",k===t);});
   try{localStorage.setItem(LS+"-tab",t)}catch(e){}
@@ -1746,7 +1741,6 @@ if(START_SET&&currentWeek()===0)setSave(`Week 1 starts ${fmtL(START)}`);
 })();
 </script>
 <script src="study.js" defer></script>
-<script src="code.js" defer></script>
 <script src="pwa.js" defer></script>
 
 </body></html>
