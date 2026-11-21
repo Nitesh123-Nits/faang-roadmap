@@ -489,6 +489,7 @@ body.is-offline .pwa-off{display:block}
           <div class="card tile"><span>Current phase</span><b id="tPhase" style="font-size:1.25rem;padding-top:6px">—</b><span id="tPhaseSub"></span><div class="bar"><i id="tPhaseBar"></i></div></div>
           <div class="card tile"><span>Contest rating goal</span><b class="num">1700+</b><span>Sun 08:00 IST weekly</span></div>
         </div>
+        <div class="card box" id="lcCard"><h3>LeetCode <small id="lcWho"></small></h3><div id="lcBody"></div></div>
         <div class="card box"><h3>Company readiness <small>problems solved per tag</small></h3><div class="cobars" id="cobars"></div></div>
         <div class="card box"><h3>Next checkpoint</h3><div class="next" id="nextCk"></div></div>
         <div class="card box"><h3>Daily routine</h3>
@@ -1670,6 +1671,68 @@ if(START_SET&&currentWeek()===0)setSave(`Week 1 starts ${fmtL(START)}`);
     if(t==="study"){const sx=document.getElementById("sx");if(sx&&!sx.dataset.ready&&window.studyRoute)window.studyRoute();}
   };
   window.onTabShown(tab);
+})();
+</script>
+<script>
+/* LeetCode stats: public profile numbers via community APIs (LeetCode has no official one). Cached; fails soft. */
+(function(){
+  const KEY="faang-run-2027-lc",el=id=>document.getElementById(id),body=el("lcBody"),who=el("lcWho");
+  if(!body)return;
+  const E=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const load=()=>{try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return{};}};
+  const save=o=>{try{localStorage.setItem(KEY,JSON.stringify(o));}catch(e){}};
+  const clean=v=>{v=String(v||"").trim();const m=v.match(/leetcode\.com\/(?:u\/)?([^\/?#\s]+)/i);return(m?m[1]:v).replace(/^@/,"");};
+  // accept a few response shapes
+  function parse(j){
+    if(!j||typeof j!=="object")return null;
+    if(j.status==="error"||j.errors)return null;
+    const n=(a,b,c)=>[a,b,c].find(x=>Number.isFinite(+x)&&x!==undefined&&x!==null);
+    let easy=j.easySolved,med=j.mediumSolved,hard=j.hardSolved,tot=j.totalSolved??j.solvedProblem;
+    const ac=(j.data&&j.data.matchedUser&&j.data.matchedUser.submitStats&&j.data.matchedUser.submitStats.acSubmissionNum)||j.acSubmissionNum;
+    if(Array.isArray(ac)){const g=d=>(ac.find(x=>x.difficulty===d)||{}).count;tot=g("All");easy=g("Easy");med=g("Medium");hard=g("Hard");}
+    if(tot==null&&[easy,med,hard].every(x=>x!=null))tot=+easy+ +med+ +hard;
+    if(tot==null||!Number.isFinite(+tot))return null;
+    return{total:+tot,easy:+easy||0,medium:+med||0,hard:+hard||0,rank:j.ranking||null};
+  }
+  const SOURCES=[u=>`https://alfa-leetcode-api.onrender.com/${u}/solved`,u=>`https://leetcode-stats-api.herokuapp.com/${u}`,u=>`https://leetcode-stats.tashif.codes/${u}`];
+  async function fetchStats(u){
+    for(const mk of SOURCES){
+      const ctl=new AbortController(),t=setTimeout(()=>ctl.abort(),20000);
+      try{const r=await fetch(mk(encodeURIComponent(u)),{signal:ctl.signal});if(!r.ok)continue;const d=parse(await r.json());if(d)return d;}catch(e){}finally{clearTimeout(t);}
+    }
+    return null;
+  }
+  const ago=t=>{const m=Math.round((Date.now()-t)/6e4);return m<1?"just now":m<60?m+" min ago":m<1440?Math.round(m/60)+" h ago":Math.round(m/1440)+" d ago";};
+  function bar(l,v,max,c){return `<div style="display:grid;grid-template-columns:62px 1fr 34px;gap:8px;align-items:center;font-size:.82rem;margin:6px 0"><span style="color:var(--muted)">${l}</span><div class="bar"><i style="--pc:${c};width:${max?Math.min(100,100*v/max):0}%"></i></div><b class="num" style="text-align:right">${v}</b></div>`;}
+  function form(msg){
+    body.innerHTML=`<p class="note" style="margin:0 0 10px">${msg||"Show your solved count from your public LeetCode profile."}</p><div style="display:flex;gap:8px;flex-wrap:wrap"><input id="lcIn" placeholder="LeetCode username or profile link" autocomplete="off" style="flex:1 1 200px;height:38px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);padding:0 10px;font:500 .9rem var(--body)"><button class="chip on" id="lcGo" type="button" style="height:38px">Connect</button></div>`;
+    const go=()=>{const u=clean(el("lcIn").value);if(!u)return;save({u});run(true);};
+    el("lcGo").onclick=go;el("lcIn").onkeydown=e=>{if(e.key==="Enter")go();};
+  }
+  function show(st,stale){
+    const d=st.data,mx=Math.max(d.easy,d.medium,d.hard,1);
+    who.innerHTML=`<a href="https://leetcode.com/u/${encodeURIComponent(st.u)}/" target="_blank" rel="noopener">@${E(st.u)}</a>`;
+    body.innerHTML=`<div style="display:flex;align-items:baseline;gap:10px"><b class="num" style="font-family:var(--display);font-size:2.2rem;line-height:1">${d.total}</b><span class="note" style="margin:0">solved on LeetCode${d.rank?` · rank ${Number(d.rank).toLocaleString("en-IN")}`:""}</span></div>
+      ${bar("Easy",d.easy,mx,"var(--p2)")}${bar("Medium",d.medium,mx,"var(--p3)")}${bar("Hard",d.hard,mx,"var(--p4)")}
+      <p class="note" style="margin:8px 0 0">${stale?"Couldn't refresh, showing numbers from "+ago(st.t):"Updated "+ago(st.t)} · <a href="#" id="lcRef">Refresh</a> · <a href="#" id="lcChg">Change user</a></p>`;
+    el("lcRef").onclick=e=>{e.preventDefault();run(true);};
+    el("lcChg").onclick=e=>{e.preventDefault();save({});who.textContent="";form();};
+  }
+  async function run(force){
+    const st=load();if(!st.u){form();return;}
+    if(st.data)show(st,false);
+    else body.innerHTML=`<p class="note" style="margin:0">Loading @${E(st.u)}… the free API can take a few seconds to wake up.</p>`;
+    if(st.data&&!force&&Date.now()-st.t<36e5)return;
+    const d=await fetchStats(st.u);
+    if(d){const n={u:st.u,t:Date.now(),data:d};save(n);show(n,false);}
+    else if(st.data)show(st,true);
+    else{who.innerHTML=`<a href="https://leetcode.com/u/${encodeURIComponent(st.u)}/" target="_blank" rel="noopener">@${E(st.u)}</a>`;
+      body.innerHTML=`<p class="note" style="margin:0 0 8px">Couldn't reach the stats service (or the username is private or wrong). <a href="#" id="lcRetry">Try again</a> · <a href="#" id="lcChg2">Change user</a></p>`;
+      el("lcRetry").onclick=e=>{e.preventDefault();run(true);};el("lcChg2").onclick=e=>{e.preventDefault();save({});who.textContent="";form();};}
+  }
+  // ?lc=username in the URL connects it once (handy for a first-time setup link)
+  try{const q=new URLSearchParams(location.search).get("lc");if(q){const u=clean(q);if(u)save({u});history.replaceState(null,"",location.pathname+location.hash);}}catch(e){}
+  run(false);
 })();
 </script>
 <script src="study.js" defer></script>
