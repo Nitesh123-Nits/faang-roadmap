@@ -88,9 +88,9 @@
 .inspire .if{margin:12px 0 0;font-size:14px;text-wrap:pretty}
 .inspire .if b{font-weight:600}
 .inspire .ic{display:inline-block;margin-left:6px;padding:0 8px;border:1px solid color-mix(in srgb,currentColor 22%,transparent);border-radius:999px;font-size:11px;line-height:18px;opacity:.75;white-space:nowrap;vertical-align:1px}
-.inspire .ib{display:flex;flex-direction:row;flex-wrap:wrap;gap:8px;margin:14px 0 0;padding:0}
-.inspire .ib button{display:inline-block;width:auto;height:auto;min-width:0;margin:0;padding:6px 12px;font:inherit;font-size:12.5px;line-height:1.2;white-space:nowrap;color:inherit;background:transparent;border:1px solid color-mix(in srgb,currentColor 22%,transparent);border-radius:6px;cursor:pointer}
-.inspire .ib button:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.inspire .inspire-acts{display:flex;flex-direction:row;flex-wrap:wrap;gap:8px;margin:14px 0 0;padding:0}
+.inspire .inspire-acts button{display:inline-block;width:auto;height:auto;min-width:0;margin:0;padding:6px 12px;font:inherit;font-size:12.5px;line-height:1.2;white-space:nowrap;color:inherit;background:transparent;border:1px solid color-mix(in srgb,currentColor 22%,transparent);border-radius:6px;cursor:pointer}
+.inspire .inspire-acts button:focus-visible{outline:2px solid currentColor;outline-offset:2px}
 .inspire-show{display:inline-block;margin:0 0 12px;padding:2px 0;font:inherit;font-size:12.5px;line-height:1.4;color:inherit;background:none;border:0;opacity:.7;cursor:pointer;text-align:left}
 `;
 
@@ -100,7 +100,7 @@
       <p class="iq">“${esc(q.t)}”</p>
       <p class="ia">— ${esc(q.a)}</p>
       <p class="if"><b>Did you know?</b> ${esc(f.t)} <span class="ic">${esc(f.c)}</span></p>
-      <div class="ib">
+      <div class="inspire-acts">
         <button type="button" data-a="next">Another</button>
         <button type="button" data-a="hide">Hide for now</button>
       </div>`;
