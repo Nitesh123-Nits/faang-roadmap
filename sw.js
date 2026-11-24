@@ -1,6 +1,6 @@
 /* FAANG Run service worker: precache app shell, runtime-cache fonts, offline fallback. */
 importScripts("engage-sw.js");   // daily-reminder notifications
-const VERSION = "v22";
+const VERSION = "v23";
 const SHELL = `faang-shell-${VERSION}`;
 const RUNTIME = "faang-runtime";
 const PRECACHE = [

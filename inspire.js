@@ -2,7 +2,8 @@
  * No network, no API key. Content lives in this file, so it works offline.
  * Add to POOL.quotes / POOL.facts any time; the card rotates through them.
  *
- *   Inspire.init({ before: 'main', key: 'my-app' })
+ *   <script src="inspire.js" defer data-into="main" data-home-only="#/home"></script>
+ *   Inspire.init({ into: 'main', homeRoute: '#/home' })
  */
 (function () {
   'use strict';
@@ -68,28 +69,29 @@
   const ssSet = (k, v) => { try { sessionStorage.setItem(k, v); } catch (e) {} };
   const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-  /* Pick a quote and a fact at random, avoiding the last pair shown so the card changes on each open. */
+  /* Pick a quote and a fact at random, avoiding the pair shown last so the card changes on each open. */
   function pick(prevQ, prevF) {
-    const pick1 = (arr, avoid) => {
+    const one = (arr, avoid) => {
       if (arr.length < 2) return 0;
       let i; do { i = Math.floor(Math.random() * arr.length); } while (i === avoid);
       return i;
     };
-    const q = pick1(POOL.quotes, prevQ), f = pick1(POOL.facts, prevF);
-    return { q, f };
+    return { q: one(POOL.quotes, prevQ), f: one(POOL.facts, prevF) };
   }
 
+  /* Styles are scoped to .inspire so they cannot be changed by the host app's global button or text rules. */
   const CSS = `
-.inspire{margin:0 auto 14px;max-width:880px;padding:14px 16px;border:1px solid color-mix(in srgb,currentColor 16%,transparent);border-radius:8px;background:color-mix(in srgb,currentColor 4%,transparent);font:inherit;line-height:1.5;color:inherit;box-sizing:border-box;min-width:0}
-.inspire .iq{margin:0;font-size:15px;font-style:italic}
-.inspire .ia{margin:4px 0 0;font-size:12.5px;opacity:.7}
-.inspire .if{margin:10px 0 0;font-size:14px}
+.inspire{box-sizing:border-box;display:block;width:100%;margin:0 0 16px;padding:16px 18px;border:1px solid color-mix(in srgb,currentColor 16%,transparent);border-radius:8px;background:color-mix(in srgb,currentColor 4%,transparent);color:inherit;font:inherit;line-height:1.5;text-align:left;position:relative;z-index:1;min-width:0;overflow:visible}
+.inspire[hidden],.inspire-show[hidden]{display:none!important}
+.inspire .iq{margin:0;font-size:15px;font-style:italic;text-wrap:pretty}
+.inspire .ia{margin:6px 0 0;font-size:12.5px;opacity:.7}
+.inspire .if{margin:12px 0 0;font-size:14px;text-wrap:pretty}
 .inspire .if b{font-weight:600}
-.inspire .ic{display:inline-block;margin-left:6px;padding:0 7px;border:1px solid color-mix(in srgb,currentColor 22%,transparent);border-radius:999px;font-size:11px;opacity:.75;vertical-align:1px}
-.inspire .ib{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-.inspire button{font:inherit;font-size:12.5px;color:inherit;background:transparent;border:1px solid color-mix(in srgb,currentColor 22%,transparent);border-radius:6px;padding:4px 10px;cursor:pointer}
-.inspire button:focus-visible{outline:2px solid currentColor;outline-offset:2px}
-.inspire-show{margin:0 auto 10px;max-width:880px;display:block;font:inherit;font-size:12.5px;color:inherit;background:none;border:0;padding:2px 0;opacity:.7;cursor:pointer;text-align:left}
+.inspire .ic{display:inline-block;margin-left:6px;padding:0 8px;border:1px solid color-mix(in srgb,currentColor 22%,transparent);border-radius:999px;font-size:11px;line-height:18px;opacity:.75;white-space:nowrap;vertical-align:1px}
+.inspire .ib{display:flex;flex-direction:row;flex-wrap:wrap;gap:8px;margin:14px 0 0;padding:0}
+.inspire .ib button{display:inline-block;width:auto;height:auto;min-width:0;margin:0;padding:6px 12px;font:inherit;font-size:12.5px;line-height:1.2;white-space:nowrap;color:inherit;background:transparent;border:1px solid color-mix(in srgb,currentColor 22%,transparent);border-radius:6px;cursor:pointer}
+.inspire .ib button:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.inspire-show{display:inline-block;margin:0 0 12px;padding:2px 0;font:inherit;font-size:12.5px;line-height:1.4;color:inherit;background:none;border:0;opacity:.7;cursor:pointer;text-align:left}
 `;
 
   function render(root, state) {
@@ -110,9 +112,11 @@
     if (!document.getElementById('inspire-style')) {
       const st = document.createElement('style'); st.id = 'inspire-style'; st.textContent = CSS; document.head.appendChild(st);
     }
-    const anchor = cfg.before ? document.querySelector(cfg.before) : null;
-    const parent = anchor ? anchor.parentNode : document.body;
-    const hidden = get(HIDE) === '1';
+    const target = cfg.into ? document.querySelector(cfg.into) : null;
+    if (cfg.into && !target) return;                     // no place to show the card
+    const host = target || document.body;
+    const homeOnly = cfg.homeRoute ? () => (location.hash || cfg.homeRoute) === cfg.homeRoute : () => true;
+
     const prev = (lsGet(KEY) || '').split(',').map(Number);
     let state = pick(prev[0], prev[1]);
     lsSet(KEY, state.q + ',' + state.f);
@@ -121,10 +125,10 @@
     card.className = 'inspire'; card.setAttribute('aria-label', 'Daily inspiration');
     const show = document.createElement('button');
     show.type = 'button'; show.className = 'inspire-show'; show.textContent = 'Show inspiration';
-    show.hidden = !hidden;
-    card.hidden = hidden;
-
+    const hidden = get(HIDE) === '1';
+    card.hidden = hidden; show.hidden = !hidden;
     render(card, state);
+
     card.addEventListener('click', (e) => {
       const b = e.target.closest && e.target.closest('button[data-a]'); if (!b) return;
       if (b.dataset.a === 'next') {
@@ -135,11 +139,25 @@
     });
     show.addEventListener('click', () => { ssSet(HIDE, ''); card.hidden = false; show.hidden = true; });
 
-    parent.insertBefore(card, anchor || parent.firstChild);
-    parent.insertBefore(show, card.nextSibling);
+    /* Place the card at the top of the host. In an app that re-renders its main area on each route, keep it
+       there only while the home route is open. */
+    const sync = () => {
+      const want = homeOnly();
+      if (want) {
+        if (!card.isConnected) host.prepend(card, show);
+      } else {
+        card.remove(); show.remove();
+      }
+    };
+    sync();
+    if (cfg.homeRoute && target) {
+      new MutationObserver(() => { if (!card.isConnected && homeOnly()) sync(); else if (card.isConnected && !homeOnly()) sync(); })
+        .observe(target, { childList: true });
+      window.addEventListener('hashchange', sync);
+    }
   }
 
   window.Inspire = { init, POOL };
-  const me = document.currentScript;       // <script src="inspire.js" defer data-before="main">
-  if (me) init({ before: me.dataset.before || '' });
+  const me = document.currentScript;   // <script src="inspire.js" defer data-into="main" data-home-only="#/home">
+  if (me) init({ into: me.dataset.into || '', homeRoute: me.dataset.homeOnly || '' });
 })();
