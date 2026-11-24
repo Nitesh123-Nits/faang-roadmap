@@ -1,10 +1,10 @@
 /* FAANG Run service worker: precache app shell, runtime-cache fonts, offline fallback. */
 importScripts("engage-sw.js");   // daily-reminder notifications
-const VERSION = "v21";
+const VERSION = "v22";
 const SHELL = `faang-shell-${VERSION}`;
 const RUNTIME = "faang-runtime";
 const PRECACHE = [
-  "./", "index.html", "pwa.js", "engage.js", "engage-sw.js", "engage-faang.js", "study.js", "code.js", "study.css", "study/index.json", "manifest.webmanifest",
+  "./", "index.html", "pwa.js", "engage.js", "engage-sw.js", "engage-faang.js", "inspire.js", "study.js", "code.js", "study.css", "study/index.json", "manifest.webmanifest",
   "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png",
   "icons/icon-maskable-512.png", "icons/apple-touch-icon.png",
   "favicon.ico", "icons/favicon-32.png", "icons/favicon-16.png"
